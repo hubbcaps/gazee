@@ -1,0 +1,124 @@
+header,
+main,
+footer {
+  padding-left: 240px;
+  background: #607d8b;
+}
+body {
+  color: #FFF;
+  background: #607d8b;
+}
+#footer {
+  background: #607d8b;
+}
+#breadcrumbs {
+  background: #ffb74d;
+}
+#logo-wrapper {
+  background: #607d8b;
+}
+#settings-button {
+  background: #607d8b;
+  color: #FFF;
+}
+#settings-arrow {
+  color: #607d8b;
+}
+.card {
+  background-color: #607d8b;
+  box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
+}
+.center-cols > .col {
+  float:none; /* disable the float */
+  display: inline-block; /* make blocks inline-block */
+  text-align: initial; /* restore text-align to default */
+}
+.card-image {
+  height: 350;
+  width: 300;
+}
+.card-content {
+  background: #ffb74d;
+  text-align: center;
+}
+.user-dropdown {
+  background: #ffb74d;
+  color: #FFF;
+}
+.logout-item {
+  background: #607d8b;
+  color: #FFF;
+}
+.reader-overlay {
+  position: absolute;
+  background-color:#ccc;
+  width:100%;
+  height:100%;
+  top:0px;
+  left:0px;
+  z-index:1000;
+  max-width:100%;
+}
+.reader-page {
+  position: absolute;
+  max-width:100%;
+}
+img[class*="reader-page-"] {
+  position: absolute;
+  max-width:100%;
+}
+.overlay-settings {
+  position: fixed;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  color: #000;
+  z-index:4000;
+  min-height: 1px;
+}
+.overlay-settings-text {
+  height: 900px;
+  line-height: 900px;
+  text-align: center;
+}
+.settings-span-left {
+  display: inline-block;
+  left: 0px;
+  vertical-align: middle;
+  line-height: normal;
+}
+.settings-span-center {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  line-height: normal;
+}
+.settings-span-right {
+  display: inline-block;
+  right: 0px;
+  vertical-align: middle;
+  line-height: normal;
+}
+.page-left {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
+  background-color: rgba(0, 0, 0, 0);
+}
+.page-settings {
+  position: fixed;
+  left: 33.33%;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
+  background-color: rgba(0, 0, 0, 0);
+}
+.page-right {
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
+  background-color: rgba(0, 0, 0, 0);
+}

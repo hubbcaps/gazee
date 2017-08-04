@@ -1,0 +1,9 @@
+data/comics/*
+data/cache/*
+data/sessions/*
+data/gazee.db
+tmp/*
+__pycache__/*
+*.pyc
+~*
+*.swp

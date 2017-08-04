@@ -1,0 +1,35 @@
+<%inherit file="read-base.html"/>
+<%!
+  import gazee
+%>
+<%
+  now_page = pages[current_page]
+%>
+  <body class="inner-page">
+  <div class="reader-whole">
+    <div class="col s12 overlay-settings">
+      <div class="overlay-settings-text">
+        <div class="page-left">
+          <span class="settings-span-left">
+            <h4 style="display: none;" id="page-settings-left-text"><i class="large material-icons" id="settings-arrow">arrow_back</i></h4>
+          </span>
+        </div>
+        <div class="page-settings">
+          <span class="settings-span-center">
+            <p style="display: none;" id="page-settings-text">
+             <a class="waves-effect waves-light btn-large" id="settings-button" href="/index">Home</a>
+            </p>
+          </span>
+        </div>
+        <div class="page-right">
+          <span class="settings-span-right">
+            <h4 style="display: none;" id="page-settings-right-text"><i class="large material-icons" id="settings-arrow">arrow_forward</i></h4>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row reader-overlay">
+      <img style="" class="reader-page" src="${now_page}"/>
+    </div>
+  </div>
+  </body>

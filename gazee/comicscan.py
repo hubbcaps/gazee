@@ -1,0 +1,192 @@
+import os, sys, shutil
+import sqlite3
+import string
+import xml.etree.ElementTree as ET
+import patoolib
+import xmltodict
+import cherrypy
+import zipfile
+
+from pathlib import Path
+from pyunpack import Archive
+from unrar import rarfile
+
+import gazee
+
+# This class will hold the various methods needed to fill out the Directory Table and the Comics table in the DB.
+
+class ComicScanner(object):
+
+    # This method will handle scanning the directories and returning a list of them all.
+    def dirScan(self):
+        full_paths = []
+        for root, dirs, files in os.walk(gazee.COMIC_PATH):
+            full_paths.extend(os.path.join(root,d) for d in dirs)
+        
+        return full_paths
+
+    # This method will handle scanning the comics and returning a list of them all.
+    def comicScan(self):
+        full_paths = []
+        for root, dirs, files in os.walk(gazee.COMIC_PATH):
+            for f in files:
+                if f.endswith((".cbz",".cbr")):
+                    full_paths.append(os.path.join(root,f))
+
+        return full_paths
+
+    # This method takes an argument of the full comic path and will simply unpack the requested comic into the temp directory. It first checks if there are already files in the temp directory. If so, it removes all of them and then unpacks the comic. It doesn't return anything currently, and will be used for both scanning and reading comics.
+    def unpackComic(self, comic_path):
+        if not os.listdir(gazee.TEMP_DIR) == []:
+            for root, dirs, files in os.walk(gazee.TEMP_DIR):
+                for f in files:
+                    os.remove(os.path.join(root, f))
+            for root, dirs, files in os.walk(gazee.TEMP_DIR):
+                for d in dirs:
+                    os.rmdir(os.path.join(root, d))
+
+        Archive(comic_path).extractall(gazee.TEMP_DIR)
+        return
+    # This method will return a list of .jpg files in their numberical order to be fed into the reading view.
+    def readingImages(self):
+        image_list = []
+        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+            for f in files:
+                if f.endswith((".jpg",".jpeg",".png")):
+                    image_list.append(os.path.join(root,f))
+                    image_list.sort()
+        return image_list
+
+    # This method takes an argument of the comic name, it then looks in the temp directory after comic has been upacked for an image with 000, 001 and an image extnesion in the name. This image name and it's path are stored in variables, then makes directory named after them, and pushes the file into that directory. It then returns the path to that file to be inserted into the DB as the comics image in the library and recent comic views.
+    def imageMove(self, comic_name, volume_number, issue_number):
+        image_temp_path = []
+        image = []
+        sorted_files = []
+
+        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+            sorted_files.extend(os.path.join(root, usf) for usf in files)
+
+        sorted_files.sort()
+
+        for f in sorted_files:
+            if any(x in f for x in ('000', '001')) and any(x in f for x in('.jpg', '.jpeg', '.png')):
+                image_temp_path = f
+                image_split = os.path.split(f)
+                image = image_split[-1]
+                break
+
+        absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number))
+
+        if not os.path.exists(absPath):
+            os.makedirs(absPath)
+
+        image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
+
+        if not os.path.exists(image_dest):
+            os.rename(image_temp_path,image_dest)
+
+        return image_dest
+
+    # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
+    def comicInfoParse(self):
+        comic_name = "Not Available"
+        comic_issue = "Not Available"
+        comic_volume = "Not Available"
+        comic_summary = "Not Available"
+        unpackedFiles = []
+        comic_attributes = {}
+
+        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+            unpackedFiles.extend(os.path.join(root, f) for f in files)
+
+        for f in unpackedFiles:
+            if any(x in f for x in ("ComicInfo", "Comicinfo" "comicInfo", "comicinfo", ".xml")):
+                with open(f) as fd:
+                    comic_attributes = xmltodict.parse(fd.read())
+                    comic_name = comic_attributes['ComicInfo']['Series']
+                    comic_issue = comic_attributes['ComicInfo']['Number']
+                    comic_volume = comic_attributes['ComicInfo']['Volume']
+                    comic_summary = comic_attributes['ComicInfo']['Summary']
+                    break
+
+        return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
+
+    # This method is where the magic actually happens. This will use all the previous functions to build out our two DB tables, Directories and Comics respectively.
+    def dbBuilder(self):
+
+        # Here we set the db file path.
+        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+
+        # Here we make the inital DB connection that we will be using throughout this function.
+        connection = sqlite3.connect(str(db))
+        c = connection.cursor()
+
+        # Here we define some variables we will use to check for existing files and files that need to be removed from the db.    
+        c.execute('SELECT ({col}) FROM {tn}'.format(col=gazee.PARENT_DIR, tn=gazee.ALL_DIRS))
+        parentsInDB = c.fetchall()
+        listOfParents = []
+        # Convert tuple to list
+        listOfParents = [tup[0] for tup in parentsInDB]
+
+        c.execute('SELECT ({col}) FROM {tn}'.format(col=gazee.COMIC_FULL_PATH, tn=gazee.ALL_COMICS))
+        comicPathsInDB = c.fetchall()
+        listOfComicPaths = []
+        # Convert tuple to list
+        listOfComicPaths = [tup[0] for tup in comicPathsInDB]
+
+        # Here we call the dirScan directory to get a list of all the directories under the set comic directory.
+        directories = self.dirScan()
+
+        parent_dirs = []
+        child_dirs = []
+        
+        # Here we are going to begin splitting the returned directories into their parents.
+        for d in directories:
+            parent_dirs = []
+
+        # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them from the db.
+        for d in listOfParents:
+            if not d in directories:
+                c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_DIRS, cn=gazee.PARENT_DIR),(d,))
+
+        # This is the simplest insert statement we'll have in this function, it adds all the full path directories to the dir name column in our all dirs tables if it doesn't already exist.
+        for d in directories:
+            if d in listOfParents:
+                continue
+            else:
+                c.execute('INSERT INTO {tn} ({cn1}) VALUES (?)'.format(tn=gazee.ALL_DIRS, cn1=gazee.PARENT_DIR),(d,))
+
+        # Here we call comic scan and get the paths of all comics to iterate over.
+        all_comics = self.comicScan()
+
+        # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them from the db.
+        for f in listOfComicPaths:
+            if not f in all_comics:
+                c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_FULL_PATH),(f,))
+
+        # Here we start iterating, inside we'll call the rest of the functions, gather the rest of the info and then insert it a row at a time into the DB.
+        for f in all_comics:
+            if f in listOfComicPaths:
+                continue
+            else:
+                try:
+                    self.unpackComic(f)
+                except:
+                    continue
+
+                info = self.comicInfoParse()
+                # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
+                name = info['name']
+                issue = info['issue']
+                volume = info['volume']
+                summary = info['summary']
+    
+                # Here we call the image move method with the previously retrieved comic name as its argument. This returns the image path to be stored in the coming insert function.
+                image = self.imageMove(name, volume, issue)
+    
+                c.execute('INSERT INTO {tn} ({cn}, {ci}, {cv}, {cs}, {cimg}, {cp}, {it}) VALUES (?, ?, ?, ?, ?, ?, DATE("now"))'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, cv=gazee.COMIC_VOLUME, cs=gazee.COMIC_SUMMARY, cimg=gazee.COMIC_IMAGE, cp=gazee.COMIC_FULL_PATH, it=gazee.INSERT_DATE),(name, issue, volume, summary, image, f))
+    
+        connection.commit()
+        connection.close()
+
+        return
