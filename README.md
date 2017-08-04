@@ -18,6 +18,8 @@ Eventually you will be able to start it up, point it at your library directory a
 - [ ] Parent Directory / Child Associations
 - [ ] Build out Library View one above is done.
 - [ ] Settings Page allowing basic server configuration.
+- [ ] Authentication Page/Mechanism
+- [ ] Multi User Support with Admin/User Settings. 
 
 ### QOL Features to be added
 
