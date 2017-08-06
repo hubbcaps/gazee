@@ -26,6 +26,7 @@ Eventually you will be able to start it up, point it at your library directory a
 These are features that will make Gazee standout, but aren't needed for functionality and actual usability.
 
 - [ ] Use keybinds for changing pages in Reading view
+- [ ] OPDS Support
 - [ ] Add compression for the cache images.
 - [ ] User set color changes.
 - [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.
