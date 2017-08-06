@@ -159,11 +159,21 @@ class ComicScanner(object):
         # Convert tuple to list
         dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
 
+        c.execute('SELECT * FROM {tn}'.format(tn=gazee.DIR_NAMES))
+        namesInDB = c.fetchall()
+        namesOfDirs = []
+        # Convert tuple to list
+        namesOfDirs = [tup[0] for tup in namesInDB]
+        
         for d in dictOfParents:
             dirContents = os.listdir(d['Path'])
             for dc in dirContents:
-                if os.path.isdir(os.path.join(d['Path'],dc)):
+                if dc in namesOfDirs:
+                    continue
+                elif os.path.isdir(os.path.join(d['Path'],dc)):
                     c.execute('INSERT INTO {tn} ({cn1}, {cn2}) VALUES (?,?)'.format(tn=gazee.DIR_NAMES, cn1=gazee.NICE_NAME, cn2=gazee.PARENT_KEY),(dc,d['ParentKey']))
+                else:
+                    continue
 
         connection.commit()
 

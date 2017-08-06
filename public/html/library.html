@@ -2,6 +2,7 @@
 	import gazee
 %>
 <!doctype html>
+<div class="whole-page">
 <html>
 <head>
 	<title>Gazee</title>
@@ -19,8 +20,8 @@
 
   <div class="nav-wrapper show-on-large" id="side-panel">
   <ul id="slide-out" class="side-nav fixed orange lighten-2 white-text">
-    <li id="dash_dashboard"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Dashboard</b></a></li>
-    <li id="dash_library"><a class="waves-effect blue-grey lighten-2 white-text" href="#!"><b>Library</b></a></li>
+    <li id="dash_dashboard"><a class="waves-effect orange lighten-2 white-text" href="/index"><b>Dashboard</b></a></li>
+    <li id="dash_library"><a class="waves-effect blue-grey lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}"><b>Library</b></a></li>
     <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a></li>
   </ul>
   </div>
@@ -50,7 +51,6 @@
     <div class="row">
       <div>
         <div class="row">
-          <ul id="library-header"><b><h4>Library</h4></b></ul>
             <div id="library">
               <div class="row center-cols center-align">
 % for directory in directories:
@@ -102,31 +102,6 @@
   -->
   <script type="text/javascript">
       $(document).ready(function() {
-// This displays the dashboard when clicked.
-        $(".button-collapse").sideNav();
-        $("#recent").load("/recents");
-        $("#dash_dashboard").click(function() {
-          $("#whiteboard").html('\
-            <div class="row">\
-              <div>\
-                <div class="row">\
-                  <ul id="recent-header"><b><h4>Recent Comics</h4></b></ul>\
-                    <div id="recent"></div>\
-                </div>\
-              </div>\
-            </div>'
-          );
-          $("#dash_dashboard").html('<a class="waves-effect blue-grey white-text" href="#!"><b>Dashboard</b></a>');
-          $("#dash_library").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Library</b></a>');
-          $("#dash_settings").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a>');
-          $("#recent").load("/recents", function() {
-          });
-        });
-// This displays the library when clicked.
-        $("#dash_library").click(function() {
-          $(document).load("/library?directory=${gazee.COMIC_PATH}", function() {
-          });
-        });
 // This displays the settings when clicked.
         $("#dash_settings").click(function() {
           $("#whiteboard").html('\
@@ -150,3 +125,4 @@
 	
 </body>
 </html>
+</div>
