@@ -95,7 +95,7 @@
           $("#dash_dashboard").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Dashboard</b></a>');
           $("#dash_library").html('<a class="waves-effect blue-grey white-text" href="#!"><b>Library</b></a>');
           $("#dash_settings").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a>');
-          $("#library").load("/library", function() {
+          $("#library").load("/library?directory=${gazee.COMIC_PATH}", function() {
           });
         });
 // This displays the settings when clicked.

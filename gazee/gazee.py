@@ -77,18 +77,60 @@ class Gazee(object):
     # Library Page
     @cherrypy.expose
     def library(self, directory):
-        dir_contents = []
-        comics = []
-        directories = []
-        if directory == gazee.COMIC_PATH:
-            dir_contents = os.list(gazee.COMIC_PATH)
-        else:
-            dir_contents = os.list(os.path.join(gazee.COMIC_PATH, directory))
-        for i in dir_contents:
-            if i.endswith((".cbz",".cbr")):
-                comics.append
+        # Here we set the db file path.
+        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
-        return serve_template(templatename="recents.html", directory=directory, children=children)
+        # Here we make the inital DB connection that we will be using throughout this function.
+        connection = sqlite3.connect(str(db))
+        c = connection.cursor()
+        
+        # Here we get the Primary Key of the selected directory
+        if directory == gazee.COMIC_PATH:
+            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(directory,))
+        else:
+            c.execute("SELECT {ptk} FROM {tn} WHERE {fp}=?".format(ptk=gazee.PARENT_KEY, tn=gazee.DIR_NAMES, fp=gazee.NICE_NAME),(directory,))
+            ptkinit = c.fetchall()
+            parent_key = [tup[0] for tup in ptkinit]
+
+            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY),(parent_key,))
+            
+            pdirinit = c.fetchall()
+            parent_dir = [tup[0] for tup in pdirinit]
+
+            full_dir = os.path.join(parent_dir, directory)
+
+            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(full_dir,))
+
+        pkinit = c.fetchall()
+        pk = [tup[0] for tup in pkinit]
+
+        # Select all the Nice Names from the Dir Names table.
+        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk))
+
+        dirsinit = c.fetchall()
+        directories = [tup[0] for tup in dirsinit]
+        
+        # Select all of the comics associated with the parent dir as well.
+        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk))
+
+        c.execute("SELECT * FROM {tn} WHERE {prk}=?".format(tn=gazee.ALL_COMICS, prk=gazee.PARENT_KEY))
+        # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
+        comicsinit = c.fetchall()
+        comics = []
+        for f in comicsinit:
+            comics.append({"Key":                f[0],
+                           "ComicName":          f[1],
+                           "ComicImage":         f[2],
+                           "ComicIssue":         f[3],
+                           "ComicVolume":        f[4],
+                           "ComicSummary":       f[5],
+                           "ComicPath":          f[6],
+                           "DateAdded":          f[7]})
+
+        connection.commit()
+        connection.close()
+
+        return serve_template(templatename="library.html", directories=directories, comics=comics)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.

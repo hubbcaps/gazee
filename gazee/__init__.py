@@ -19,10 +19,15 @@ COMIC_PATH = "data/comics"
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
 
-# Directories table, and the only field in it.
+# Directories table, holds all actual directories full paths. We iterate over these in comicscan for their contents and add those to the below Directory Names table with the associated key.
 ALL_DIRS = "all_directories"
-PARENT_DIR = "parent_dir"
-CHILD_DIR = "child_dir"
+FULL_DIR_PATH = "full_dir_path"
+KEY = "key"
+
+# Directory Names. This will hold the actual names of directories and their associated parent keys.
+DIR_NAMES = "dir_names"
+NICE_NAME = "nice_name"
+PARENT_KEY = "parent_key"
 
 # Comics table and various attributes we associate with them.
 ALL_COMICS = "all_comics"
@@ -33,7 +38,6 @@ COMIC_VOLUME = "volume"
 COMIC_SUMMARY = "summary"
 COMIC_FULL_PATH = "path"
 INSERT_DATE = "date"
-KEY = "key"
 
 # Users Table and various attributes.
 USERS = "USERS"
@@ -46,9 +50,14 @@ db = Path(os.path.join(DATA_DIR, DB_NAME))
 if not db.is_file():
     connection = sqlite3.connect(str(db))
     c = connection.cursor()
+
+    # Create the Directories table.
+    c.execute('CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)'.format(tn=ALL_DIRS, nf=KEY, ft="INTEGER"))
+    c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_DIRS, cn=FULL_DIR_PATH, ft="TEXT"))
+
     # Create the Directory table.
-    c.execute('CREATE TABLE {tn} ({nf} {ft})'.format(tn=ALL_DIRS, nf=PARENT_DIR, ft="TEXT"))
-    c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_DIRS, cn=CHILD_DIR, ft="TEXT"))
+    c.execute('CREATE TABLE {tn} ({nf} {ft})'.format(tn=DIR_NAMES, nf=NICE_NAME, ft="TEXT"))
+    c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=DIR_NAMES, cn=PARENT_KEY, ft="INTEGER"))
 
     # Create Comics table and necessary columns.
     c.execute('CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)'.format(tn=ALL_COMICS, nf=KEY, ft="INTEGER"))
@@ -58,6 +67,7 @@ if not db.is_file():
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_COMICS, cn=COMIC_VOLUME, ft="TEXT"))
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_COMICS, cn=COMIC_SUMMARY, ft="TEXT"))
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_COMICS, cn=COMIC_FULL_PATH, ft="TEXT"))
+    c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=ALL_COMICS, cn=PARENT_KEY, ft="INTEGER"))
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}'".format(tn=ALL_COMICS, cn=INSERT_DATE))
 
     # Create Users colume and necessary columns.

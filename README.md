@@ -28,3 +28,4 @@ These are features that will make Gazee standout, but aren't needed for function
 - [ ] Use keybinds for changing pages in Reading view
 - [ ] Add compression for the cache images.
 - [ ] User set color changes.
+- [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.
