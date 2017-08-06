@@ -82,20 +82,7 @@
         });
 // This displays the library when clicked.
         $("#dash_library").click(function() {
-          $("#whiteboard").html('\
-            <div class="row">\
-              <div>\
-                <div class="row">\
-                  <ul id="library-header"><b><h4>Library</h4></b></ul>\
-                    <div id="library"></div>\
-                </div>\
-              </div>\
-            </div>'
-          );
-          $("#dash_dashboard").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Dashboard</b></a>');
-          $("#dash_library").html('<a class="waves-effect blue-grey white-text" href="#!"><b>Library</b></a>');
-          $("#dash_settings").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a>');
-          $("#library").load("/library?directory=${gazee.COMIC_PATH}", function() {
+          $(document).load("/library?directory=${gazee.COMIC_PATH}", function() {
           });
         });
 // This displays the settings when clicked.

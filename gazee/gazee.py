@@ -92,12 +92,12 @@ class Gazee(object):
             ptkinit = c.fetchall()
             parent_key = [tup[0] for tup in ptkinit]
 
-            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY),(parent_key,))
+            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY),(parent_key[0],))
             
             pdirinit = c.fetchall()
             parent_dir = [tup[0] for tup in pdirinit]
 
-            full_dir = os.path.join(parent_dir, directory)
+            full_dir = os.path.join(parent_dir[0], directory)
 
             c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(full_dir,))
 
@@ -105,15 +105,14 @@ class Gazee(object):
         pk = [tup[0] for tup in pkinit]
 
         # Select all the Nice Names from the Dir Names table.
-        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk))
+        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk[0],))
 
         dirsinit = c.fetchall()
         directories = [tup[0] for tup in dirsinit]
         
         # Select all of the comics associated with the parent dir as well.
-        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk))
+        c.execute("SELECT * FROM {tn} WHERE {prk}=?".format(tn=gazee.ALL_COMICS, prk=gazee.PARENT_KEY),(pk[0],))
 
-        c.execute("SELECT * FROM {tn} WHERE {prk}=?".format(tn=gazee.ALL_COMICS, prk=gazee.PARENT_KEY))
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         comicsinit = c.fetchall()
         comics = []
