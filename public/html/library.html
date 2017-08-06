@@ -60,7 +60,7 @@
 % for directory in directories:
                 <div class="col s4 m4 l3">
                   <div class="card">
-                    <div class="card-content hoverable">
+                    <div class="card-content hoverable" id="directory-card-content">
                       <span class="card-title" style="width:100%;"><a href="/library?directory=${directory}" id="library-link">${directory}</span></a>
                     </div>
                   </div>
@@ -72,12 +72,12 @@
                     <div class="card-image hoverable">
                       <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
                     </div>
-                    <div class="card-content small hoverable">
+                    <div class="card-content hoverable" id="comic-card-content">
                       <span class="card-title activator" style="width:100%;">${comic['ComicName']} ${comic['ComicIssue']}</span>
                     </div>
-                    <div class="card-reveal">
-                      <span class="card-title">${comic['ComicName']} ${comic['ComicIssue']}</span>
-                      <p class="flow-text" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link">${comic['ComicSummary']}</a><i class="material-icons right">close</i></p>
+                    <div class="card-reveal" id="summary-pane">
+                      <span class="card-title"><i class="material-icons right">close</i></span>
+                      <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link">${comic['ComicSummary']}</a></p>
                     </div>
                   </div>
                 </div>

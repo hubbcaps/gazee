@@ -10,6 +10,9 @@ body {
 #footer {
   background: #607d8b;
 }
+#read-link {
+  color: #FFF;
+}
 #breadcrumbs {
   background: #ffb74d;
 }
@@ -24,17 +27,37 @@ body {
   color: #607d8b;
 }
 .card {
-  background-color: #607d8b;
+  max-width: 300px;
+  background-color: #ffb74d;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
+}
+#comic-card-content {
+  display:flex;
+  height: 125px;
+  color: #FFF;
+  background-color: #ffb74d;
+  text-position: center;
+}
+#directory-card-content {
+  display:flex;
+  height: 125px;
+  color: #FFF;
+  background-color: #ffb74d;
+  text-position: center;
+}
+.card-content a {
+  color: #FFF;
+}
+.card img {
+  height: 100%;
+  max-height: 400px;
+  max-width: 300px;
+  object-fit: cover;
 }
 .center-cols > .col {
   float:none; /* disable the float */
   display: inline-block; /* make blocks inline-block */
   text-align: initial; /* restore text-align to default */
-}
-.card-image {
-  max-width: 100%;
-  height: auto;
 }
 .card-content {
   background: #ffb74d;
@@ -101,6 +124,10 @@ img[class*="reader-page-"] {
   right: 0px;
   vertical-align: middle;
   line-height: normal;
+}
+#summary-pane {
+  background: #ffb74d;
+  color: #FFF;
 }
 .page-left {
   position: fixed;

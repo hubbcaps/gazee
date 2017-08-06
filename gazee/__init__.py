@@ -15,6 +15,7 @@ DATA_DIR = "data"
 TEMP_DIR = "tmp"
 PORT = 4242
 COMIC_PATH = "data/comics"
+THUMB_SIZE = 400, 300
 
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
