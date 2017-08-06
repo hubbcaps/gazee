@@ -8,10 +8,10 @@
 </%def>
  <div class="row center-cols center-align">
 % for comic in comics:
-    <div class="col s4 m3 l2">
+    <div class="col s5 m5 l2">
       <div class="card">
         <div class="card-image hoverable">
-          <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img src="${comic['ComicImage']}"></a>
+          <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
         </div>
         <div class="card-content small hoverable">
           <span class="card-title activator" style="width:100%;">${comic['ComicName']} ${comic['ComicIssue']}</span>

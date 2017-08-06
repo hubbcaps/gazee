@@ -52,7 +52,7 @@ class Gazee(object):
         connection = sqlite3.connect(str(db))
         c = connection.cursor()
 
-        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 LIMIT 20".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE))
+        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 ORDER BY {cn} ASC, {ci} ASC LIMIT 20".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER))
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         all_recent_comics_tup = c.fetchall()
         comics = []
@@ -87,6 +87,7 @@ class Gazee(object):
         # Here we get the Primary Key of the selected directory
         if directory == gazee.COMIC_PATH:
             c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(directory,))
+            parent_dir = ''
         else:
             c.execute("SELECT {ptk} FROM {tn} WHERE {fp}=?".format(ptk=gazee.PARENT_KEY, tn=gazee.DIR_NAMES, fp=gazee.NICE_NAME),(directory,))
             ptkinit = c.fetchall()
@@ -111,7 +112,7 @@ class Gazee(object):
         directories = [tup[0] for tup in dirsinit]
         
         # Select all of the comics associated with the parent dir as well.
-        c.execute("SELECT * FROM {tn} WHERE {prk}=?".format(tn=gazee.ALL_COMICS, prk=gazee.PARENT_KEY),(pk[0],))
+        c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, prk=gazee.PARENT_KEY),(pk[0],))
 
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         comicsinit = c.fetchall()
@@ -129,7 +130,21 @@ class Gazee(object):
         connection.commit()
         connection.close()
 
-        return serve_template(templatename="library.html", directories=directories, comics=comics)
+        cp_split = os.path.split(gazee.COMIC_PATH)
+
+        # End it all by grinding the breadcrumb.
+        if parent_dir == '':
+            prd = ''
+        else:
+            parent_parts = os.path.split(parent_dir[0])
+            prd = parent_parts[1]
+
+        if prd == cp_split[1]:
+            prd = ''
+
+        directories.sort()
+
+        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.

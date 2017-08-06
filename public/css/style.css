@@ -1,7 +1,6 @@
 header,
 main,
 footer {
-  padding-left: 240px;
   background: #607d8b;
 }
 body {
@@ -34,14 +33,19 @@ body {
   text-align: initial; /* restore text-align to default */
 }
 .card-image {
-  height: 350;
-  width: 300;
+  max-width: 100%;
+  height: auto;
 }
 .card-content {
   background: #ffb74d;
+  color: #FFF;
   text-align: center;
 }
 .user-dropdown {
+  background-color: #ffb74d;
+  color: #FFF;
+}
+#nav-drop-button {
   background: #ffb74d;
   color: #FFF;
 }

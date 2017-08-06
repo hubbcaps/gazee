@@ -12,11 +12,11 @@ Eventually you will be able to start it up, point it at your library directory a
 - [x] Landing page with Recent Comics view
 - [x] Comic Scanner for building the DB and creating image cache
 - [x] Reading view, including changing pages with instruction pane.
+- [x] Parent Directory / Child Associations
+- [x] Build out Library View one above is done.
 
 ### Needed features before Gazee is actually usable
 
-- [ ] Parent Directory / Child Associations
-- [ ] Build out Library View one above is done.
 - [ ] Settings Page allowing basic server configuration.
 - [ ] Authentication Page/Mechanism
 - [ ] Multi User Support with Admin/User Settings. 

@@ -18,12 +18,12 @@
 
 <body>
 
-  <div class="nav-wrapper show-on-large" id="side-panel">
-  <ul id="slide-out" class="side-nav fixed orange lighten-2 white-text">
-    <li id="dash_dashboard"><a class="waves-effect blue-grey white-text" href="/index"><b>Dashboard</b></a></li>
-    <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}"><b>Library</b></a></li>
-    <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a></li>
-  </ul>
+  <div class="dropdown-content" id="nav-dropdown">
+    <ul id="nav-items">
+      <li id="dash_dashboard"><a class="waves-effect blue-grey white-text" href="/index"><b>Dashboard</b></a></li>
+      <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}"><b>Library</b></a></li>
+      <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a></li>
+    </ul>
   </div>
 
   <header>
@@ -32,17 +32,17 @@
     </ul>
     <nav class="" role="navigation">
       <div class="nav-wrapper" id="logo-wrapper">
-        <a data-activates="slide-out" class="button-collapse show-on-large" href="#!"><img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png" /></a>
+        <a data-activates="slide-out" class="button-collapse show-on-large" href="#!"><img id="logo-image" style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png" /></a>
         <ul class="right">
           <li>
-            <a class="right dropdown-button" href='' data-activates='user-dropdown'><i class='material-icons'>account_circle</i></a>
+            <a class="right dropdown-button" href='#!' data-activates='user-dropdown'><i class='material-icons'>account_circle</i></a>
           </li>
         </ul>
       </div>
     </nav>
     <nav>
       <div class="nav-wrapper" id="breadcrumbs">
-        <a style="margin-left: 20px;" class="breadcrumb" href="index">Dashboard</a>
+        <a class="waves-effect dropdown-button btn-large" id="nav-drop-button" data-activates='nav-dropdown' href="#!">Dashboard</a>
       </div>
     </nav>
   </header>
