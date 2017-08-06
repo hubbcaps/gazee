@@ -14,6 +14,7 @@ Eventually you will be able to start it up, point it at your library directory a
 - [x] Reading view, including changing pages with instruction pane.
 - [x] Parent Directory / Child Associations
 - [x] Build out Library View one above is done.
+- [x] Add compression for the cache images.
 
 ### Needed features before Gazee is actually usable
 
@@ -23,10 +24,9 @@ Eventually you will be able to start it up, point it at your library directory a
 
 ### QOL Features to be added
 
-These are features that will make Gazee standout, but aren't needed for functionality and actual usability.
+These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
-- [ ] Use keybinds for changing pages in Reading view
+- [ ] Allow use of keybinds for changing pages in Reading view
 - [ ] OPDS Support
-- [ ] Add compression for the cache images.
 - [ ] User set color changes.
 - [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.

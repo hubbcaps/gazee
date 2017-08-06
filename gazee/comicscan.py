@@ -85,7 +85,9 @@ class ComicScanner(object):
         image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
 
         if not os.path.exists(image_dest):
-            Image.open(image_temp_path).thumbnail(gazee.THUMB_SIZE).save(image_dest)
+            im = Image.open(image_temp_path)
+            im.thumbnail(gazee.THUMB_SIZE)
+            im.save(image_dest)
             #os.rename(image_temp_path,image_dest)
 
         return image_dest
