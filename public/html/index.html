@@ -21,7 +21,7 @@
   <div class="dropdown-content" id="nav-dropdown">
     <ul id="nav-items">
       <li id="dash_dashboard"><a class="waves-effect blue-grey white-text" href="/index"><b>Dashboard</b></a></li>
-      <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}"><b>Library</b></a></li>
+      <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
       <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a></li>
     </ul>
   </div>
@@ -32,7 +32,7 @@
     </ul>
     <nav class="" role="navigation">
       <div class="nav-wrapper" id="logo-wrapper">
-        <a data-activates="slide-out" class="button-collapse show-on-large" href="#!"><img id="logo-image" style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png" /></a>
+        <img id="logo-image" style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
         <ul class="right">
           <li>
             <a class="right dropdown-button" href='#!' data-activates='user-dropdown'><i class='material-icons'>account_circle</i></a>
@@ -52,7 +52,42 @@
       <div class="col s12">
         <div class="row">
           <ul id="recent-header"><b><h4>Recent Comics</h4></b></ul>
-            <div id="recent"></div>
+            <div id="recent">
+               <div class="row center-cols center-align">
+                 <ul class="pagination">
+% if current_page == 1:
+                   <li class="disabled"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+% else:
+
+                   <li class="waves-effect"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+% endif
+% for i in range(1, num_of_pages + 1):
+                   <li class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
+% endfor
+% if current_page == num_of_pages:
+<li class="disabled"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+% else:
+<li class="waves-effect"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+% endif
+                </ul>
+% for comic in comics:
+                  <div class="col s5 m5 l2">
+                    <div class="card">
+                      <div class="card-image hoverable">
+                        <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
+                      </div>
+                      <div class="card-content hoverable" id="comic-card-content">
+                        <p class="card-title activator">${comic['ComicName']} ${comic['ComicIssue']}</p>
+                      </div>
+                      <div class="card-reveal" id="summary-pane">
+                        <span class="card-title"><i class="material-icons right">close</i></span>
+                        <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link">${comic['ComicSummary']}</a></p>
+                      </div>
+                    </div>
+                  </div>
+% endfor
+                </div>
+            </div>
         </div>
       </div>
     </div>
@@ -75,7 +110,6 @@
   -->
   <script type="text/javascript">
       $(document).ready(function() {
-        $("#recent").load("/recents");
 // This displays the settings when clicked.
         $("#dash_settings").click(function() {
           $("#whiteboard").html('\

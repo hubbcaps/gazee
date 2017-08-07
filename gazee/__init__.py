@@ -2,6 +2,7 @@ import os, sys, shutil
 import sqlite3
 import string
 import cherrypy
+import configparser
 
 from pathlib import Path
 from gazee.gazee import Gazee
@@ -10,11 +11,15 @@ from gazee.comicscan import ComicScanner
 __version__ = '0.0.1'
 __all__ = ['Gazee', 'ComicScanner']
 
-DB_NAME = "gazee.db"
-DATA_DIR = "data"
-TEMP_DIR = "tmp"
-PORT = 4242
-COMIC_PATH = "data/comics"
+config = configparser.ConfigParser()
+config.read('data/app.ini')
+
+DB_NAME = config['GLOBAL']['DB_NAME']
+DATA_DIR = config['GLOBAL']['DATA_DIR']
+TEMP_DIR = config['GLOBAL']['TEMP_DIR']
+PORT = int(config['GLOBAL']['PORT'])
+COMIC_PATH = config['GLOBAL']['COMIC_PATH']
+COMICS_PER_PAGE = int(config['GLOBAL']['COMICS_PER_PAGE'])
 THUMB_SIZE = 400, 300
 
 # Declare DB variables, such as table names and field names

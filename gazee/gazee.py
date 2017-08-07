@@ -30,21 +30,12 @@ Web Pages/Views methods that are exposed for API like url calling.
 class Gazee(object):
 
     """
-    Index Page, only needed to show the start page. From here, we'll use jquery calls to load in the rest of the application via the exposed methods.
-    """
-    @cherrypy.expose
-    def index(self):
-        return serve_template(templatename="index.html")
-
-    """
+    Index Page
     This returns the html template for the recents div.
-    The recents div is by default the the last twenty comics added to the DB in the last 20 days.
+    The recents div is by default the the last twenty comics added to the DB in the last 7 days.
     """
-    #TODO
-    # Make the amount of comics and time span user settable.
-    # Optimize: New to all this, page loads a bit slow when being return for the first time. Images are already kept in their cache so how can we speed up the presentation of them? Gzip? Need to look into possibilities.
     @cherrypy.expose
-    def recents(self):
+    def index(self, page_num=1):
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -52,7 +43,20 @@ class Gazee(object):
         connection = sqlite3.connect(str(db))
         c = connection.cursor()
 
-        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 ORDER BY {cn} ASC, {ci} ASC LIMIT 20".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER))
+        c.execute("SELECT COUNT(*) FROM {tn} WHERE DATE('now') - {it} <= 7".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE))
+        numcinit = c.fetchone()
+        num_of_comics = numcinit[0]
+        num_of_pages = 0
+        while num_of_comics >= 0:
+            num_of_comics -= gazee.COMICS_PER_PAGE
+            num_of_pages += 1
+
+        if page_num == 1:
+            PAGE_OFFSET = 0
+        else:
+            PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
+
+        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 ORDER BY {cn} ASC, {ci} ASC LIMIT {nc} OFFSET {pn}".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET))
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         all_recent_comics_tup = c.fetchall()
         comics = []
@@ -69,14 +73,14 @@ class Gazee(object):
         connection.commit()
         connection.close()
 
-        return serve_template(templatename="recents.html", comics=comics)
+        return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num))
 
     """
     This returns the library view starting with the root library directory.
     """
     # Library Page
     @cherrypy.expose
-    def library(self, directory):
+    def library(self, directory, page_num=1):
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -110,9 +114,22 @@ class Gazee(object):
 
         dirsinit = c.fetchall()
         directories = [tup[0] for tup in dirsinit]
-        
+
+        c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY),(pk[0],))
+        numcinit = c.fetchone()
+        num_of_comics = numcinit[0]
+        num_of_pages = 0
+        while num_of_comics >= 0:
+            num_of_comics -= gazee.COMICS_PER_PAGE
+            num_of_pages += 1
+
+        if page_num == 1:
+            PAGE_OFFSET = 0
+        else:
+            PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
+
         # Select all of the comics associated with the parent dir as well.
-        c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, prk=gazee.PARENT_KEY),(pk[0],))
+        c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET),(pk[0],))
 
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         comicsinit = c.fetchall()
@@ -144,7 +161,7 @@ class Gazee(object):
 
         directories.sort()
 
-        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd)
+        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
