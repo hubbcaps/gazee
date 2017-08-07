@@ -2,6 +2,7 @@ import os
 import sys
 import cherrypy
 import sqlite3
+import configparser
 
 from pathlib import Path
 
@@ -203,10 +204,28 @@ class Gazee(object):
     #Settings Page
     @cherrypy.expose
     def settings(self):
-        #TODO
-        scanner = ComicScanner()
-        scanner.dbBuilder()
-        return "Building"
+        return serve_template(templatename="settings.html")
+
+    @cherrypy.expose
+    @cherrypy.tools.accept(media='text/plain')
+    def saveSettings(self, sport='', scomicPath='', scomicsPerPage=''):
+        # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
+        config = configparser.ConfigParser()
+        config.read('data/app.ini')
+
+        if sport == '':
+            sport = config['GLOBAL']['PORT']
+        if scomicPath == '':
+            scomicPath = config['GLOBAL']['COMIC_PATH']
+        if scomicsPerPage == '':
+            scomicsPerPage = config['GLOBAL']['COMICS_PER_PAGE']
+
+        config['GLOBAL']['PORT'] = sport
+        config['GLOBAL']['COMIC_PATH'] = scomicPath
+        config['GLOBAL']['COMICS_PER_PAGE'] = scomicsPerPage
+        with open('data/app.ini', 'w') as configfile:
+            config.write(configfile)
+        return
 
     @cherrypy.expose
     def opds(self):

@@ -1,0 +1,147 @@
+<%!
+	import gazee
+%>
+<!doctype html>
+<div class="whole-page">
+<html>
+<head>
+	<title>Gazee</title>
+	<meta name="description" content="Gazee Base Mako Page - Made by Hubcaps / Jessi">
+	<meta name="author" content="Hubcaps / Jessi">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+
+<body>
+
+  <div class="dropdown-content" id="nav-dropdown">
+    <ul id="nav-items">
+      <li id="dash_dashboard"><a class="waves-effect orange lighten-2 white-text" href="/index"><b>Dashboard</b></a></li>
+      <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
+      <li id="dash_settings"><a class="waves-effect blue-grey white-text" href="/settings"><b>Settings</b></a></li>
+    </ul>
+  </div>
+
+  <header>
+    <ul class="dropdown-content" id="user-dropdown">
+      <li><a class="logout-item" href="#!">Logout</a></li>
+    </ul>
+    <nav class="" role="navigation">
+      <div class="nav-wrapper" id="logo-wrapper">
+        <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
+        <ul class="right">
+          <li>
+            <a class="right dropdown-button" href='' data-activates='user-dropdown'><i class='material-icons'>account_circle</i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <nav>
+      <div class="nav-wrapper" id="breadcrumbs">
+        <a class="waves-effect dropdown-button btn-large" id="nav-drop-button" data-activates='nav-dropdown' href="#!">Settings</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="whiteboard">
+    <div class="row" style="padding: 15px;">
+      <form class="col s6" id="server-settings-form">
+        <div class="row">
+          <div class="input-field left col s6">
+            <input type="text" name="sport" value="${gazee.PORT}" class="validate">
+            <label for="sport">Port</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field left col s6">
+            <input type="text" name="scomicsPerPage" value="${gazee.COMICS_PER_PAGE}" class="validate">
+            <label for="scomicsPerPage">Comics Per Page</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field left col s6">
+            <input type="text" name="scomicPath" id="comic-path" value="${gazee.COMIC_PATH}" class="validate">
+            <label for="scomicPath">Comic Library</label>
+          </div>
+        </div>
+        <div class="row">
+          <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
+        </div>
+      </form>
+      <form class="col s6 right" id="change-password-form">
+        <div class="row">
+          <div class="input-field col s6 right">
+            <input id="change-password" type="password" class="validate">
+            <label for="change-password">New Password</label>
+          </div>
+        </div>
+        <div class="row right">
+          <a class="btn-flat waves-effect" type="submit" id="change-pass-submit">Change Password</a>
+        </div>
+      </form>
+      <form class="col s6 right" id="new-user-form">
+        <div class="row">
+          <div class="input-field col s6 right">
+            <input id="new-username" type="text" class="validate">
+            <label for="new-username">Username</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6 right">
+            <input id="new-user-password" type="password" class="validate">
+            <label for="new-user-password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6 right">
+              <input id="user-type-admin" type="radio" name="user-types" value="admin">
+              <label for="user-type-admin">Admin</label>
+              <input id="user-type-user" type="radio" name="user-types" value="user">
+              <label for="user-type-user">User</label>
+          </div>
+        </div>
+        <div class="row right">
+          <a class="btn-flat waves-effect" type="submit" id="new-user-submit">Add New User</a>
+        </div>
+      </form>
+      <form class="col s6 left">
+        <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
+      </form>
+    </div>
+  </main>
+
+  <footer class="page-footer" id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+        </div>
+      </div>
+    </div>
+  </footer>
+	
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+
+  <!--
+  This function simply loads the recent method from mylar.py to generate the comics from the last week.
+  -->
+  <script type="text/javascript">
+      $(document).ready(function() {
+        cpf = $("#change-password-form").serialize()
+        nuf = $("#new-user-form").serialize()
+        $("#update-app-submit").click(function() {
+          $.ajax({
+            url: "saveSettings",
+            data: $("#server-settings-form").serialize()
+          });
+        });
+      });
+  </script>
+	
+</body>
+</html>
+</div>

@@ -3,6 +3,7 @@ import sys
 import cherrypy
 import string
 
+import gazee
 from gazee import *
 
 def main():

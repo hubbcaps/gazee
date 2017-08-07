@@ -22,7 +22,7 @@
     <ul id="nav-items">
       <li id="dash_dashboard"><a class="waves-effect orange lighten-2 white-text" href="/index"><b>Dashboard</b></a></li>
       <li id="dash_library"><a class="waves-effect blue-grey white-text" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
-      <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="#!"><b>Settings</b></a></li>
+      <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="/settings"><b>Settings</b></a></li>
     </ul>
   </div>
 
@@ -122,24 +122,6 @@
   -->
   <script type="text/javascript">
       $(document).ready(function() {
-// This displays the settings when clicked.
-        $("#dash_settings").click(function() {
-          $("#whiteboard").html('\
-            <div class="row">\
-              <div>\
-                <div class="row">\
-                  <ul id="settings-header"><b><h4>Settings</h4></b></ul>\
-                    <div id="settings"></div>\
-                </div>\
-              </div>\
-            </div>'
-          );
-          $("#dash_dashboard").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Dashboard</b></a>');
-          $("#dash_library").html('<a class="waves-effect orange lighten-2 white-text" href="#!"><b>Library</b></a>');
-          $("#dash_settings").html('<a class="waves-effect blue-grey white-text" href="#!"><b>Settings</b></a>');
-          $("#settings").load("/settings", function() {
-          });
-        });
       });
   </script>
 	

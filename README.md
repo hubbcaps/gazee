@@ -24,10 +24,10 @@ Pillow
 - [x] Parent Directory / Child Associations
 - [x] Build out Library View one above is done.
 - [x] Add compression for the cache images.
+- [x] Settings Page allowing basic server configuration.
 
 ### Needed features before Gazee is actually usable
 
-- [ ] Settings Page allowing basic server configuration.
 - [ ] Authentication Page/Mechanism
 - [ ] Multi User Support with Admin/User Settings. 
 
