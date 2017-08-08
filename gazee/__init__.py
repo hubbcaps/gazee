@@ -7,6 +7,7 @@ import configparser
 from pathlib import Path
 from gazee.gazee import Gazee
 from gazee.comicscan import ComicScanner
+import gazee.authmech
 
 __version__ = '0.0.1'
 __all__ = ['Gazee', 'ComicScanner']

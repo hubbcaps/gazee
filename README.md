@@ -25,10 +25,11 @@ Pillow
 - [x] Build out Library View one above is done.
 - [x] Add compression for the cache images.
 - [x] Settings Page allowing basic server configuration.
+- [x] Authentication Mechanism
 
 ### Needed features before Gazee is actually usable
 
-- [ ] Authentication Page/Mechanism
+- [ ] Ability to change admin/user password.
 - [ ] Multi User Support with Admin/User Settings. 
 
 ### QOL Features to be added

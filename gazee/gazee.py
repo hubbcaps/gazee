@@ -200,7 +200,6 @@ class Gazee(object):
     """
     This returns the settings page.
     """
-
     #Settings Page
     @cherrypy.expose
     def settings(self):
