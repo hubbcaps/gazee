@@ -31,6 +31,7 @@ Eventually you will be able to start it up, point it at your library directory a
 
 ### Needed features before Gazee is actually usable
 
+- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive.
 - [ ] Portability. Verify working on Windows. Currently developed and working under linux.
 - [ ] Daemonize. Make it runable as a service.
 - [ ] Various system level settings need to be implemented for CherryPy still.
