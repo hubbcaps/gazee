@@ -96,7 +96,7 @@ all_users = c.fetchall()
 adminCheck = [tup[0] for tup in all_users]
 
 if len(adminCheck) == 0:
-    c.execute('INSERT INTO {tn} ({cn1}, {cn2}, {cn3}) VALUES ("admin", "gazee", "administrator")'.format(tn=USERS, cn1=USERNAME, cn2=PASSWORD, cn3=TYPE))
+    c.execute('INSERT INTO {tn} ({cn1}, {cn2}, {cn3}) VALUES ("admin", "87f69abe62021d9ab8497e052c65ee79ca6705169916b930ea3e6979a0555c4d", "administrator")'.format(tn=USERS, cn1=USERNAME, cn2=PASSWORD, cn3=TYPE))
 
 connection.commit()
 connection.close()

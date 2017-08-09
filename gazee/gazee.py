@@ -203,7 +203,8 @@ class Gazee(object):
     #Settings Page
     @cherrypy.expose
     def settings(self):
-        return serve_template(templatename="settings.html")
+        user = cherrypy.request.login
+        return serve_template(templatename="settings.html", user=user)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
@@ -224,6 +225,23 @@ class Gazee(object):
         config['GLOBAL']['COMICS_PER_PAGE'] = scomicsPerPage
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
+        return
+
+    @cherrypy.expose
+    def changePassword(self, password):
+        user = cherrypy.request.login
+        gazee.authmech.changePass(user, password)
+        return
+
+    @cherrypy.expose
+    def newUser(self, username, password, usertype):
+        gazee.authmech.addUser(username, password, usertype)
+        return
+
+    @cherrypy.expose
+    def comicScan(self):
+        scanner = ComicScanner()
+        scanner.dbBuilder()
         return
 
     @cherrypy.expose

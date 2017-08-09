@@ -75,8 +75,8 @@
       <form class="col s6 right" id="change-password-form">
         <div class="row">
           <div class="input-field col s6 right">
-            <input id="change-password" type="password" class="validate">
-            <label for="change-password">New Password</label>
+            <input type="password" name=password id="change-password" value='' class="validate" >
+            <label for="change-password">New Password for ${user}</label>
           </div>
         </div>
         <div class="row right">
@@ -86,21 +86,21 @@
       <form class="col s6 right" id="new-user-form">
         <div class="row">
           <div class="input-field col s6 right">
-            <input id="new-username" type="text" class="validate">
+            <input id="new-username" name="username" type="text" class="validate">
             <label for="new-username">Username</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s6 right">
-            <input id="new-user-password" type="password" class="validate">
+            <input id="new-user-password" name="password" type="password" class="validate">
             <label for="new-user-password">Password</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s6 right">
-              <input id="user-type-admin" type="radio" name="user-types" value="admin">
+              <input id="user-type-admin" type="radio" name="usertype" value="admin">
               <label for="user-type-admin">Admin</label>
-              <input id="user-type-user" type="radio" name="user-types" value="user">
+              <input id="user-type-user" type="radio" name="usertype" value="user">
               <label for="user-type-user">User</label>
           </div>
         </div>
@@ -131,12 +131,28 @@
   -->
   <script type="text/javascript">
       $(document).ready(function() {
-        cpf = $("#change-password-form").serialize()
-        nuf = $("#new-user-form").serialize()
+        
         $("#update-app-submit").click(function() {
           $.ajax({
             url: "saveSettings",
             data: $("#server-settings-form").serialize()
+          });
+        });
+        $("#scan-comics-submit").click(function() {
+          $.ajax({
+            url: "comicScan"
+          });
+        });
+        $("#change-pass-submit").click(function() {
+          $.ajax({
+            url: "changePassword",
+            data: $("#change-password-form").serialize()
+          });
+        });
+        $("#new-user-submit").click(function() {
+          $.ajax({
+            url: "newUser",
+            data: $("#new-user-form").serialize()
           });
         });
       });

@@ -26,13 +26,16 @@ Eventually you will be able to start it up, point it at your library directory a
 - [x] Add compression for the cache images.
 - [x] Settings Page allowing basic server configuration.
 - [x] Authentication Mechanism
+- [x] Ability to change admin/user password.
+- [x] Multi User Support with Admin/User Settings. 
 
 ### Needed features before Gazee is actually usable
 
-- [ ] Ability to change admin/user password.
-- [ ] Multi User Support with Admin/User Settings. 
+- [ ] Portability. Verify working on Windows. Currently developed and working under linux.
+- [ ] Daemonize. Make it runable as a service.
+- [ ] Various system level settings need to be implemented for CherryPy still.
 
-### QOL Features to be added
+### QOL Features on the Roadmap
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 

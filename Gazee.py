@@ -9,19 +9,20 @@ from gazee import *
 
 def main():
     conf = {
+            'global' : {
+                'server.socket_host': '0.0.0.0',
+                'server.socket_port': 4242
+                },
             '/' : {
                 'tools.gzip.on': True,
                 'tools.sessions.on': True,
                 'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
                 'tools.sessions.storage_path': "data/sessions",
                 'tools.staticdir.root': os.path.abspath(os.getcwd()),
-                'tools.digest_auth.on': True,
-                'tools.digest_auth.realm': 'Gazee',
-                'tools.digest_auth.users': gazee.authmech.getPassword
-                },
-            'global' : {
-                'server.socket_host': '0.0.0.0',
-                'server.socket_port': 4242
+                'tools.basic_auth.on': True,
+                'tools.basic_auth.realm': 'Gazee',
+                'tools.basic_auth.users': gazee.authmech.getPassword,
+                'tools.basic_auth.encrypt': gazee.authmech.hashPass
                 },
             '/static' : {
                 'tools.staticdir.on': True,
