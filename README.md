@@ -5,13 +5,13 @@ Gazee will be a webapp for reading your comics in your web browser.
 Eventually you will be able to start it up, point it at your library directory and have fun!
 
 ## Requirements
-Python 3.6
-CherryPy
-Mako
-PyUnpack
-patoolib
-xmltodict
-Pillow
+*Python 3.6
+*CherryPy
+*Mako
+*PyUnpack
+*patoolib
+*xmltodict
+*Pillow
 
 ## Current Status
 
