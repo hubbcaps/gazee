@@ -16,6 +16,7 @@ config = configparser.ConfigParser()
 config.read('data/app.ini')
 
 DB_NAME = config['GLOBAL']['DB_NAME']
+MYLAR_DB = config['GLOBAL']['MYLAR_DB']
 DATA_DIR = config['GLOBAL']['DATA_DIR']
 TEMP_DIR = config['GLOBAL']['TEMP_DIR']
 PORT = int(config['GLOBAL']['PORT'])

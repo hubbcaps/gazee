@@ -21,7 +21,10 @@ def getPassword(username):
 
     c.execute('SELECT {pw} FROM {tn} WHERE {un}=?'.format(pw=gazee.PASSWORD,tn=gazee.USERS,un=gazee.USERNAME),(userstring,))
     passinit = c.fetchone()
-    password = passinit[0]
+    if not passinit is None:
+        password = passinit[0]
+    else:
+        password = 'nil'
 
     connection.commit()
     connection.close()

@@ -208,7 +208,7 @@ class Gazee(object):
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
-    def saveSettings(self, sport='', scomicPath='', scomicsPerPage=''):
+    def saveSettings(self, sport='', scomicPath='', scomicsPerPage='', smylarPath=''):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read('data/app.ini')
@@ -219,10 +219,13 @@ class Gazee(object):
             scomicPath = config['GLOBAL']['COMIC_PATH']
         if scomicsPerPage == '':
             scomicsPerPage = config['GLOBAL']['COMICS_PER_PAGE']
+        if smylarPath == '':
+            smylarPath = config['GLOBAL']['MYLAR_DB']
 
         config['GLOBAL']['PORT'] = sport
         config['GLOBAL']['COMIC_PATH'] = scomicPath
         config['GLOBAL']['COMICS_PER_PAGE'] = scomicsPerPage
+        config['GLOBAL']['MYLAR_DB'] = smylarPath
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
         return

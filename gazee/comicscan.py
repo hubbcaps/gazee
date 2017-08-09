@@ -93,11 +93,12 @@ class ComicScanner(object):
         return image_dest
 
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
-    def comicInfoParse(self):
+    def comicInfoParse(self, comicpath):
         comic_name = "Not Available"
         comic_issue = "Not Available"
         comic_volume = "Not Available"
         comic_summary = "Not Available"
+
         unpackedFiles = []
         comic_attributes = {}
 
@@ -113,6 +114,21 @@ class ComicScanner(object):
                     comic_volume = comic_attributes['ComicInfo']['Volume']
                     comic_summary = comic_attributes['ComicInfo']['Summary']
                     break
+
+        if not gazee.MYLAR_DB == "":
+            location = os.path.basename(comicpath)
+            connection = sqlite3.connect(gazee.MYLAR_DB)
+            c = connection.cursor()
+
+            c.execute('SELECT * FROM issues WHERE location=?', (location,))
+            comic_attributes = c.fetchone()
+
+            if not comic_attributes is None:
+                if comic_name == "Not Available":
+                    comic_name = comic_attributes[1]
+                    comic_issue = comic_attributes[3]
+
+            connection.close()
 
         return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
 
@@ -206,7 +222,7 @@ class ComicScanner(object):
                 except:
                     continue
 
-                info = self.comicInfoParse()
+                info = self.comicInfoParse(f)
                 # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
                 name = info['name']
                 issue = info['issue']
