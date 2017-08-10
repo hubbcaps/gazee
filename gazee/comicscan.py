@@ -9,7 +9,6 @@ import zipfile
 
 from pathlib import Path
 from pyunpack import Archive
-from unrar import rarfile
 from PIL import Image
 
 import gazee

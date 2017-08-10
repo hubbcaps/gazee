@@ -1,4 +1,4 @@
-![Gazee Logo](/public/images/logo.png?raw=true "Gazee Logo")
+# Gazee
 
 Gazee will be a webapp for reading your comics in your web browser.
 
