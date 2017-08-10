@@ -2,6 +2,7 @@ data/comics/*
 data/cache/*
 data/sessions/*
 data/gazee.db
+data/gazee.log
 data/mylar.db
 tmp/*
 __pycache__/*

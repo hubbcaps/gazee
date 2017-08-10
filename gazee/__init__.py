@@ -3,6 +3,7 @@ import sqlite3
 import string
 import cherrypy
 import configparser
+import logging
 
 from pathlib import Path
 from gazee.gazee import Gazee
@@ -53,6 +54,9 @@ USERNAME = "username"
 PASSWORD = "password"
 TYPE = "type"
 
+logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+logger = logging.getLogger(__name__) 
+
 # Create DB if it doesn't already exist.
 db = Path(os.path.join(DATA_DIR, DB_NAME))
 if not db.is_file():
@@ -85,6 +89,7 @@ if not db.is_file():
 
     connection.commit()
     connection.close()
+    logging.info("DB Schema Created")
 
 # Insert Admin user into DB if they aren't already there.
 connection = sqlite3.connect(str(db))
@@ -98,6 +103,7 @@ adminCheck = [tup[0] for tup in all_users]
 
 if len(adminCheck) == 0:
     c.execute('INSERT INTO {tn} ({cn1}, {cn2}, {cn3}) VALUES ("admin", "87f69abe62021d9ab8497e052c65ee79ca6705169916b930ea3e6979a0555c4d", "administrator")'.format(tn=USERS, cn1=USERNAME, cn2=PASSWORD, cn3=TYPE))
+    logging.info("Admin inserted into DB")
 
 connection.commit()
 connection.close()

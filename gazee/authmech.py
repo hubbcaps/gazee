@@ -2,10 +2,14 @@ import os,sys
 import sqlite3
 import string
 import hashlib
+import logging
 
 from pathlib import Path
 
 import gazee
+
+logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+logger = logging.getLogger(__name__) 
 
 # This is the function called when a user logs in, it returns their hashed password from the DB for checking by CherryPys auth mechanism.
 def getPassword(username):
@@ -50,6 +54,7 @@ def changePass(user, password):
 
     connection.commit()
     connection.close()
+    logging.info("Password Updated")
 
     return
 
@@ -68,4 +73,5 @@ def addUser(user, password, ut):
     connection.commit()
     connection.close()
 
+    logging.info("User %s Added" % (user))
     return

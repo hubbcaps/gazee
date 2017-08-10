@@ -1,6 +1,7 @@
 import os, sys
 import cherrypy
 import string
+import logging
 
 from pathlib import Path
 
@@ -8,6 +9,9 @@ import gazee
 from gazee import *
 
 def main():
+    logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+    logger = logging.getLogger(__name__) 
+
     conf = {
             'global' : {
                 'server.socket_host': '0.0.0.0',
@@ -39,6 +43,7 @@ def main():
             }
     # Start the server.
     cherrypy.quickstart(Gazee(), '/', config=conf)
+    logging.info("Gazee Started")
 
     return
 

@@ -3,6 +3,7 @@ import sys
 import cherrypy
 import sqlite3
 import configparser
+import logging
 
 from pathlib import Path
 
@@ -12,6 +13,9 @@ from mako import exceptions
 
 import gazee
 from gazee.comicscan import ComicScanner
+
+logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+logger = logging.getLogger(__name__) 
 
 """
 This initializes our mako template serving directory and allows us to return it's compiled embeded html pages rather than the default return of a static html page.
@@ -37,6 +41,7 @@ class Gazee(object):
     """
     @cherrypy.expose
     def index(self, page_num=1):
+        logging.info("Index Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -74,6 +79,8 @@ class Gazee(object):
         connection.commit()
         connection.close()
 
+        logging.info("Index Served")
+
         return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num))
 
     """
@@ -82,6 +89,7 @@ class Gazee(object):
     # Library Page
     @cherrypy.expose
     def library(self, directory, page_num=1):
+        logging.info("Library Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -161,6 +169,7 @@ class Gazee(object):
             prd = ''
 
         directories.sort()
+        logging.info("Library Served")
 
         return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory)
 
@@ -171,11 +180,13 @@ class Gazee(object):
     # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
+        logging.info("Reader Requested")
         scanner = ComicScanner()
         scanner.unpackComic(comic_path)
         image_list = scanner.readingImages()
         num_pages = len(image_list)
         num_pages -= 1
+        logging.info("Reader Served")
         return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=0)
 
     """
@@ -204,6 +215,7 @@ class Gazee(object):
     @cherrypy.expose
     def settings(self):
         user = cherrypy.request.login
+        logging.info("Settings Served")
         return serve_template(templatename="settings.html", user=user)
 
     @cherrypy.expose
@@ -228,23 +240,28 @@ class Gazee(object):
         config['GLOBAL']['MYLAR_DB'] = smylarPath
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
+        logging.info("Settings Saved")
         return
 
     @cherrypy.expose
     def changePassword(self, password):
         user = cherrypy.request.login
         gazee.authmech.changePass(user, password)
+        logging.info("Password Changed")
         return
 
     @cherrypy.expose
     def newUser(self, username, password, usertype):
         gazee.authmech.addUser(username, password, usertype)
+        logging.info("New User Added")
         return
 
     @cherrypy.expose
     def comicScan(self):
+        logging.info("DB Build Requested")
         scanner = ComicScanner()
         scanner.dbBuilder()
+        logging.info("DB Build Finished")
         return
 
     @cherrypy.expose
