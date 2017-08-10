@@ -3,6 +3,7 @@ import sqlite3
 import string
 import xml.etree.ElementTree as ET
 import patoolib
+import zipfile, rarfile
 import xmltodict
 import cherrypy
 import logging
