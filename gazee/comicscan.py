@@ -284,6 +284,7 @@ class ComicScanner(object):
     
                 logging.info("Comic %s Being Inserted into DB" % (name))
                 c.execute('INSERT INTO {tn} ({cn}, {ci}, {cv}, {cs}, {cimg}, {cp}, {pk}, {it}) VALUES (?, ?, ?, ?, ?, ?, ?, DATE("now"))'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, cv=gazee.COMIC_VOLUME, cs=gazee.COMIC_SUMMARY, cimg=gazee.COMIC_IMAGE, cp=gazee.COMIC_FULL_PATH, pk=gazee.PARENT_KEY, it=gazee.INSERT_DATE),(name, issue, volume, summary, image, f, pk))
+                connection.commit()
                 logging.info("Comic %s Inserted into DB Successfully" % (name))
     
         connection.commit()
