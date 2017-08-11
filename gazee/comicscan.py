@@ -100,7 +100,7 @@ class ComicScanner(object):
         if not os.path.exists(absPath):
             os.makedirs(absPath)
         
-        image_dest = os.path.abs(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image))
+        image_dest = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image))
 
         if not os.path.exists(image_dest):
             im = Image.open(image_temp_path)
