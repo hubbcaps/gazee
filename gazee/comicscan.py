@@ -47,8 +47,8 @@ class ComicScanner(object):
 
     # This method takes an argument of the full comic path and will simply unpack the requested comic into the temp directory. It first checks if there are already files in the temp directory. If so, it removes all of them and then unpacks the comic. It doesn't return anything currently, and will be used for both scanning and reading comics.
     def unpackComic(self, comic_path):
-        logging.info("Unpack Requested")
-        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+        logging.info("%s Unpack Requested" % comic_path)
+        for root, dirs, files in os.walk(gazee.TEMP_DIR, topdown=False):
             for f in files:
                 os.remove(os.path.join(root, f))
         for root, dirs, files in os.walk(gazee.TEMP_DIR, topdown=False):
