@@ -48,13 +48,12 @@ class ComicScanner(object):
     # This method takes an argument of the full comic path and will simply unpack the requested comic into the temp directory. It first checks if there are already files in the temp directory. If so, it removes all of them and then unpacks the comic. It doesn't return anything currently, and will be used for both scanning and reading comics.
     def unpackComic(self, comic_path):
         logging.info("Unpack Requested")
-        if not os.listdir(gazee.TEMP_DIR) == []:
-            for root, dirs, files in os.walk(gazee.TEMP_DIR):
-                for f in files:
-                    os.remove(os.path.join(root, f))
-            for root, dirs, files in os.walk(gazee.TEMP_DIR):
-                for d in dirs:
-                    os.rmdir(os.path.join(root, d))
+        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+            for f in files:
+                os.remove(os.path.join(root, f))
+        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+            for d in dirs:
+                os.rmdir(os.path.join(root, d))
         #Archive(comic_path).extractall(gazee.TEMP_DIR)
         if comic_path.endswith(".cbr"):
             opened_rar = rarfile.RarFile(comic_path)
