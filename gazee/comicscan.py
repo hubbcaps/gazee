@@ -103,7 +103,8 @@ class ComicScanner(object):
         if len(image) == 0:
             image_dest = 'public/images/imgnotfound.png'
         else:
-            image_dest = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image))
+            image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
+
             if not os.path.exists(image_dest):
                 im = Image.open(image_temp_path)
                 im.thumbnail(gazee.THUMB_SIZE)
