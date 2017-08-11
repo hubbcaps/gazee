@@ -100,7 +100,7 @@ class ComicScanner(object):
             os.makedirs(absPath)
         
         if len(image) == 0:
-            image_dest = 'public/images/imgnotfound.png'
+            image_dest = 'static/images/imgnotfound.png'
         else:
             image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
 

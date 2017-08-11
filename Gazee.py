@@ -15,7 +15,8 @@ def main():
     conf = {
             'global' : {
                 'server.socket_host': '0.0.0.0',
-                'server.socket_port': 4242
+                'server.socket_port': 4242,
+                'engine.timeout_monitor.on': False
                 },
             '/' : {
                 'tools.gzip.on': True,
