@@ -51,7 +51,7 @@ class ComicScanner(object):
         for root, dirs, files in os.walk(gazee.TEMP_DIR):
             for f in files:
                 os.remove(os.path.join(root, f))
-        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+        for root, dirs, files in os.walk(gazee.TEMP_DIR, topdown=False):
             for d in dirs:
                 os.rmdir(os.path.join(root, d))
         #Archive(comic_path).extractall(gazee.TEMP_DIR)
