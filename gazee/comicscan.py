@@ -55,7 +55,13 @@ class ComicScanner(object):
             for root, dirs, files in os.walk(gazee.TEMP_DIR):
                 for d in dirs:
                     os.rmdir(os.path.join(root, d))
-        Archive(comic_path).extractall(gazee.TEMP_DIR)
+        #Archive(comic_path).extractall(gazee.TEMP_DIR)
+        if comic_path.endswith(".cbr"):
+            opened_rar = rarfile.RarFile(comic_path)
+            opened_rar.extractall(gazee.TEMP_DIR)
+        elif comic_path.endswith(".cbz"):
+            opened_zip = zipfile.ZipFile(comic_path)
+            opened_zip.extractall(gazee.TEMP_DIR)
         return
 
     # This method will return a list of .jpg files in their numberical order to be fed into the reading view.
