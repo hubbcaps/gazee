@@ -88,7 +88,7 @@ class ComicScanner(object):
         sorted_files.sort()
 
         for f in sorted_files:
-            if any(x in f for x in ('000', '001')) and any(x in f for x in('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+            if any(x in f for x in ('000', '001', 'c01')) and any(x in f for x in('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
                 image_temp_path = f
                 image_split = os.path.split(f)
                 image = image_split[-1]
@@ -269,13 +269,8 @@ class ComicScanner(object):
                 logging.info("Comic exists in DB, Skipping")
                 continue
             else:
-                try:
-                    logging.info("Unpacking Comic")
-                    self.unpackComic(f)
-                    logging.info("Unpacking Successful")
-                except:
-                    logging.info("Unpacking Failed")
-                    continue
+                logging.info("Unpacking Comic")
+                self.unpackComic(f)
 
                 logging.info("Comic Info being requested")
                 info = self.comicInfoParse(f)
