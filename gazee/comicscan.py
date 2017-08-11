@@ -133,10 +133,22 @@ class ComicScanner(object):
                 logging.info("ComicInfo File Found")
                 with open(f) as fd:
                     comic_attributes = xmltodict.parse(fd.read())
-                    comic_name = comic_attributes['ComicInfo']['Series']
-                    comic_issue = comic_attributes['ComicInfo']['Number']
-                    comic_volume = comic_attributes['ComicInfo']['Volume']
-                    comic_summary = comic_attributes['ComicInfo']['Summary']
+                    try:
+                        comic_name = comic_attributes['ComicInfo']['Series']
+                    except:
+                        comic_name = "Not Available"
+                    try:
+                        comic_issue = comic_attributes['ComicInfo']['Number']
+                    except:
+                        comic_issue = "Not Available"
+                    try:
+                        comic_volume = comic_attributes['ComicInfo']['Volume']
+                    except:
+                        comic_volume = "Not Available"
+                    try:
+                        comic_summary = comic_attributes['ComicInfo']['Summary']
+                    except:
+                        comic_summary = "Not Available"
                     break
 
         if not gazee.MYLAR_DB == "":
