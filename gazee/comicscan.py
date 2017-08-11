@@ -89,7 +89,7 @@ class ComicScanner(object):
         sorted_files.sort()
 
         for f in sorted_files:
-            if any(x in f for x in ('000', '001')) and any(x in f for x in('.jpg', '.jpeg', '.png')):
+            if any(x in f for x in ('000', '001')) and any(x in f for x in('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
                 image_temp_path = f
                 image_split = os.path.split(f)
                 image = image_split[-1]
@@ -100,13 +100,25 @@ class ComicScanner(object):
         if not os.path.exists(absPath):
             os.makedirs(absPath)
         
-        image_dest = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image))
+        if len(image) == 0:
+            image_dest = 'public/images/imgnotfound.png'
+        elif len(image) > 1:
+            singleImage = image[0]
+            image_dest = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, singleImage))
 
-        if not os.path.exists(image_dest):
-            im = Image.open(image_temp_path)
-            im.thumbnail(gazee.THUMB_SIZE)
-            im.save(image_dest)
-            #os.rename(image_temp_path,image_dest)
+            if not os.path.exists(image_dest):
+                im = Image.open(image_temp_path)
+                im.thumbnail(gazee.THUMB_SIZE)
+                im.save(image_dest)
+                #os.rename(image_temp_path,image_dest)
+        else:
+            image_dest = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image))
+
+            if not os.path.exists(image_dest):
+                im = Image.open(image_temp_path)
+                im.thumbnail(gazee.THUMB_SIZE)
+                im.save(image_dest)
+
 
         logging.info("Thumbnail Generated")
         return image_dest
