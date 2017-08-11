@@ -269,8 +269,13 @@ class ComicScanner(object):
                 logging.info("Comic exists in DB, Skipping")
                 continue
             else:
-                logging.info("Unpacking Comic")
-                self.unpackComic(f)
+                try:
+                    logging.info("Unpacking Comic")
+                    self.unpackComic(f)
+                    logging.info("Unpacking Successful")
+                except:
+                    logging.info("Unpacking Failed")
+                    continue
 
                 logging.info("Comic Info being requested")
                 info = self.comicInfoParse(f)
