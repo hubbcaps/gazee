@@ -177,7 +177,7 @@ class Gazee(object):
         directories.sort()
         logging.info("Library Served")
 
-        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory, userlevel=userlevel)
+        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory, user_level=user_level)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
