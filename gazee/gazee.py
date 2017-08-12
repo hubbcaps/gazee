@@ -79,11 +79,12 @@ class Gazee(object):
         connection.commit()
         connection.close()
 
-        usertype = gazee.authmech.getUserType(cherrypy.request.login)
+        user = cherrypy.request.login
+        userlevel = gazee.authmech.getUserType(user)
 
         logging.info("Index Served")
 
-        return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num, usertype=usertype))
+        return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num, usertype=userlevel))
 
     """
     This returns the library view starting with the root library directory.
