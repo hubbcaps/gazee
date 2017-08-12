@@ -88,11 +88,10 @@ class ComicScanner(object):
         sorted_files.sort()
 
         for f in sorted_files:
-            if any(x in f for x in ('000', '001', 'c01')) and any(x in f for x in('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
-                image_temp_path = f
-                image_split = os.path.split(f)
-                image = image_split[-1]
-                break
+            image_temp_path = f
+            image_split = os.path.split(f)
+            image = image_split[-1]
+            break
 
         absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number))
 
