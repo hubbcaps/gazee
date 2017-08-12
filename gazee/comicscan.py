@@ -100,14 +100,20 @@ class ComicScanner(object):
             os.makedirs(absPath)
         
         if len(image) == 0:
+            logging.info("Image Not Found")
             image_dest = 'static/images/imgnotfound.png'
         else:
             image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
 
             if not os.path.exists(image_dest):
-                im = Image.open(image_temp_path)
-                im.thumbnail(gazee.THUMB_SIZE)
-                im.save(image_dest)
+                try:
+                    im = Image.open(image_temp_path)
+                    im.thumbnail(gazee.THUMB_SIZE)
+                    im.save(image_dest)
+                    logging.info("Thumbnail Saved")
+                except IOError:
+                    logging.info("Thumbnail Generation failed")
+                    image_dest = 'static/images/imgnotfound.png'
 
 
         logging.info("Thumbnail Generated")
