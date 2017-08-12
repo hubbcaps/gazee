@@ -46,7 +46,7 @@ def getUserLevel(username):
     c.execute('SELECT {ut} FROM {tn} WHERE {un}=?'.format(ut=gazee.TYPE,tn=gazee.USERS,un=gazee.USERNAME),(username,))
     levelinit = c.fetchone()
 
-    if not typeinit is None:
+    if not levelinit is None:
         userlevel = typeinit[0]
     else:
         userlevel = 'user'
