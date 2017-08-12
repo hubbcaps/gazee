@@ -57,11 +57,17 @@ class ComicScanner(object):
                 os.rmdir(os.path.join(root, d))
         #Archive(comic_path).extractall(gazee.TEMP_DIR)
         if comic_path.endswith(".cbr"):
-            opened_rar = rarfile.RarFile(comic_path)
-            opened_rar.extractall(gazee.TEMP_DIR)
+            try:
+                opened_rar = rarfile.RarFile(comic_path)
+                opened_rar.extractall(gazee.TEMP_DIR)
+            except:
+                Archive(comic_path).extractall(gazee.TEMP_DIR)
         elif comic_path.endswith(".cbz"):
-            opened_zip = zipfile.ZipFile(comic_path)
-            opened_zip.extractall(gazee.TEMP_DIR)
+            try:
+                opened_zip = zipfile.ZipFile(comic_path)
+                opened_zip.extractall(gazee.TEMP_DIR)
+            except:
+                Archive(comic_path).extractall(gazee.TEMP_DIR)
         return
 
     # This method will return a list of .jpg files in their numberical order to be fed into the reading view.
@@ -276,14 +282,8 @@ class ComicScanner(object):
                 logging.info("Comic exists in DB, Skipping")
                 continue
             else:
-                try:
-                    logging.info("Unpacking Comic")
-                    self.unpackComic(f)
-                    logging.info("Unpacking Successful")
-                except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, OSError) as e:
-                    logging.info("Unpacking Failed")
-                    logging.info(str(e))
-                    continue
+                logging.info("Unpacking Comic")
+                self.unpackComic(f)
 
                 logging.info("Comic Info being requested")
                 info = self.comicInfoParse(f)
