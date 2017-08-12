@@ -8,10 +8,15 @@ Eventually you will be able to start it up, point it at your library directory a
 * Python 3.6
 * CherryPy
 * Mako
-* PyUnpack
-* patoolib
 * xmltodict
 * Pillow
+* rarfile
+
+unrar needs to be installed and visible in the path of the user Gazee is running under.
+
+[Windows](http://www.rarlab.com/download.htm)
+[Centos 7](https://centos.pkgs.org/7/forensics-x86_64/unrar-5.3.0-1.el7.x86_64.rpm.html)
+[Debian](https://packages.debian.org/jessie/unrar)
 
 ## Current Status
 

@@ -69,7 +69,7 @@ class ComicScanner(object):
         image_list = []
         for root, dirs, files in os.walk(gazee.TEMP_DIR):
             for f in files:
-                if f.endswith((".jpg",".jpeg",".png")):
+                if f.endswith((".png",".gif",".bmp",".dib",".jpg",".jpeg",".jpe",".jif",".jfif",".jfi",".tiff",".tif")):
                     image_list.append(os.path.join(root,f))
                     image_list.sort()
         logging.info("Image List Created")
@@ -88,10 +88,11 @@ class ComicScanner(object):
         sorted_files.sort()
 
         for f in sorted_files:
-            image_temp_path = f
-            image_split = os.path.split(f)
-            image = image_split[-1]
-            break
+            if f.endswith((".png",".gif",".bmp",".dib",".jpg",".jpeg",".jpe",".jif",".jfif",".jfi",".tiff",".tif")):
+                image_temp_path = f
+                image_split = os.path.split(f)
+                image = image_split[-1]
+                break
 
         absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number))
 
