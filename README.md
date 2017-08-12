@@ -1,5 +1,7 @@
 # Gazee
 
+![Gazee](/public/images/logo.png)
+
 Gazee will be a webapp for reading your comics in your web browser.
 
 Eventually you will be able to start it up, point it at your library directory and have fun!
@@ -14,8 +16,12 @@ Eventually you will be able to start it up, point it at your library directory a
 
 unrar needs to be installed and visible in the path of the user Gazee is running under.
 
+#### Unrar Downloads
+
 [Windows](http://www.rarlab.com/download.htm)
+
 [Centos 7](https://centos.pkgs.org/7/forensics-x86_64/unrar-5.3.0-1.el7.x86_64.rpm.html)
+
 [Debian](https://packages.debian.org/jessie/unrar)
 
 ## Current Status
