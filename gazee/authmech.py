@@ -43,7 +43,7 @@ def getUserType(username):
     connection = sqlite3.connect(str(db))
     c = connection.cursor()
 
-    c.execute('SELECT {ut} FROM {tn} WHERE {un}=?'.format(ut=gazee.TYPE,tn=gazee.USERS,un=gazee.USERNAME),(username))
+    c.execute('SELECT {ut} FROM {tn} WHERE {un}=?'.format(ut=gazee.TYPE,tn=gazee.USERS,un=gazee.USERNAME),(username,))
     typeinit = c.fetchone()
 
     if not typeinit is None:
