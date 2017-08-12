@@ -20,7 +20,7 @@ unrar needs to be installed and visible in the path of the user Gazee is running
 
 [Windows](http://www.rarlab.com/download.htm)
 
-[Centos 7](https://centos.pkgs.org/7/forensics-x86_64/unrar-5.3.0-1.el7.x86_64.rpm.html)
+[Centos 7](https://www.rpmfind.net/linux/rpm2html/search.php?query=unrar) needs Unrar from RPMFusion, not Offical/EPEL unar application. unar is out of date and will fail with certain types of cbrs and other rar archives.
 
 [Debian](https://packages.debian.org/jessie/unrar)
 
