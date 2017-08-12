@@ -122,60 +122,72 @@ class Gazee(object):
         pk = [tup[0] for tup in pkinit]
 
         # Select all the Nice Names from the Dir Names table.
-        c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk[0],))
+        try:
+            c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk[0],))
 
-        dirsinit = c.fetchall()
-        directories = [tup[0] for tup in dirsinit]
+            dirsinit = c.fetchall()
+            directories = [tup[0] for tup in dirsinit]
 
-        c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY),(pk[0],))
-        numcinit = c.fetchone()
-        num_of_comics = numcinit[0]
-        num_of_pages = 0
-        while num_of_comics >= 0:
-            num_of_comics -= gazee.COMICS_PER_PAGE
-            num_of_pages += 1
 
-        if page_num == 1:
-            PAGE_OFFSET = 0
-        else:
-            PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
+            c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY),(pk[0],))
+            numcinit = c.fetchone()
+            num_of_comics = numcinit[0]
+            num_of_pages = 0
+            while num_of_comics >= 0:
+                num_of_comics -= gazee.COMICS_PER_PAGE
+                num_of_pages += 1
+    
+            if page_num == 1:
+                PAGE_OFFSET = 0
+            else:
+                PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
+    
+            # Select all of the comics associated with the parent dir as well.
+            c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET),(pk[0],))
+    
+            # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
+            comicsinit = c.fetchall()
+            comics = []
+            for f in comicsinit:
+                comics.append({"Key":                f[0],
+                               "ComicName":          f[1],
+                               "ComicImage":         f[2],
+                               "ComicIssue":         f[3],
+                               "ComicVolume":        f[4],
+                               "ComicSummary":       f[5],
+                               "ComicPath":          f[6],
+                               "DateAdded":          f[7]})
+    
+            connection.commit()
+            connection.close()
+    
+            cp_split = os.path.split(gazee.COMIC_PATH)
+    
+            # End it all by grinding the breadcrumb.
+            if parent_dir == '':
+                prd = ''
+            else:
+                parent_parts = os.path.split(parent_dir[0])
+                prd = parent_parts[1]
+    
+            if prd == cp_split[1]:
+                prd = ''
+    
+    
+            directories.sort()
+            logging.info("Library Served")
 
-        # Select all of the comics associated with the parent dir as well.
-        c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET),(pk[0],))
-
-        # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
-        comicsinit = c.fetchall()
-        comics = []
-        for f in comicsinit:
-            comics.append({"Key":                f[0],
-                           "ComicName":          f[1],
-                           "ComicImage":         f[2],
-                           "ComicIssue":         f[3],
-                           "ComicVolume":        f[4],
-                           "ComicSummary":       f[5],
-                           "ComicPath":          f[6],
-                           "DateAdded":          f[7]})
-
-        connection.commit()
-        connection.close()
-
-        cp_split = os.path.split(gazee.COMIC_PATH)
-
-        # End it all by grinding the breadcrumb.
-        if parent_dir == '':
+        except IndexError:
+            logging.warning("No Child Directories, Scan your comic path")
+            directories = []
+            comics = []
             prd = ''
-        else:
-            parent_parts = os.path.split(parent_dir[0])
-            prd = parent_parts[1]
-
-        if prd == cp_split[1]:
-            prd = ''
+            num_of_pages = 1
+            current_page = 1
+            current_dir = gazee.COMIC_PATH
 
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
-
-        directories.sort()
-        logging.info("Library Served")
 
         return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory, user_level=user_level)
 

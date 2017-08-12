@@ -18,31 +18,23 @@
 
 <body>
 
-  <div class="dropdown-content" id="nav-dropdown">
-    <ul id="nav-items">
+  <header>
+    <ul class="dropdown-content" id="nav-dropdown">
       <li id="dash_dashboard"><a class="waves-effect orange lighten-2 white-text" href="/index"><b>Dashboard</b></a></li>
       <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
-      <li id="dash_settings"><a class="waves-effect blue-grey white-text" href="/settings"><b>Settings</b></a></li>
-    </ul>
-  </div>
-
-  <header>
-    <ul class="dropdown-content" id="user-dropdown">
-      <li><a class="logout-item" href="/logout">Logout</a></li>
     </ul>
     <nav class="" role="navigation">
       <div class="nav-wrapper" id="logo-wrapper">
         <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
         <ul class="right">
           <li>
-            <a class="right dropdown-button" href='' data-activates='user-dropdown'><i class='material-icons'>account_circle</i></a>
+            <a class="right dropdown-button" href='#!' data-activates='nav-dropdown'>Settings</a>
           </li>
         </ul>
       </div>
     </nav>
     <nav>
       <div class="nav-wrapper" id="breadcrumbs">
-        <a class="waves-effect dropdown-button btn-large" id="nav-drop-button" data-activates='nav-dropdown' href="#!">Settings</a>
       </div>
     </nav>
   </header>
