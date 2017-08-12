@@ -22,7 +22,9 @@
     <ul id="nav-items">
       <li id="dash_dashboard"><a class="waves-effect blue-grey white-text" href="/index"><b>Dashboard</b></a></li>
       <li id="dash_library"><a class="waves-effect orange lighten-2 white-text" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
+%if usertype == 'admin':
       <li id="dash_settings"><a class="waves-effect orange lighten-2 white-text" href="/settings"><b>Settings</b></a></li>
+%endif
     </ul>
   </div>
 

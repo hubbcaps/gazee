@@ -79,9 +79,11 @@ class Gazee(object):
         connection.commit()
         connection.close()
 
+        usertype = gazee.authmech.getUserType(cherrypy.request.login)
+
         logging.info("Index Served")
 
-        return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num))
+        return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num, usertype=usertype))
 
     """
     This returns the library view starting with the root library directory.
@@ -168,10 +170,12 @@ class Gazee(object):
         if prd == cp_split[1]:
             prd = ''
 
+        usertype = gazee.authmech.getUserType(cherrypy.request.login)
+
         directories.sort()
         logging.info("Library Served")
 
-        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory)
+        return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory,usertype=usertype)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.

@@ -35,6 +35,27 @@ def getPassword(username):
 
     return password
 
+def getUserType(username):
+
+    db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+
+    # Here we make the inital DB connection that we will be using throughout this function.
+    connection = sqlite3.connect(str(db))
+    c = connection.cursor()
+
+    c.execute('SELECT {ut} FROM {tn} WHERE {un}=?'.format(ut=gazee.TYPE,tn=gazee.USERS,un=gazee.USERNAME),(username))
+    typeinit = c.fetchone()
+
+    if not typeinit is None:
+        usertype = typeinit[0]
+    else:
+        usertype = 'user'
+
+    connection.commit()
+    connection.close()
+
+    return usertype
+
 def hashPass(password):
     hashedPass = hashlib.sha256(bytes(password, encoding='utf-8')).hexdigest()
     return hashedPass
