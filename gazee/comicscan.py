@@ -4,7 +4,7 @@ import string
 import xml.etree.ElementTree as ET
 import patoolib
 import zipfile, rarfile
-import zlib.error
+import zlib
 import xmltodict
 import cherrypy
 import logging
