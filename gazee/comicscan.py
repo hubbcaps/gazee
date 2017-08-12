@@ -279,8 +279,9 @@ class ComicScanner(object):
                     logging.info("Unpacking Comic")
                     self.unpackComic(f)
                     logging.info("Unpacking Successful")
-                except:
+                except BadZipFile as e:
                     logging.info("Unpacking Failed")
+                    logging.info(str(e))
                     continue
 
                 logging.info("Comic Info being requested")
