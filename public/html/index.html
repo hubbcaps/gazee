@@ -56,16 +56,16 @@
                <div class="row center-cols center-align">
                  <ul class="pagination">
 % if current_page == 1:
-                   <li class="disabled"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 % else:
 
                    <li class="waves-effect"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
-% for i in range(1, num_of_pages + 1):
+% for i in range(1, 20):
                    <li class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
 % endfor
-% if current_page == num_of_pages:
-<li class="disabled"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+% if current_page == 20:
+<li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 % else:
 <li class="waves-effect"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
 % endif
