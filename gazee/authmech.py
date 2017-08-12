@@ -35,7 +35,7 @@ def getPassword(username):
 
     return password
 
-def getUserType(username):
+def getUserLevel(username):
 
     db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -44,17 +44,17 @@ def getUserType(username):
     c = connection.cursor()
 
     c.execute('SELECT {ut} FROM {tn} WHERE {un}=?'.format(ut=gazee.TYPE,tn=gazee.USERS,un=gazee.USERNAME),(username,))
-    typeinit = c.fetchone()
+    levelinit = c.fetchone()
 
     if not typeinit is None:
-        usertype = typeinit[0]
+        userlevel = typeinit[0]
     else:
-        usertype = 'user'
+        userlevel = 'user'
 
     connection.commit()
     connection.close()
 
-    return usertype
+    return userlevel
 
 def hashPass(password):
     hashedPass = hashlib.sha256(bytes(password, encoding='utf-8')).hexdigest()
