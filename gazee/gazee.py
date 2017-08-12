@@ -233,8 +233,9 @@ class Gazee(object):
     @cherrypy.expose
     def settings(self):
         user = cherrypy.request.login
+        user_level = gazee.authmech.getUserLevel(user)
         logging.info("Settings Served")
-        return serve_template(templatename="settings.html", user=user)
+        return serve_template(templatename="settings.html", user=user, user_level=user_level)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')

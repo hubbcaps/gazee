@@ -84,12 +84,14 @@ body {
   border-bottom: 1px solid #FFF;
   box-shadow: 0 1px 0 0 #FFF;
 }
-.user-dropdown {
+#nav-dropdown {
   background-color: #ffb74d;
+}
+#nav-dropdown a {
   color: #FFF;
 }
-#nav-drop-button {
-  background: #ffb74d;
+.dropdown-button {
+  background-color: #ffb74d;
   color: #FFF;
 }
 .logout-item {
