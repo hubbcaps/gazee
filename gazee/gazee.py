@@ -271,12 +271,6 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def logout(self, from_page="/"):
-        cherrypy.lib.sessions.expire
-        cherrypy.request.login = None
-        raise cherrypy.HTTPRedirect(from_page or "/")
-
-    @cherrypy.expose
     def opds(self):
         #TODO
         return "not implemented yet"
