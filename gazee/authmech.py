@@ -47,7 +47,7 @@ def getUserLevel(username):
     levelinit = c.fetchone()
 
     if not levelinit is None:
-        userlevel = typeinit[0]
+        userlevel = levelinit[0]
     else:
         userlevel = 'user'
 
