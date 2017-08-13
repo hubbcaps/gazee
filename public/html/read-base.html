@@ -25,6 +25,9 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $(".page-settings").click(function() {
+        $(".page-settings").toggleClass( "dimmed" );
+        $(".page-left").toggleClass( "dimmed" );
+        $(".page-right").toggleClass( "dimmed" );
         $("#page-settings-text").toggle();
         $("#page-settings-left-text").toggle();
         $("#page-settings-right-text").toggle();

@@ -1,3 +1,5 @@
+html {
+}
 header,
 main,
 footer {
@@ -7,29 +9,12 @@ body {
   color: #FFF;
   background: #607d8b;
 }
-#footer {
-  background: #607d8b;
-}
-#read-link {
-  color: #FFF;
+img[class*="reader-page-"] {
+  position: absolute;
+  max-width:100%;
 }
 #breadcrumbs {
   background: #ffb74d;
-}
-#logo-wrapper {
-  background: #607d8b;
-}
-#settings-arrow {
-  color: #607d8b;
-}
-.btn-flat {
-  background: #ffb74d;
-  color: #FFF;
-}
-.card {
-  max-width: 300px;
-  background-color: #ffb74d;
-  box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 #comic-card-content {
   display:flex;
@@ -45,8 +30,43 @@ body {
   background-color: #ffb74d;
   text-position: center;
 }
-.card-content a {
+#footer {
+  background: #607d8b;
+}
+#logo-wrapper {
+  background: #607d8b;
+}
+#nav-dropdown {
+  background-color: #ffb74d;
+}
+#nav-dropdown a {
   color: #FFF;
+}
+#page-settings-text {
+  color: #FFF;
+}
+#read-link {
+  color: #FFF;
+}
+#settings-arrow {
+  color: #ffb74d;
+}
+#settings-button {
+  background: #ffb74d;
+  color: #FFF;
+}
+#summary-pane {
+  background: #ffb74d;
+  color: #FFF;
+}
+.btn-flat {
+  background: #ffb74d;
+  color: #FFF;
+}
+.card {
+  max-width: 300px;
+  background-color: #ffb74d;
+  box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 .card img {
   height: 100%;
@@ -54,15 +74,25 @@ body {
   max-width: 300px;
   object-fit: cover;
 }
+.card-content {
+  background: #ffb73d;
+  color: #FFF;
+  text-align: center;
+}
+.card-content a {
+  color: #FFF;
+}
 .center-cols > .col {
   float:none; /* disable the float */
   display: inline-block; /* make blocks inline-block */
   text-align: initial; /* restore text-align to default */
 }
-.card-content {
-  background: #ffb74d;
+.dimmed {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.dropdown-button {
+  background-color: #ffb74d;
   color: #FFF;
-  text-align: center;
 }
 .input-field {
   color: #FFF;
@@ -84,19 +114,39 @@ body {
   border-bottom: 1px solid #FFF;
   box-shadow: 0 1px 0 0 #FFF;
 }
-#nav-dropdown {
-  background-color: #ffb74d;
+.overlay-settings {
+  position: fixed;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  color: #000;
+  z-index:4000;
+  min-height: 1px;
 }
-#nav-dropdown a {
-  color: #FFF;
+.overlay-settings-text {
+  height: 900px;
+  line-height: 900px;
+  text-align: center;
 }
-.dropdown-button {
-  background-color: #ffb74d;
-  color: #FFF;
+.page-left {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
 }
-.logout-item {
-  background: #607d8b;
-  color: #FFF;
+.page-settings {
+  position: fixed;
+  left: 33.33%;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
+}
+.page-right {
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  width: 33.33%;
 }
 .reader-overlay {
   position: absolute;
@@ -111,23 +161,6 @@ body {
 .reader-page {
   position: absolute;
   max-width:100%;
-}
-img[class*="reader-page-"] {
-  position: absolute;
-  max-width:100%;
-}
-.overlay-settings {
-  position: fixed;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0);
-  color: #000;
-  z-index:4000;
-  min-height: 1px;
-}
-.overlay-settings-text {
-  height: 900px;
-  line-height: 900px;
-  text-align: center;
 }
 .settings-span-left {
   display: inline-block;
@@ -146,32 +179,4 @@ img[class*="reader-page-"] {
   right: 0px;
   vertical-align: middle;
   line-height: normal;
-}
-#summary-pane {
-  background: #ffb74d;
-  color: #FFF;
-}
-.page-left {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  height: 100%;
-  width: 33.33%;
-  background-color: rgba(0, 0, 0, 0);
-}
-.page-settings {
-  position: fixed;
-  left: 33.33%;
-  top: 0px;
-  height: 100%;
-  width: 33.33%;
-  background-color: rgba(0, 0, 0, 0);
-}
-.page-right {
-  position: fixed;
-  right: 0px;
-  top: 0px;
-  height: 100%;
-  width: 33.33%;
-  background-color: rgba(0, 0, 0, 0);
 }

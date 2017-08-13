@@ -203,9 +203,10 @@ class Gazee(object):
         scanner.unpackComic(comic_path)
         image_list = scanner.readingImages()
         num_pages = len(image_list)
-        num_pages -= 1
+        if num_pages == 0:
+            image_list = ['static/images/imgnotfound.png']
         logging.info("Reader Served")
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=0)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=0, nop=num_pages)
 
     """
     This allows us to change pages and do some basic sanity checking.
