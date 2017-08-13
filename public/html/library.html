@@ -39,7 +39,7 @@
       <div class="nav-wrapper" id="breadcrumbs">
         <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>
 %if parent_dir != '':
-        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${parent_dir}&page_num=1">${parent_dir}</a>
+        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory='${parent_dir}'&page_num=1">${parent_dir}</a>
 %endif
       </div>
     </nav>
@@ -55,7 +55,7 @@
                 <div class="col s4 m4 l3">
                   <div class="card">
                     <div class="card-content hoverable" id="directory-card-content">
-                      <span class="card-title" style="width:100%;"><a href="/library?directory=${directory}&page_num=1" id="library-link">${directory}</span></a>
+                      <span class="card-title" style="width:100%;"><a href="/library?directory='${directory}'&page_num=1" id="library-link">${directory}</span></a>
                     </div>
                   </div>
                 </div>
@@ -80,14 +80,14 @@
                 <div class="col s4 m4 l3">
                   <div class="card">
                     <div class="card-image hoverable">
-                      <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
+                      <a href="/readComic?comic_path='${comic['ComicPath']}'" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
                     </div>
                     <div class="card-content hoverable" id="comic-card-content">
                       <span class="card-title activator" style="width:100%;">${comic['ComicName']} ${comic['ComicIssue']}</span>
                     </div>
                     <div class="card-reveal" id="summary-pane">
                       <span class="card-title"><i class="material-icons right">close</i></span>
-                      <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link">${comic['ComicSummary']}</a></p>
+                      <p class="flow-text" style="font-size: 0.9em"><a href="/readComic?comic_path='${comic['ComicPath']}'" id="read-link">${comic['ComicSummary']}</a></p>
                     </div>
                   </div>
                 </div>

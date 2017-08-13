@@ -71,11 +71,11 @@
                         <a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
                       </div>
                       <div class="card-content hoverable" id="comic-card-content">
-                        <p class="card-title activator">${comic['ComicName']} ${comic['ComicIssue']}</p>
+                        <p class="card-title activator flow-text">${comic['ComicName']} ${comic['ComicIssue']}</p>
                       </div>
                       <div class="card-reveal" id="summary-pane">
                         <span class="card-title"><i class="material-icons right">close</i></span>
-                        <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath']}" id="read-link">${comic['ComicSummary']}</a></p>
+                        <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path='${comic['ComicPath']}'" id="read-link">${comic['ComicSummary']}</a></p>
                       </div>
                     </div>
                   </div>
