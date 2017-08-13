@@ -16,9 +16,9 @@ Gazee is still under active development and at this time should be considered an
 * Pillow
 * rarfile
 
-unrar needs to be installed and visible in the path of the user Gazee is running under.
-
 #### Unrar Downloads
+
+Unrar needs to be installed and visible in the path of the user Gazee is running under.
 
 [Windows](http://www.rarlab.com/download.htm)
 
