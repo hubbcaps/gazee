@@ -2,9 +2,11 @@
 
 ![Gazee](/public/images/logo.png)
 
-Gazee will be a webapp for reading your comics in your web browser.
+Gazee is a comic viewer for the web browser.
 
-Eventually you will be able to start it up, point it at your library directory and have fun!
+Read your favorite digital comics from almost any web connected device.
+
+Gazee is still under active development and at this time should be considered an Alpha while the base features are hammered out.
 
 ## Requirements
 * Python 3.6
@@ -24,6 +26,16 @@ unrar needs to be installed and visible in the path of the user Gazee is running
 
 [Debian](https://packages.debian.org/jessie/unrar)
 
+## Setup
+
+    cd <your install directory>
+    git clone https://github.com/hubbcaps/gazee.git
+    cd gazee
+    sudo pip install -r requirements.txt
+    python Gazee.py
+
+Proceed to the settings page and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
+
 ## Current Status
 
 ### Completed features
@@ -39,6 +51,7 @@ unrar needs to be installed and visible in the path of the user Gazee is running
 - [x] Authentication Mechanism
 - [x] Ability to change admin/user password.
 - [x] Multi User Support with Admin/User Settings. 
+- [x] Mylar DB support for additional comic info
 
 ### Needed features before Gazee is actually usable
 
@@ -51,6 +64,8 @@ unrar needs to be installed and visible in the path of the user Gazee is running
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
+- [ ] Search Functionality
+- [ ] Random First Issue of a series in library.
 - [ ] Allow use of keybinds for changing pages in Reading view
 - [ ] OPDS Support
 - [ ] User set color changes.
