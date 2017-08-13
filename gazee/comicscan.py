@@ -159,20 +159,23 @@ class ComicScanner(object):
                     break
 
         if not gazee.MYLAR_DB == "":
-            location = os.path.basename(comicpath)
-            connection = sqlite3.connect(gazee.MYLAR_DB)
-            c = connection.cursor()
+            try:
+                location = os.path.basename(comicpath)
+                connection = sqlite3.connect(gazee.MYLAR_DB)
+                c = connection.cursor()
 
-            c.execute('SELECT * FROM issues WHERE location=?', (location,))
-            comic_attributes = c.fetchone()
+                c.execute('SELECT * FROM issues WHERE location=?', (location,))
+                comic_attributes = c.fetchone()
 
-            if not comic_attributes is None:
-                if comic_name == "Not Available":
-                    logging.info("Mylar DB Found and Being Used")
-                    comic_name = comic_attributes[1]
-                    comic_issue = comic_attributes[3]
+                if not comic_attributes is None:
+                    if comic_name == "Not Available":
+                        logging.info("Mylar DB Found and Being Used")
+                        comic_name = comic_attributes[1]
+                        comic_issue = comic_attributes[3]
 
-            connection.close()
+                connection.close()
+            except:
+                logging.info("Mylar DB is locked or doesn't exist")
         logging.info("ComicInfo Being Returned")
         return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
 
