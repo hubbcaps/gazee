@@ -6,6 +6,8 @@ Gazee is a comic viewer for the web browser.
 
 Read your favorite digital comics from almost any web connected device.
 
+Works best with [Mylar](https://github.com/evilhero/mylar) comic book management, but not needed.
+
 Gazee is still under active development and at this time should be considered an Alpha while the base features are hammered out.
 
 ## Requirements
@@ -15,6 +17,8 @@ Gazee is still under active development and at this time should be considered an
 * xmltodict
 * Pillow
 * rarfile
+
+Requirements can be installed easily in the setup section below.
 
 #### Unrar Downloads
 
@@ -34,7 +38,10 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
     sudo pip install -r requirements.txt
     python Gazee.py
 
-Proceed to the settings page and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
+
+Default user and pass for the web interface is admin/gazee
+
+Proceed to the settings page and change your admin pass, and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
 
 ## Daemonize (*nix only)
 
@@ -59,7 +66,7 @@ You can easily run the program in Daemon mode by using the -d flag
 - [x] Multi User Support with Admin/User Settings. 
 - [x] Mylar DB support for additional comic info
 - [x] Daemonize. Make it runable as a service.
-- [x] Portability, is able to run under *nix and windows 
+- [x] Portability, is able to run under nix and windows 
 
 ### Needed features before Gazee is actually usable
 
