@@ -18,7 +18,7 @@ Gazee is still under active development and at this time should be considered an
 
 #### Unrar Downloads
 
-Unrar needs to be installed and visible in the path of the user Gazee is running under.
+Unrar needs to be installed and visible in the path of the user Gazee is running under to be able to properly extract all CBRs.
 
 [Windows](http://www.rarlab.com/download.htm)
 
@@ -35,6 +35,12 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
     python Gazee.py
 
 Proceed to the settings page and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
+
+## Daemonize (*nix only)
+
+You can easily run the program in Daemon mode by using the -d flag
+
+    python Gazee.py -d
 
 ## Current Status
 
@@ -53,13 +59,13 @@ Proceed to the settings page and enter the path to your comic library and option
 - [x] Multi User Support with Admin/User Settings. 
 - [x] Mylar DB support for additional comic info
 - [x] Daemonize. Make it runable as a service.
+- [x] Portability, is able to run under *nix and windows 
 
 ### Needed features before Gazee is actually usable
 
 - [ ] Search capabilities
 - [ ] Allow use of keybinds for changing pages in Reading view
 - [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
-- [ ] Portability. Verify working on Windows. Currently developed and working under linux.
 
 ### QOL Features on the Roadmap
 

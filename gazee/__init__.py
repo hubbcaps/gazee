@@ -28,6 +28,12 @@ PIDFILE = config['GLOBAL']['PIDFILE']
 ARGS = []
 THUMB_SIZE = 400, 300
 
+if not os.path.exists(TEMP_DIR):
+    os.makedirs(TEMP_DIR)
+    
+if not os.path.exists(os.path.join(DATA_DIR,'sessions')):
+    os.makedirs(os.path.join(DATA_DIR,'sessions'))
+
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
 

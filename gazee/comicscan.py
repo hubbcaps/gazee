@@ -10,7 +10,6 @@ import cherrypy
 import logging
 
 from pathlib import Path
-from pyunpack import Archive
 from PIL import Image
 
 import gazee
