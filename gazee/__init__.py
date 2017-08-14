@@ -16,6 +16,7 @@ __all__ = ['Gazee', 'ComicScanner']
 config = configparser.ConfigParser()
 config.read('data/app.ini')
 
+FULL_PATH = ""
 DB_NAME = config['GLOBAL']['DB_NAME']
 MYLAR_DB = config['GLOBAL']['MYLAR_DB']
 DATA_DIR = config['GLOBAL']['DATA_DIR']
@@ -23,6 +24,8 @@ TEMP_DIR = config['GLOBAL']['TEMP_DIR']
 PORT = int(config['GLOBAL']['PORT'])
 COMIC_PATH = config['GLOBAL']['COMIC_PATH']
 COMICS_PER_PAGE = int(config['GLOBAL']['COMICS_PER_PAGE'])
+PIDFILE = config['GLOBAL']['PIDFILE']
+ARGS = []
 THUMB_SIZE = 400, 300
 
 # Declare DB variables, such as table names and field names
@@ -107,3 +110,4 @@ if len(adminCheck) == 0:
 
 connection.commit()
 connection.close()
+

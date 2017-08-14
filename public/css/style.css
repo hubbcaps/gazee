@@ -59,6 +59,10 @@ img[class*="reader-page-"] {
   background: #ffb74d;
   color: #FFF;
 }
+#tab-row {
+  background: #ffb74d;
+  color: #FFF;
+}
 .btn-flat {
   background: #ffb74d;
   color: #FFF;
@@ -179,4 +183,14 @@ img[class*="reader-page-"] {
   right: 0px;
   vertical-align: middle;
   line-height: normal;
+}
+.tabs .tab a {
+  background: #ffb74d;
+  color: #FFF;
+}
+.tabs .tab a:hover {
+  color: #607d8b;
+}
+.tabs .indicator {
+  background-color: #FFF;
 }

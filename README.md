@@ -52,21 +52,20 @@ Proceed to the settings page and enter the path to your comic library and option
 - [x] Ability to change admin/user password.
 - [x] Multi User Support with Admin/User Settings. 
 - [x] Mylar DB support for additional comic info
+- [x] Daemonize. Make it runable as a service.
 
 ### Needed features before Gazee is actually usable
 
-- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive.
+- [ ] Search capabilities
+- [ ] Allow use of keybinds for changing pages in Reading view
+- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
 - [ ] Portability. Verify working on Windows. Currently developed and working under linux.
-- [ ] Daemonize. Make it runable as a service.
-- [ ] Various system level settings need to be implemented for CherryPy still.
 
 ### QOL Features on the Roadmap
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
-- [ ] Search Functionality
 - [ ] Random First Issue of a series in library.
-- [ ] Allow use of keybinds for changing pages in Reading view
 - [ ] OPDS Support
 - [ ] User set color changes.
 - [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.

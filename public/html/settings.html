@@ -36,14 +36,19 @@
         </ul>
       </div>
     </nav>
-    <nav>
-      <div class="nav-wrapper" id="breadcrumbs">
+    <div class="row" id="tab-row">
+      <div class="col s12">
+        <ul class="tabs">
+          <li class="tab col s3"><a class="active" href="#server-settings">Server Settings</a></li>
+          <li class="tab col s3"><a href="#user-settings">User Settings</a></li>
+          <li class="tab col s3"><a href="#server-ops">System Operations</a></li>
+        </ul>
       </div>
-    </nav>
+    </div>
   </header>
 
   <main id="whiteboard">
-    <div class="row" style="padding: 15px;">
+    <div id="server-settings" class="col s12" style="padding: 15px;">
       <form class="col s6" id="server-settings-form">
         <div class="row">
           <div class="input-field left col s6">
@@ -72,46 +77,60 @@
         <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
         </div>
-      </form>
-      <form class="col s6 right" id="change-password-form">
         <div class="row">
-          <div class="input-field col s6 right">
+          <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
+        </div>
+      </form>
+    </div>
+
+    <div id="user-settings" class="col s12" style="padding: 15px;">
+      <form class="col s6" id="change-password-form">
+        <div class="row">
+          <div class="input-field col s6">
             <input type="password" name=password id="change-password" value='' class="validate" >
             <label for="change-password">New Password for ${user}</label>
           </div>
         </div>
-        <div class="row right">
+        <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="change-pass-submit">Change Password</a>
         </div>
       </form>
-      <form class="col s6 right" id="new-user-form">
+      <form class="col s6" id="new-user-form">
         <div class="row">
-          <div class="input-field col s6 right">
+          <div class="input-field col s6">
             <input id="new-username" name="username" type="text" class="validate">
             <label for="new-username">Username</label>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s6 right">
+          <div class="input-field col s6">
             <input id="new-user-password" name="password" type="password" class="validate">
             <label for="new-user-password">Password</label>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s6 right">
+          <div class="input-field col s6">
               <input id="user-type-admin" type="radio" name="usertype" value="admin">
               <label for="user-type-admin">Admin</label>
               <input id="user-type-user" type="radio" name="usertype" value="user">
               <label for="user-type-user">User</label>
           </div>
         </div>
-        <div class="row right">
+        <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="new-user-submit">Add New User</a>
         </div>
       </form>
-      <form class="col s6 left">
-        <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
-      </form>
+    </div>
+    <div id="server-ops" class="col s12" style="padding: 15px;">
+      <div class="row">
+        <a class="btn-flat waves-effect" id="shutdown-server">Shutdown Server</a>
+      </div>
+      <div class="row">
+        <a class="btn-flat waves-effect" id="restart-server">Restart Server</a>
+      </div>
+      <div class="row">
+        <a class="btn-flat waves-effect" id="update-server">Update Server</a>
+      </div>
     </div>
   </main>
 
@@ -132,7 +151,6 @@
   -->
   <script type="text/javascript">
       $(document).ready(function() {
-        
         $("#update-app-submit").click(function() {
           $.ajax({
             url: "saveSettings",
@@ -154,6 +172,21 @@
           $.ajax({
             url: "newUser",
             data: $("#new-user-form").serialize()
+          });
+        });
+        $("#shutdown-server").click(function() {
+          $.ajax({
+            url: "shutdown"
+          });
+        });
+        $("#restart-server").click(function() {
+          $.ajax({
+            url: "restart"
+          });
+        });
+        $("#update-server").click(function() {
+          $.ajax({
+            url: "update"
           });
         });
       });

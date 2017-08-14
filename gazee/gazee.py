@@ -4,6 +4,7 @@ import cherrypy
 import sqlite3
 import configparser
 import logging
+import subprocess
 
 from pathlib import Path
 
@@ -261,6 +262,7 @@ class Gazee(object):
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
         logging.info("Settings Saved")
+        cherrypy.engine.restart()
         return
 
     @cherrypy.expose
@@ -282,6 +284,26 @@ class Gazee(object):
         scanner = ComicScanner()
         scanner.dbBuilder()
         logging.info("DB Build Finished")
+        return
+
+    @cherrypy.expose
+    def shutdown(self):
+    
+        cherrypy.engine.exit()
+        logger.info('Gazee is shutting down...')
+    
+        os._exit(0)
+        return
+
+    @cherrypy.expose
+    def restart(self):
+        cherrypy.engine.exit()
+        logger.info('Gazee is restarting...')
+        popen_list = [sys.executable, gazee.FULL_PATH]
+        popen_list += gazee.ARGS
+        logger.info('Restarting Gazee with ' + str(popen_list))
+        subprocess.Popen(popen_list, cwd=os.getcwd())
+        os._exit(0)
         return
 
     @cherrypy.expose
