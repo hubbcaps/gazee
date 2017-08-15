@@ -153,7 +153,7 @@ def main():
             }
 
     if (gazee.SSL_KEY == '') and (gazee.SSL_CERT == ''):
-        ssl_options_dict = {
+        options_dict = {
         'server.socket_port': gazee.PORT,
         'server.socket_host': '0.0.0.0',
         'server.thread_pool': 10,
