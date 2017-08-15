@@ -38,13 +38,13 @@
       $(".page-left").click(function() {
         $(".whole-page").load("/changePage?page_str=${lp}");
       });
-      $(".reader-whole").keydown(function(e) {
-        if (e.which == '39') {
+      $(document).one("keyup", function(e) {
+        if (e.which == 39) {
           $(".whole-page").load("/changePage?page_str=${np}");
         }
         });
-      $(".reader-whole").keydown(function(e) {
-        if (e.which == '37') {
+      $(document).one("keyup", function(e) {
+        if (e.which == 37) {
           $(".whole-page").load("/changePage?page_str=${lp}");
         }
         });

@@ -127,6 +127,7 @@ img[class*="reader-page-"] {
   min-height: 1px;
 }
 .overlay-settings-text {
+  color: #FFF;
   height: 900px;
   line-height: 900px;
   text-align: center;

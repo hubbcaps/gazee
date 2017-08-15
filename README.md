@@ -32,7 +32,7 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
 
 ## Setup
 
-    cd <your install directory>
+    cd <directory you want to install to>
     git clone https://github.com/hubbcaps/gazee.git
     cd gazee
     sudo pip install -r requirements.txt
@@ -68,16 +68,17 @@ You can easily run the program in Daemon mode by using the -d flag
 - [x] Daemonize. Make it runable as a service.
 - [x] Portability, is able to run under linux and windows 
 - [x] HTTPS Support
+- [x] Allow use of keybinds for changing pages in Reading view
 
 ### Needed features before Gazee is actually usable
 
 - [ ] Search capabilities
-- [ ] Allow use of keybinds for changing pages in Reading view
 
 ### QOL Features on the Roadmap
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
+- [ ] Bookmarks/Remember where user was in comic.
 - [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
 - [ ] Random First Issue of a series in library.
 - [ ] OPDS Support
