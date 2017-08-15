@@ -26,7 +26,7 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
 
 [Windows](http://www.rarlab.com/download.htm)
 
-[Centos 7](https://www.rpmfind.net/linux/rpm2html/search.php?query=unrar) needs Unrar from RPMFusion, not Offical/EPEL unar application. unar is out of date and will fail with certain types of cbrs and other rar archives.
+[Centos](https://www.rpmfind.net/linux/rpm2html/search.php?query=unrar) needs Unrar from RPMFusion, not Offical/EPEL unar application. unar is out of date and will fail with certain types of cbrs and other rar archives.
 
 [Debian](https://packages.debian.org/jessie/unrar)
 
@@ -43,7 +43,7 @@ Default user and pass for the web interface is admin/gazee
 
 Proceed to the settings page and change your admin pass, and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
 
-## Daemonize (*nix only)
+## Daemonize (Linux only)
 
 You can easily run the program in Daemon mode by using the -d flag
 
@@ -66,10 +66,11 @@ You can easily run the program in Daemon mode by using the -d flag
 - [x] Multi User Support with Admin/User Settings. 
 - [x] Mylar DB support for additional comic info
 - [x] Daemonize. Make it runable as a service.
-- [x] Portability, is able to run under nix and windows 
+- [x] Portability, is able to run under linux and windows 
 
 ### Needed features before Gazee is actually usable
 
+- [ ] HTTPS Support
 - [ ] Search capabilities
 - [ ] Allow use of keybinds for changing pages in Reading view
 - [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
