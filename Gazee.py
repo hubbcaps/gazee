@@ -152,13 +152,25 @@ def main():
                 }
             }
 
-    options_dict = {
+    if (gazee.SSL_KEY == '') and (gazee.SSL_CERT == ''):
+        ssl_options_dict = {
         'server.socket_port': gazee.PORT,
         'server.socket_host': '0.0.0.0',
         'server.thread_pool': 10,
         'log.screen': False,
         'engine.autoreload.on': False,
-    }
+        }
+    else:
+        options_dict = {
+        'server.socket_port': gazee.PORT,
+        'server.socket_host': '0.0.0.0',
+        'server.thread_pool': 10,
+        'server.ssl_module': 'builtin',
+        'server.ssl_certificate': gazee.SSL_CERT,
+        'server.ssl_private_key': gazee.SSL_KEY,
+        'log.screen': False,
+        'engine.autoreload.on': False,
+        }
 
     cherrypy.config.update(options_dict)
 

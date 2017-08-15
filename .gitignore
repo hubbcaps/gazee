@@ -1,6 +1,7 @@
 data/comics/*
 data/cache/*
 data/sessions/*
+data/ssl/*
 data/gazee.db
 data/gazee.log
 data/mylar.db

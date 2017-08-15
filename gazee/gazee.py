@@ -256,24 +256,17 @@ class Gazee(object):
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
-    def saveSettings(self, sport='', scomicPath='', scomicsPerPage='', smylarPath=''):
+    def saveSettings(self, sport=4242, scomicPath=None, scomicsPerPage=None, smylarPath=None, ssslKey=None, ssslCert=None):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read('data/app.ini')
-
-        if sport == '':
-            sport = config['GLOBAL']['PORT']
-        if scomicPath == '':
-            scomicPath = config['GLOBAL']['COMIC_PATH']
-        if scomicsPerPage == '':
-            scomicsPerPage = config['GLOBAL']['COMICS_PER_PAGE']
-        if smylarPath == '':
-            smylarPath = config['GLOBAL']['MYLAR_DB']
 
         config['GLOBAL']['PORT'] = sport
         config['GLOBAL']['COMIC_PATH'] = scomicPath
         config['GLOBAL']['COMICS_PER_PAGE'] = scomicsPerPage
         config['GLOBAL']['MYLAR_DB'] = smylarPath
+        config['GLOBAL']['SSL_KEY'] = ssslKey
+        config['GLOBAL']['SSL_CERT'] = ssslCert
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
         logging.info("Settings Saved")

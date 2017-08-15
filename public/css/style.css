@@ -3,41 +3,41 @@ html {
 header,
 main,
 footer {
-  background: #607d8b;
+  background: #757575;
 }
 body {
   color: #FFF;
-  background: #607d8b;
+  background: #757575;
 }
 img[class*="reader-page-"] {
   position: absolute;
   max-width:100%;
 }
 #breadcrumbs {
-  background: #ffb74d;
+  background: #bdbdbd;
 }
 #comic-card-content {
   display:flex;
   height: 125px;
   color: #FFF;
-  background-color: #ffb74d;
+  background-color: #bdbdbd;
   text-position: center;
 }
 #directory-card-content {
   display:flex;
   height: 125px;
   color: #FFF;
-  background-color: #ffb74d;
+  background-color: #bdbdbd;
   text-position: center;
 }
 #footer {
-  background: #607d8b;
+  background: #757575;
 }
 #logo-wrapper {
-  background: #607d8b;
+  background: #757575;
 }
 #nav-dropdown {
-  background-color: #ffb74d;
+  background-color: #bdbdbd;
 }
 #nav-dropdown a {
   color: #FFF;
@@ -49,27 +49,27 @@ img[class*="reader-page-"] {
   color: #FFF;
 }
 #settings-arrow {
-  color: #ffb74d;
+  color: #bdbdbd;
 }
 #settings-button {
-  background: #ffb74d;
+  background: #bdbdbd;
   color: #FFF;
 }
 #summary-pane {
-  background: #ffb74d;
+  background: #bdbdbd;
   color: #FFF;
 }
 #tab-row {
-  background: #ffb74d;
+  background: #bdbdbd;
   color: #FFF;
 }
 .btn-flat {
-  background: #ffb74d;
+  background: #bdbdbd;
   color: #FFF;
 }
 .card {
   max-width: 300px;
-  background-color: #ffb74d;
+  background-color: #bdbdbd;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 .card img {
@@ -95,7 +95,7 @@ img[class*="reader-page-"] {
   background-color: rgba(0, 0, 0, 0.7);
 }
 .dropdown-button {
-  background-color: #ffb74d;
+  background-color: #bdbdbd;
   color: #FFF;
 }
 .input-field {
@@ -185,11 +185,11 @@ img[class*="reader-page-"] {
   line-height: normal;
 }
 .tabs .tab a {
-  background: #ffb74d;
+  background: #bdbdbd;
   color: #FFF;
 }
 .tabs .tab a:hover {
-  color: #607d8b;
+  color: #757575;
 }
 .tabs .indicator {
   background-color: #FFF;

@@ -67,18 +67,18 @@ You can easily run the program in Daemon mode by using the -d flag
 - [x] Mylar DB support for additional comic info
 - [x] Daemonize. Make it runable as a service.
 - [x] Portability, is able to run under linux and windows 
+- [x] HTTPS Support
 
 ### Needed features before Gazee is actually usable
 
-- [ ] HTTPS Support
 - [ ] Search capabilities
 - [ ] Allow use of keybinds for changing pages in Reading view
-- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
 
 ### QOL Features on the Roadmap
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
+- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
 - [ ] Random First Issue of a series in library.
 - [ ] OPDS Support
 - [ ] User set color changes.
