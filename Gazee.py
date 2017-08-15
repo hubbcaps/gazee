@@ -125,6 +125,7 @@ def main():
     conf = {
             '/' : {
                 'tools.gzip.on': True,
+                'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'], 
                 'tools.sessions.on': True,
                 'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
                 'tools.sessions.storage_path': "data/sessions",

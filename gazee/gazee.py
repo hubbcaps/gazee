@@ -222,7 +222,7 @@ class Gazee(object):
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
         logging.info("Reader Served")
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=0, nop=num_pages)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=num_pages - 1, nop=num_pages)
 
     """
     This allows us to change pages and do some basic sanity checking.
@@ -237,10 +237,14 @@ class Gazee(object):
         scanner = ComicScanner()
         image_list = scanner.readingImages()
         num_pages = len(image_list)
-        if next_page > num_pages:
-            page_num = 0
-        if last_page < 0:
+        if page_num == -1:
             page_num = num_pages - 1
+            next_page = 0
+            last_page = num_pages - 2
+        if page_num == num_pages:
+            page_num = 0
+            next_page = 1
+            last_page = num_pages - 1
         return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages)
 
     """
