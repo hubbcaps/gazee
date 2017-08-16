@@ -67,10 +67,7 @@ You can easily run the program in Daemon mode by using the -d flag
 - [x] Portability, is able to run under linux and windows 
 - [x] HTTPS Support
 - [x] Allow use of keybinds for changing pages in Reading view
-
-### Needed features before Gazee is actually usable
-
-- [ ] Search capabilities
+- [x] Search capabilities
 
 ### QOL Features on the Roadmap
 
