@@ -1,5 +1,3 @@
-# Gazee
-
 ![Gazee](/public/images/logo.png)
 
 Gazee is a comic viewer for the web browser.

@@ -31,7 +31,7 @@ import gazee
 from gazee.comicscan import ComicScanner
 
 logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 
 """
 This initializes our mako template serving directory and allows us to return it's compiled embeded html pages rather than the default return of a static html page.
@@ -102,6 +102,57 @@ class Gazee(object):
 
         return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level)
 
+    @cherrypy.expose
+    def search(self, page_num=1, search_string=''):
+        logging.info("Search Requested")
+        # Here we set the db file path.
+        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+
+        # Here we make the inital DB connection that we will be using throughout this function.
+        connection = sqlite3.connect(str(db))
+        c = connection.cursor()
+
+        c.execute("CREATE VIRTUAL TABLE ComicSearch USING fts4(key, name, image, issue, volume, summary, path, parent_key, date)")
+        c.execute("INSERT INTO ComicSearch SELECT key, name, image, issue, volume, summary, path, parent_key, date from all_comics")
+
+        c.execute("SELECT COUNT(*) FROM ComicSearch WHERE ComicSearch MATCH ?",(search_string,))
+        numcinit = c.fetchone()
+        num_of_comics = numcinit[0]
+        num_of_pages = 0
+        while num_of_comics >= 0:
+            num_of_comics -= gazee.COMICS_PER_PAGE
+            num_of_pages += 1
+
+        if page_num == 1:
+            PAGE_OFFSET = 0
+        else:
+            PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
+
+        c.execute("SELECT * FROM ComicSearch WHERE ComicSearch MATCH ? ORDER BY name ASC, issue ASC LIMIT {nc} OFFSET {pn}".format(nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET),(search_string,))
+        # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
+        all_recent_comics_tup = c.fetchall()
+        comics = []
+        for f in all_recent_comics_tup:
+            comics.append({"Key":                f[0],
+                           "ComicName":          f[1],
+                           "ComicImage":         f[2],
+                           "ComicIssue":         f[3],
+                           "ComicVolume":        f[4],
+                           "ComicSummary":       f[5],
+                           "ComicPath":          f[6],
+                           "DateAdded":          f[7]})
+
+        c.execute("DROP TABLE ComicSearch")
+        connection.commit()
+        connection.close()
+
+        user = cherrypy.request.login
+        user_level = gazee.authmech.getUserLevel(user)
+
+        logging.info("Search Served")
+
+        return serve_template(templatename="search.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level)
+
     """
     This returns the library view starting with the root library directory.
     """
@@ -115,7 +166,7 @@ class Gazee(object):
         # Here we make the inital DB connection that we will be using throughout this function.
         connection = sqlite3.connect(str(db))
         c = connection.cursor()
-        
+
         # Here we get the Primary Key of the selected directory
         if directory == gazee.COMIC_PATH:
             c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(directory,))
@@ -126,7 +177,7 @@ class Gazee(object):
             parent_key = [tup[0] for tup in ptkinit]
 
             c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY),(parent_key[0],))
-            
+
             pdirinit = c.fetchall()
             parent_dir = [tup[0] for tup in pdirinit]
 
@@ -152,15 +203,15 @@ class Gazee(object):
             while num_of_comics >= 0:
                 num_of_comics -= gazee.COMICS_PER_PAGE
                 num_of_pages += 1
-    
+
             if page_num == 1:
                 PAGE_OFFSET = 0
             else:
                 PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
-    
+
             # Select all of the comics associated with the parent dir as well.
             c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET),(pk[0],))
-    
+
             # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
             comicsinit = c.fetchall()
             comics = []
@@ -173,23 +224,23 @@ class Gazee(object):
                                "ComicSummary":       f[5],
                                "ComicPath":          f[6],
                                "DateAdded":          f[7]})
-    
+
             connection.commit()
             connection.close()
-    
+
             cp_split = os.path.split(gazee.COMIC_PATH)
-    
+
             # End it all by grinding the breadcrumb.
             if parent_dir == '':
                 prd = ''
             else:
                 parent_parts = os.path.split(parent_dir[0])
                 prd = parent_parts[1]
-    
+
             if prd == cp_split[1]:
                 prd = ''
-    
-    
+
+
             directories.sort()
             logging.info("Library Served")
 
@@ -227,8 +278,6 @@ class Gazee(object):
     """
     This allows us to change pages and do some basic sanity checking.
     """
-    #TODO 
-    # Make this better. Should completely disable ability to cycle comic from first to last page in this manner as it causes some artifacting I can't account for at the moment.
     @cherrypy.expose
     def changePage(self, page_str):
         page_num = int(page_str)
@@ -300,10 +349,10 @@ class Gazee(object):
 
     @cherrypy.expose
     def shutdown(self):
-    
+
         cherrypy.engine.exit()
         logger.info('Gazee is shutting down...')
-    
+
         os._exit(0)
         return
 

@@ -41,7 +41,7 @@ if ( sys.platform == 'win32' and sys.executable.split( '\\' )[-1] == 'pythonw.ex
 def daemonize():
 
     logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
-    logger = logging.getLogger(__name__) 
+    logger = logging.getLogger(__name__)
 
     if threading.activeCount() != 1:
         logger.warn('There are %r active threads. Daemonizing may cause \
@@ -51,10 +51,10 @@ def daemonize():
     sys.stderr.flush()
 
     # Do first fork
-    try: 
+    try:
         pid = os.fork()
         if pid == 0:
-            pass 
+            pass
         else:
             # Exit the parent process
             logger.debug('Forking once...')
@@ -69,9 +69,9 @@ def daemonize():
     os.umask(prev and int('077', 8))
 
     # Do second fork
-    try: 
+    try:
         pid = os.fork()
-        if pid > 0: 
+        if pid > 0:
             logger.debug('Forking twice...')
             os._exit(0) # Exit second parent process
     except OSError as e:
@@ -80,7 +80,7 @@ def daemonize():
     with open('/dev/null', 'r') as dev_null:
         os.dup2(dev_null.fileno(), sys.stdin.fileno())
 
-    si = open('/dev/null', "r") 
+    si = open('/dev/null', "r")
     so = open('/dev/null', "a+")
     se = open('/dev/null', "a+")
 
@@ -96,7 +96,7 @@ def daemonize():
 
 def main():
     logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
-    logger = logging.getLogger(__name__) 
+    logger = logging.getLogger(__name__)
 
     parser = argparse.ArgumentParser(description='Gazee - Open Comic Book Reader')
 
@@ -125,7 +125,7 @@ def main():
     conf = {
             '/' : {
                 'tools.gzip.on': True,
-                'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'], 
+                'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'],
                 'tools.sessions.on': True,
                 'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
                 'tools.sessions.storage_path': "data/sessions",
