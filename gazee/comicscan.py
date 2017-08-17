@@ -61,28 +61,28 @@ class ComicScanner(object):
         return full_paths
 
     # This method takes an argument of the full comic path and will simply unpack the requested comic into the temp directory. It first checks if there are already files in the temp directory. If so, it removes all of them and then unpacks the comic. It doesn't return anything currently, and will be used for both scanning and reading comics.
-    def unpackComic(self, comic_path):
+    def unpackComic(self, comic_path, user):
         logging.info("%s Unpack Requested" % comic_path)
-        for root, dirs, files in os.walk(gazee.TEMP_DIR, topdown=False):
+        for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user), topdown=False):
             for f in files:
                 os.remove(os.path.join(root, f))
-        for root, dirs, files in os.walk(gazee.TEMP_DIR, topdown=False):
+        for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user), topdown=False):
             for d in dirs:
                 os.rmdir(os.path.join(root, d))
         #Archive(comic_path).extractall(gazee.TEMP_DIR)
         if comic_path.endswith(".cbr"):
             opened_rar = rarfile.RarFile(comic_path)
-            opened_rar.extractall(gazee.TEMP_DIR)
+            opened_rar.extractall(os.path.join(gazee.TEMP_DIR, user))
         elif comic_path.endswith(".cbz"):
             opened_zip = zipfile.ZipFile(comic_path)
-            opened_zip.extractall(gazee.TEMP_DIR)
+            opened_zip.extractall(os.path.join(gazee.TEMP_DIR, user))
         return
 
     # This method will return a list of .jpg files in their numberical order to be fed into the reading view.
-    def readingImages(self):
+    def readingImages(self, user):
         logging.info("Image List Requested")
         image_list = []
-        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+        for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             for f in files:
                 if f.endswith((".png",".gif",".bmp",".dib",".jpg",".jpeg",".jpe",".jif",".jfif",".jfi",".tiff",".tif")):
                     image_list.append(os.path.join(root,f))
@@ -91,13 +91,13 @@ class ComicScanner(object):
         return image_list
 
     # This method takes an argument of the comic name, it then looks in the temp directory after comic has been upacked for an image with 000, 001 and an image extnesion in the name. This image name and it's path are stored in variables, then makes directory named after them, and pushes the file into that directory. It then returns the path to that file to be inserted into the DB as the comics image in the library and recent comic views.
-    def imageMove(self, comic_name, volume_number, issue_number):
+    def imageMove(self, comic_name, volume_number, issue_number, user):
         logging.info("Thumbnail Requested")
         image_temp_path = []
         image = []
         sorted_files = []
 
-        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+        for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             sorted_files.extend(os.path.join(root, usf) for usf in files)
 
         sorted_files.sort()
@@ -135,7 +135,7 @@ class ComicScanner(object):
         return image_dest
 
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
-    def comicInfoParse(self, comicpath):
+    def comicInfoParse(self, comicpath, user):
         logging.info("Comic Info Requested")
         comic_name = "Not Available"
         comic_issue = "Not Available"
@@ -145,7 +145,7 @@ class ComicScanner(object):
         unpackedFiles = []
         comic_attributes = {}
 
-        for root, dirs, files in os.walk(gazee.TEMP_DIR):
+        for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             unpackedFiles.extend(os.path.join(root, f) for f in files)
         logging.info("%i unpacked files found" % (len(unpackedFiles)))
 
@@ -194,7 +194,7 @@ class ComicScanner(object):
         return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
 
     # This method is where the magic actually happens. This will use all the previous functions to build out our two DB tables, Directories and Comics respectively.
-    def dbBuilder(self):
+    def dbBuilder(self, user):
 
         logging.info("DB Build Requested")
         logging.info("Begining Full Directory and Comic Scan")
@@ -295,7 +295,7 @@ class ComicScanner(object):
             else:
                 try:
                     logging.info("Unpacking Comic")
-                    self.unpackComic(f)
+                    self.unpackComic(f, user)
                     logging.info("Unpacking Successful")
                 except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, OSError) as e:
                     logging.info("Unpacking Failed")
@@ -303,7 +303,7 @@ class ComicScanner(object):
                     continue
 
                 logging.info("Comic Info being requested")
-                info = self.comicInfoParse(f)
+                info = self.comicInfoParse(f, user)
                 logging.info("Comic Info Successfully returned")
                 # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
                 name = info['name']
@@ -312,7 +312,7 @@ class ComicScanner(object):
                 summary = info['summary']
     
                 # Here we call the image move method with the previously retrieved comic name as its argument. This returns the image path to be stored in the coming insert function.
-                image = self.imageMove(name, volume, issue)
+                image = self.imageMove(name, volume, issue, user)
 
                 pk = 1
                 bp = os.path.split(f)

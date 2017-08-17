@@ -265,10 +265,11 @@ class Gazee(object):
     # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
+        username = cherrypy.request.login
         logging.info("Reader Requested")
         scanner = ComicScanner()
-        scanner.unpackComic(comic_path)
-        image_list = scanner.readingImages()
+        scanner.unpackComic(comic_path, username)
+        image_list = scanner.readingImages(username)
         num_pages = len(image_list)
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
@@ -280,11 +281,12 @@ class Gazee(object):
     """
     @cherrypy.expose
     def changePage(self, page_str):
+        username = cherrypy.request.login
         page_num = int(page_str)
         next_page = page_num + 1
         last_page = page_num - 1
         scanner = ComicScanner()
-        image_list = scanner.readingImages()
+        image_list = scanner.readingImages(username)
         num_pages = len(image_list)
         if page_num == -1:
             page_num = num_pages - 1
@@ -341,9 +343,10 @@ class Gazee(object):
 
     @cherrypy.expose
     def comicScan(self):
+        username = cherrypy.request.login
         logging.info("DB Build Requested")
         scanner = ComicScanner()
-        scanner.dbBuilder()
+        scanner.dbBuilder(username)
         logging.info("DB Build Finished")
         return
 

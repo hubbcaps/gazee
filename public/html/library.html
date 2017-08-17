@@ -41,6 +41,12 @@
 %if parent_dir != '':
         <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${parent_dir}&page_num=1">${parent_dir}</a>
 %endif
+        <div class="input-field col s6 right">
+          <form id="search_form" action="/search">
+            <input id="search_field" name="search_string" type="text">
+            <label for="search_string"><i class="material-icons">search</i></label>
+          </form>
+        </div>
       </div>
     </nav>
   </header>
