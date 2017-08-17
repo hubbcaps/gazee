@@ -151,7 +151,7 @@ class Gazee(object):
 
         logging.info("Search Served")
 
-        return serve_template(templatename="search.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level)
+        return serve_template(templatename="search.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level, search_string=search_string)
 
     """
     This returns the library view starting with the root library directory.

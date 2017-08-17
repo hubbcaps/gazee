@@ -54,21 +54,21 @@
                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 % else:
 
-                   <li class="waves-effect"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+<li class="waves-effect"><a href="/search?page_num=${current_page - 1}&search_string=${search_string}"><i class="material-icons">chevron_left</i></a></li>
 % endif
 % if 10 > num_of_pages:
   % for i in range(1, num_of_pages + 1):
-                   <li class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
+                   <li class="waves-effect"><a href="/search?page_num=${i}&search_string=${search_string}">${i}</a></li>
   % endfor
 % else:
   % for i in range(1, 11):
-                   <li class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
+                   <li class="waves-effect"><a href="/search?page_num=${i}&search_string=${search_string}">${i}</a></li>
   % endfor
 % endif
 % if current_page == num_of_pages:
 <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 % else:
-<li class="waves-effect"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+<li class="waves-effect"><a href="/search?page_num=${current_page + 1}&search_string=${search_string}"><i class="material-icons">chevron_right</i></a></li>
 % endif
                 </ul>
 % for comic in comics:
