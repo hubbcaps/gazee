@@ -16,9 +16,10 @@
 import os, sys, shutil
 import sqlite3
 import string
-import cherrypy
 import configparser
 import logging
+import cherrypy
+from cherrypy.process.plugins import BackgroundTask
 
 from pathlib import Path
 from gazee.gazee import Gazee
@@ -38,6 +39,7 @@ DATA_DIR = config['GLOBAL']['DATA_DIR']
 TEMP_DIR = config['GLOBAL']['TEMP_DIR']
 PORT = int(config['GLOBAL']['PORT'])
 COMIC_PATH = config['GLOBAL']['COMIC_PATH']
+COMIC_SCAN_INTERVAL = config['GLOBAL']['COMIC_SCAN_INTERVAL']
 COMICS_PER_PAGE = int(config['GLOBAL']['COMICS_PER_PAGE'])
 SSL_KEY = config['GLOBAL']['SSL_KEY']
 SSL_CERT = config['GLOBAL']['SSL_CERT']
@@ -133,4 +135,3 @@ if len(adminCheck) == 0:
 
 connection.commit()
 connection.close()
-

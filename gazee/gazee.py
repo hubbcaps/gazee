@@ -268,7 +268,7 @@ class Gazee(object):
         username = cherrypy.request.login
         logging.info("Reader Requested")
         scanner = ComicScanner()
-        scanner.unpackComic(comic_path, username)
+        scanner.userUnpackComic(comic_path, username)
         image_list = scanner.readingImages(username)
         num_pages = len(image_list)
         if num_pages == 0:
@@ -343,10 +343,9 @@ class Gazee(object):
 
     @cherrypy.expose
     def comicScan(self):
-        username = cherrypy.request.login
         logging.info("DB Build Requested")
         scanner = ComicScanner()
-        scanner.dbBuilder(username)
+        scanner.dbBuilder()
         logging.info("DB Build Finished")
         return
 

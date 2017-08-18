@@ -25,10 +25,10 @@ import threading
 from pathlib import Path
 
 import cherrypy
-from cherrypy.process.plugins import Daemonizer, PIDFile
+from cherrypy.process.plugins import Daemonizer, PIDFile, BackgroundTask
 
 import gazee
-from gazee import *
+from gazee import Gazee, ComicScanner
 
 gazee.FULL_PATH = os.path.abspath(__file__)
 # Verify our app is working out of the install directory
@@ -180,8 +180,10 @@ def main():
 
     logging.info("Gazee Started")
 
+
     cherrypy.engine.start()
     cherrypy.engine.block()
+    
 
     return
 
