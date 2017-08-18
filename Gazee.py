@@ -13,19 +13,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Mylar.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys
-import string
-import time
+import os
+import sys
 import threading
-import signal
 import argparse
 import logging
-import threading
-
-from pathlib import Path
 
 import cherrypy
-from cherrypy.process.plugins import Daemonizer, PIDFile, BackgroundTask
+from cherrypy.process.plugins import Daemonizer, PIDFile
 
 import gazee
 from gazee import Gazee, ComicScanner
@@ -34,13 +29,14 @@ gazee.FULL_PATH = os.path.abspath(__file__)
 # Verify our app is working out of the install directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-if ( sys.platform == 'win32' and sys.executable.split( '\\' )[-1] == 'pythonw.exe'):
+if (sys.platform == 'win32' and sys.executable.split('\\')[-1] == 'pythonw.exe'):
     sys.stdout = open(os.devnull, "w")
     sys.stderr = open(os.devnull, "w")
 
+
 def daemonize():
 
-    logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+    logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
     logger = logging.getLogger(__name__)
 
     if threading.activeCount() != 1:
@@ -73,7 +69,7 @@ def daemonize():
         pid = os.fork()
         if pid > 0:
             logger.debug('Forking twice...')
-            os._exit(0) # Exit second parent process
+            os._exit(0)  # Exit second parent process
     except OSError as e:
         sys.exit("2nd fork failed: %s [%d]" % (e.strerror, e.errno))
 
@@ -94,8 +90,9 @@ def daemonize():
     with open(gazee.PIDFILE, 'w') as fp:
         fp.write("%s\n" % pid)
 
+
 def main():
-    logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+    logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
     logger = logging.getLogger(__name__)
 
     parser = argparse.ArgumentParser(description='Gazee - Open Comic Book Reader')
@@ -106,11 +103,8 @@ def main():
 
     if args.daemon:
         if sys.platform == 'win32':
-            print("Daemonize not supported under Windows, starting normally")
-            DAEMON = False
+            logger.info("Daemonize not supported under Windows, starting normally")
         else:
-            DAEMON = True
-
             # If the pidfile already exists, Gazee may still be running, so exit
             if os.path.exists(gazee.PIDFILE):
                 sys.exit("PID file '" + gazee.PIDFILE + "' already exists. Exiting.")
@@ -123,7 +117,7 @@ def main():
             Daemonizer(cherrypy.engine).subscribe()
 
     conf = {
-            '/' : {
+            '/': {
                 'tools.gzip.on': True,
                 'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'],
                 'tools.sessions.on': True,
@@ -135,19 +129,19 @@ def main():
                 'tools.basic_auth.users': gazee.authmech.getPassword,
                 'tools.basic_auth.encrypt': gazee.authmech.hashPass
                 },
-            '/static' : {
+            '/static': {
                 'tools.staticdir.on': True,
                 'tools.staticdir.dir': "public"
                 },
-            '/data' : {
+            '/data': {
                 'tools.staticdir.on': True,
                 'tools.staticdir.dir': "data"
                 },
-            '/tmp' : {
+            '/tmp': {
                 'tools.staticdir.on': True,
                 'tools.staticdir.dir': "tmp"
                 },
-            '/favicon.ico' : {
+            '/favicon.ico': {
                 'tools.staticfile.on': True,
                 'tools.staticfile.filename': os.path.join(os.getcwd(), "public/images/favicon.ico")
                 }
@@ -155,22 +149,22 @@ def main():
 
     if (gazee.SSL_KEY == '') and (gazee.SSL_CERT == ''):
         options_dict = {
-        'server.socket_port': gazee.PORT,
-        'server.socket_host': '0.0.0.0',
-        'server.thread_pool': 10,
-        'log.screen': False,
-        'engine.autoreload.on': False,
+            'server.socket_port': gazee.PORT,
+            'server.socket_host': '0.0.0.0',
+            'server.thread_pool': 10,
+            'log.screen': False,
+            'engine.autoreload.on': False,
         }
     else:
         options_dict = {
-        'server.socket_port': gazee.PORT,
-        'server.socket_host': '0.0.0.0',
-        'server.thread_pool': 10,
-        'server.ssl_module': 'builtin',
-        'server.ssl_certificate': gazee.SSL_CERT,
-        'server.ssl_private_key': gazee.SSL_KEY,
-        'log.screen': False,
-        'engine.autoreload.on': False,
+            'server.socket_port': gazee.PORT,
+            'server.socket_host': '0.0.0.0',
+            'server.thread_pool': 10,
+            'server.ssl_module': 'builtin',
+            'server.ssl_certificate': gazee.SSL_CERT,
+            'server.ssl_private_key': gazee.SSL_KEY,
+            'log.screen': False,
+            'engine.autoreload.on': False,
         }
 
     cherrypy.config.update(options_dict)
@@ -184,9 +178,8 @@ def main():
     scanner = ComicScanner()
     scanner.rescanDB()
     cherrypy.engine.block()
-    
-
     return
+
 
 if __name__ == '__main__':
     main()

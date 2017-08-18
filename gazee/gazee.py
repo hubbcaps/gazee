@@ -23,19 +23,20 @@ import subprocess
 
 from pathlib import Path
 
-from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako import exceptions
 
 import gazee
 from gazee.comicscan import ComicScanner
 
-logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
+logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
 logger = logging.getLogger(__name__)
 
 """
 This initializes our mako template serving directory and allows us to return it's compiled embeded html pages rather than the default return of a static html page.
 """
+
+
 def serve_template(templatename, **kwargs):
     html_dir = 'public/html/'
     _hplookup = TemplateLookup(directories=[html_dir])
@@ -45,9 +46,12 @@ def serve_template(templatename, **kwargs):
     except:
         return exceptions.html_error_template().render()
 
+
 """
 Web Pages/Views methods that are exposed for API like url calling.
 """
+
+
 class Gazee(object):
 
     """
@@ -115,7 +119,7 @@ class Gazee(object):
         c.execute("CREATE VIRTUAL TABLE ComicSearch USING fts4(key, name, image, issue, volume, summary, path, parent_key, date)")
         c.execute("INSERT INTO ComicSearch SELECT key, name, image, issue, volume, summary, path, parent_key, date from all_comics")
 
-        c.execute("SELECT COUNT(*) FROM ComicSearch WHERE ComicSearch MATCH ?",(search_string,))
+        c.execute("SELECT COUNT(*) FROM ComicSearch WHERE ComicSearch MATCH ?", (search_string,))
         numcinit = c.fetchone()
         num_of_comics = numcinit[0]
         num_of_pages = 0
@@ -128,7 +132,7 @@ class Gazee(object):
         else:
             PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
 
-        c.execute("SELECT * FROM ComicSearch WHERE ComicSearch MATCH ? ORDER BY name ASC, issue ASC LIMIT {nc} OFFSET {pn}".format(nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET),(search_string,))
+        c.execute("SELECT * FROM ComicSearch WHERE ComicSearch MATCH ? ORDER BY name ASC, issue ASC LIMIT {nc} OFFSET {pn}".format(nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET), (search_string,))
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         all_recent_comics_tup = c.fetchall()
         comics = []
@@ -169,34 +173,33 @@ class Gazee(object):
 
         # Here we get the Primary Key of the selected directory
         if directory == gazee.COMIC_PATH:
-            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(directory,))
+            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH), (directory,))
             parent_dir = ''
         else:
-            c.execute("SELECT {ptk} FROM {tn} WHERE {fp}=?".format(ptk=gazee.PARENT_KEY, tn=gazee.DIR_NAMES, fp=gazee.NICE_NAME),(directory,))
+            c.execute("SELECT {ptk} FROM {tn} WHERE {fp}=?".format(ptk=gazee.PARENT_KEY, tn=gazee.DIR_NAMES, fp=gazee.NICE_NAME), (directory,))
             ptkinit = c.fetchall()
             parent_key = [tup[0] for tup in ptkinit]
 
-            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY),(parent_key[0],))
+            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY), (parent_key[0],))
 
             pdirinit = c.fetchall()
             parent_dir = [tup[0] for tup in pdirinit]
 
             full_dir = os.path.join(parent_dir[0], directory)
 
-            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH),(full_dir,))
+            c.execute("SELECT {prk} FROM {tn} WHERE {fp}=?".format(prk=gazee.KEY, tn=gazee.ALL_DIRS, fp=gazee.FULL_DIR_PATH), (full_dir,))
 
         pkinit = c.fetchall()
         pk = [tup[0] for tup in pkinit]
 
         # Select all the Nice Names from the Dir Names table.
         try:
-            c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY),(pk[0],))
+            c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY), (pk[0],))
 
             dirsinit = c.fetchall()
             directories = [tup[0] for tup in dirsinit]
 
-
-            c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY),(pk[0],))
+            c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY), (pk[0],))
             numcinit = c.fetchone()
             num_of_comics = numcinit[0]
             num_of_pages = 0
@@ -210,7 +213,7 @@ class Gazee(object):
                 PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
 
             # Select all of the comics associated with the parent dir as well.
-            c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET),(pk[0],))
+            c.execute("SELECT * FROM {tn} WHERE {prk}=? ORDER BY {cn} ASC LIMIT {np} OFFSET {pn}".format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NUMBER, np=gazee.COMICS_PER_PAGE, prk=gazee.PARENT_KEY, pn=PAGE_OFFSET), (pk[0],))
 
             # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
             comicsinit = c.fetchall()
@@ -240,7 +243,6 @@ class Gazee(object):
             if prd == cp_split[1]:
                 prd = ''
 
-
             directories.sort()
             logging.info("Library Served")
 
@@ -250,8 +252,8 @@ class Gazee(object):
             comics = []
             prd = ''
             num_of_pages = 1
-            current_page = 1
-            current_dir = gazee.COMIC_PATH
+            page_num = 1
+            directory = gazee.COMIC_PATH
 
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
@@ -301,7 +303,6 @@ class Gazee(object):
     """
     This returns the settings page.
     """
-    #Settings Page
     @cherrypy.expose
     def settings(self):
         user = cherrypy.request.login
@@ -372,5 +373,5 @@ class Gazee(object):
 
     @cherrypy.expose
     def opds(self):
-        #TODO
+        # TODO
         return "not implemented yet"

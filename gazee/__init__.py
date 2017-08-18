@@ -13,18 +13,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Mylar.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys, shutil
+import os
 import sqlite3
-import string
 import configparser
 import logging
-import cherrypy
-from cherrypy.process.plugins import BackgroundTask
 
 from pathlib import Path
 from gazee.gazee import Gazee
 from gazee.comicscan import ComicScanner
-import gazee.authmech
 
 __version__ = '0.0.1'
 __all__ = ['Gazee', 'ComicScanner']
@@ -49,9 +45,9 @@ THUMB_SIZE = 400, 300
 
 if not os.path.exists(TEMP_DIR):
     os.makedirs(TEMP_DIR)
-    
-if not os.path.exists(os.path.join(DATA_DIR,'sessions')):
-    os.makedirs(os.path.join(DATA_DIR,'sessions'))
+
+if not os.path.exists(os.path.join(DATA_DIR, 'sessions')):
+    os.makedirs(os.path.join(DATA_DIR, 'sessions'))
 
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
@@ -82,8 +78,8 @@ USERNAME = "username"
 PASSWORD = "password"
 TYPE = "type"
 
-logging.basicConfig(level=logging.DEBUG,filename='data/gazee.log')
-logger = logging.getLogger(__name__) 
+logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+logger = logging.getLogger(__name__)
 
 # Create DB if it doesn't already exist.
 db = Path(os.path.join(DATA_DIR, DB_NAME))
