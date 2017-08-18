@@ -180,8 +180,9 @@ def main():
 
     logging.info("Gazee Started")
 
-
     cherrypy.engine.start()
+    scanner = ComicScanner()
+    scanner.rescanDB()
     cherrypy.engine.block()
     
 

@@ -24,6 +24,7 @@ import xmltodict
 import cherrypy
 import logging
 import threading
+import time
 
 from pathlib import Path
 from PIL import Image
@@ -352,4 +353,4 @@ class ComicScanner(object):
 
     def rescanDB(self):
         self.dbBuilder()
-        threading.Timer(gazee.COMIC_SCAN_INTERVAL, rescanDB()).start()
+        threading.Timer((int(gazee.COMIC_SCAN_INTERVAL) * 60), self.rescanDB).start()
