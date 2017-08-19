@@ -15,6 +15,7 @@
 
 import os
 import sys
+import time
 import cherrypy
 import sqlite3
 import configparser
@@ -305,10 +306,34 @@ class Gazee(object):
     """
     @cherrypy.expose
     def settings(self):
+
+        # Here we set the db file path.
+        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+
+        # Here we make the inital DB connection that we will be using throughout this function.
+        connection = sqlite3.connect(str(db))
+        c = connection.cursor()
+        c.execute("SELECT COUNT(*) FROM {tn}".format(tn=gazee.ALL_COMICS))
+        numcinit = c.fetchone()
+        num_of_comics = numcinit[0]
+
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
+
+        if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
+            scan_in_progress = True
+            made = os.path.getmtime(os.path.join(gazee.DATA_DIR, "db.lock"))
+            now = time.time()
+            since = now - made
+            m, s = divmod(int(since), 60)
+            h, m = divmod(m, 60)
+            scantime = ("%d:%02d:%02d" % (h, m, s))
+        else:
+            scan_in_progress = False
+            scantime = ("%d:%02d:%02d" % (0, 0, 0))
+
         logging.info("Settings Served")
-        return serve_template(templatename="settings.html", user=user, user_level=user_level)
+        return serve_template(templatename="settings.html", user=user, user_level=user_level, sip=scan_in_progress, noc=num_of_comics, scantime=scantime)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')

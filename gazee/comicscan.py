@@ -210,142 +210,154 @@ class ComicScanner(object):
     # This method is where the magic actually happens. This will use all the previous functions to build out our two DB tables, Directories and Comics respectively.
     def dbBuilder(self):
 
-        logging.info("DB Build Requested")
-        logging.info("Begining Full Directory and Comic Scan")
-        # Here we set the db file path.
-        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+        if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
+            logging.info("Comic Scan Already Running, Skipping this run")
+            return
 
-        # Here we make the inital DB connection that we will be using throughout this function.
-        connection = sqlite3.connect(str(db))
-        c = connection.cursor()
+        else:
+            with open(os.path.join(gazee.DATA_DIR, "db.lock"), 'w') as f:
+                f.write("locked")
+            f.close()
 
-        # Here we define some variables we will use to check for existing directories and directories that need to be removed from the db.
-        c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
-        pathsInDB = c.fetchall()
-        dictOfParents = []
-        keyNames = ['ParentKey', 'Path']
-        # Convert tuple to list
-        dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
-        logging.info("Grabbed Directories Currently in DB")
+            logging.info("DB Build Requested")
+            logging.info("Begining Full Directory and Comic Scan")
+            # Here we set the db file path.
+            db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
-        # Here we call the dirScan directory to get a list of all the directories under the set comic directory.
-        logging.info("Requesting Directory Scan")
-        directories = self.dirScan()
-        logging.info("Directory Scan Returned")
+            # Here we make the inital DB connection that we will be using throughout this function.
+            connection = sqlite3.connect(str(db))
+            c = connection.cursor()
 
-        # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them and their children from the db.
-        for d in dictOfParents:
-            for key, value in d.items():
-                if key == 'Path':
-                    if value not in directories:
-                        logging.info("Removing Directories No Longer on Disk.")
-                        c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_DIRS, cn=gazee.FULL_DIR_PATH), (d['Path'],))
-                        c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.DIR_NAMES, cn=gazee.PARENT_KEY), (d['ParentKey'],))
+            # Here we define some variables we will use to check for existing directories and directories that need to be removed from the db.
+            c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
+            pathsInDB = c.fetchall()
+            dictOfParents = []
+            keyNames = ['ParentKey', 'Path']
+            # Convert tuple to list
+            dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
+            logging.info("Grabbed Directories Currently in DB")
 
-        # Here we iterate over the scanned directories and check if any match any of the earlier returned paths. If they do, we skip to the next scanned directory, otherwise we insert them.
-        for d in directories:
-            if d in [dic['Path'] for dic in dictOfParents]:
-                logging.debug("Directory exists in DB, Skipping")
-                continue
-            else:
-                logging.info("Adding Directory %s to DB" % (d))
-                c.execute('INSERT INTO {tn} ({cn1}) VALUES (?)'.format(tn=gazee.ALL_DIRS, cn1=gazee.FULL_DIR_PATH), (d,))
+            # Here we call the dirScan directory to get a list of all the directories under the set comic directory.
+            logging.info("Requesting Directory Scan")
+            directories = self.dirScan()
+            logging.info("Directory Scan Returned")
 
-        # Here we commit real quick to make sure our main Dir table is up to date for associating the proper parent keys to their child contents in the regular directory table.
-        # We also reset our parent dictionary.
-        connection.commit()
+            # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them and their children from the db.
+            for d in dictOfParents:
+                for key, value in d.items():
+                    if key == 'Path':
+                        if value not in directories:
+                            logging.info("Removing Directories No Longer on Disk.")
+                            c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_DIRS, cn=gazee.FULL_DIR_PATH), (d['Path'],))
+                            c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.DIR_NAMES, cn=gazee.PARENT_KEY), (d['ParentKey'],))
 
-        c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
-        pathsInDB = c.fetchall()
-        dictOfParents = []
-        keyNames = ['ParentKey', 'Path']
-        # Convert tuple to list
-        dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
-
-        c.execute('SELECT * FROM {tn}'.format(tn=gazee.DIR_NAMES))
-        namesInDB = c.fetchall()
-        namesOfDirs = []
-        # Convert tuple to list
-        namesOfDirs = [tup[0] for tup in namesInDB]
-
-        for d in dictOfParents:
-            dirContents = os.listdir(d['Path'])
-            for dc in dirContents:
-                if dc in namesOfDirs:
-                    logging.info("Dir Name exists, skipping")
+            # Here we iterate over the scanned directories and check if any match any of the earlier returned paths. If they do, we skip to the next scanned directory, otherwise we insert them.
+            for d in directories:
+                if d in [dic['Path'] for dic in dictOfParents]:
+                    logging.debug("Directory exists in DB, Skipping")
                     continue
-                elif os.path.isdir(os.path.join(d['Path'], dc)):
-                    logging.info("Dir name %s being added to DB" % (dc))
-                    c.execute('INSERT INTO {tn} ({cn1}, {cn2}) VALUES (?,?)'.format(tn=gazee.DIR_NAMES, cn1=gazee.NICE_NAME, cn2=gazee.PARENT_KEY), (dc, d['ParentKey']))
                 else:
+                    logging.info("Adding Directory %s to DB" % (d))
+                    c.execute('INSERT INTO {tn} ({cn1}) VALUES (?)'.format(tn=gazee.ALL_DIRS, cn1=gazee.FULL_DIR_PATH), (d,))
+
+            # Here we commit real quick to make sure our main Dir table is up to date for associating the proper parent keys to their child contents in the regular directory table.
+            # We also reset our parent dictionary.
+            connection.commit()
+
+            c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
+            pathsInDB = c.fetchall()
+            dictOfParents = []
+            keyNames = ['ParentKey', 'Path']
+            # Convert tuple to list
+            dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
+
+            c.execute('SELECT * FROM {tn}'.format(tn=gazee.DIR_NAMES))
+            namesInDB = c.fetchall()
+            namesOfDirs = []
+            # Convert tuple to list
+            namesOfDirs = [tup[0] for tup in namesInDB]
+
+            for d in dictOfParents:
+                dirContents = os.listdir(d['Path'])
+                for dc in dirContents:
+                    if dc in namesOfDirs:
+                        logging.info("Dir Name exists, skipping")
+                        continue
+                    elif os.path.isdir(os.path.join(d['Path'], dc)):
+                        logging.info("Dir name %s being added to DB" % (dc))
+                        c.execute('INSERT INTO {tn} ({cn1}, {cn2}) VALUES (?,?)'.format(tn=gazee.DIR_NAMES, cn1=gazee.NICE_NAME, cn2=gazee.PARENT_KEY), (dc, d['ParentKey']))
+                    else:
+                        continue
+
+            connection.commit()
+
+            # Here we define some variables we will use to check for existing comics and comics that need to be removed from the db.
+            logging.info("Gathering all Comics in DB")
+            c.execute('SELECT ({col}) FROM {tn}'.format(col=gazee.COMIC_FULL_PATH, tn=gazee.ALL_COMICS))
+            comicPathsInDB = c.fetchall()
+            listOfComicPaths = []
+            # Convert tuple to list
+            listOfComicPaths = [tup[0] for tup in comicPathsInDB]
+
+            # Here we call comic scan and get the paths of all comics to iterate over.
+            logging.info("Comic Scan Requested")
+            all_comics = self.comicScan()
+            logging.info("Comic Scan Returned")
+
+            # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them from the db.
+            for f in listOfComicPaths:
+                if f not in all_comics:
+                    logging.info("Comic Being Removed from DB")
+                    c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_FULL_PATH), (f,))
+
+            # Here we start iterating, inside we'll call the rest of the functions, gather the rest of the info and then insert it a row at a time into the DB.
+            for f in all_comics:
+                if f in listOfComicPaths:
+                    logging.info("Comic exists in DB, Skipping")
                     continue
+                else:
+                    try:
+                        logging.info("Unpacking Comic")
+                        self.buildUnpackComic(f)
+                        logging.info("Unpacking Successful")
+                    except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, OSError) as e:
+                        logging.info("Unpacking Failed")
+                        logging.info(str(e))
+                        continue
 
-        connection.commit()
+                    logging.info("Comic Info being requested")
+                    info = self.comicInfoParse(f)
+                    logging.info("Comic Info Successfully returned")
+                    # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
+                    name = info['name']
+                    issue = info['issue']
+                    volume = info['volume']
+                    summary = info['summary']
 
-        # Here we define some variables we will use to check for existing comics and comics that need to be removed from the db.
-        logging.info("Gathering all Comics in DB")
-        c.execute('SELECT ({col}) FROM {tn}'.format(col=gazee.COMIC_FULL_PATH, tn=gazee.ALL_COMICS))
-        comicPathsInDB = c.fetchall()
-        listOfComicPaths = []
-        # Convert tuple to list
-        listOfComicPaths = [tup[0] for tup in comicPathsInDB]
+                    # Here we call the image move method with the previously retrieved comic name as its argument. This returns the image path to be stored in the coming insert function.
+                    image = self.imageMove(name, volume, issue)
 
-        # Here we call comic scan and get the paths of all comics to iterate over.
-        logging.info("Comic Scan Requested")
-        all_comics = self.comicScan()
-        logging.info("Comic Scan Returned")
+                    pk = 1
+                    bp = os.path.split(f)
+                    parent = bp[0]
+                    for d in dictOfParents:
+                        if parent == d['Path']:
+                            pk = d['ParentKey']
 
-        # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them from the db.
-        for f in listOfComicPaths:
-            if f not in all_comics:
-                logging.info("Comic Being Removed from DB")
-                c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_FULL_PATH), (f,))
+                    logging.info("Comic %s Being Inserted into DB" % (name))
+                    c.execute('INSERT INTO {tn} ({cn}, {ci}, {cv}, {cs}, {cimg}, {cp}, {pk}, {it}) VALUES (?, ?, ?, ?, ?, ?, ?, DATE("now"))'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, cv=gazee.COMIC_VOLUME, cs=gazee.COMIC_SUMMARY, cimg=gazee.COMIC_IMAGE, cp=gazee.COMIC_FULL_PATH, pk=gazee.PARENT_KEY, it=gazee.INSERT_DATE), (name, issue, volume, summary, image, f, pk))
+                    connection.commit()
+                    logging.info("Comic %s Inserted into DB Successfully" % (name))
 
-        # Here we start iterating, inside we'll call the rest of the functions, gather the rest of the info and then insert it a row at a time into the DB.
-        for f in all_comics:
-            if f in listOfComicPaths:
-                logging.info("Comic exists in DB, Skipping")
-                continue
-            else:
-                try:
-                    logging.info("Unpacking Comic")
-                    self.buildUnpackComic(f)
-                    logging.info("Unpacking Successful")
-                except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, OSError) as e:
-                    logging.info("Unpacking Failed")
-                    logging.info(str(e))
-                    continue
+            connection.commit()
+            connection.close()
 
-                logging.info("Comic Info being requested")
-                info = self.comicInfoParse(f)
-                logging.info("Comic Info Successfully returned")
-                # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
-                name = info['name']
-                issue = info['issue']
-                volume = info['volume']
-                summary = info['summary']
+            os.remove(os.path.join(gazee.DATA_DIR, "db.lock"))
 
-                # Here we call the image move method with the previously retrieved comic name as its argument. This returns the image path to be stored in the coming insert function.
-                image = self.imageMove(name, volume, issue)
-
-                pk = 1
-                bp = os.path.split(f)
-                parent = bp[0]
-                for d in dictOfParents:
-                    if parent == d['Path']:
-                        pk = d['ParentKey']
-
-                logging.info("Comic %s Being Inserted into DB" % (name))
-                c.execute('INSERT INTO {tn} ({cn}, {ci}, {cv}, {cs}, {cimg}, {cp}, {pk}, {it}) VALUES (?, ?, ?, ?, ?, ?, ?, DATE("now"))'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, cv=gazee.COMIC_VOLUME, cs=gazee.COMIC_SUMMARY, cimg=gazee.COMIC_IMAGE, cp=gazee.COMIC_FULL_PATH, pk=gazee.PARENT_KEY, it=gazee.INSERT_DATE), (name, issue, volume, summary, image, f, pk))
-                connection.commit()
-                logging.info("Comic %s Inserted into DB Successfully" % (name))
-
-        connection.commit()
-        connection.close()
-
-        logging.info("DB Build succesful")
-        return
+            logging.info("DB Build succesful")
+            return
 
     def rescanDB(self):
+
         self.dbBuilder()
         threading.Timer((int(gazee.COMIC_SCAN_INTERVAL) * 60), self.rescanDB).start()

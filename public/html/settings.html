@@ -52,49 +52,71 @@
       <form class="col s6" id="server-settings-form">
         <div class="row">
           <div class="input-field left col s4">
-            <input type="text" name="sport" value="${gazee.PORT}" class="validate">
+            <input type="text" name="sport" value="${gazee.PORT}" class="">
             <label for="sport">Port</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s4">
-            <input type="text" name="scomicsPerPage" value="${gazee.COMICS_PER_PAGE}" class="validate">
+            <input type="text" name="scomicsPerPage" value="${gazee.COMICS_PER_PAGE}" class="">
             <label for="scomicsPerPage">Comics Per Page</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s5">
-            <input type="text" name="scomicPath" value="${gazee.COMIC_PATH}" class="validate">
+            <input type="text" name="scomicPath" value="${gazee.COMIC_PATH}" class="">
             <label for="scomicPath">Comic Library Path</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s4">
-            <input type="text" name="scomicScanInterval" value="${gazee.COMIC_SCAN_INTERVAL}" class="validate">
+            <input type="text" name="scomicScanInterval" value="${gazee.COMIC_SCAN_INTERVAL}" class="">
             <label for="scomicScanInterval">Comic Scan Interval</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s5">
-            <input type="text" name="smylarPath" value="${gazee.MYLAR_DB}" class="validate">
+            <input type="text" name="smylarPath" value="${gazee.MYLAR_DB}" class="">
             <label for="smylarPath">Mylar DB Path</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s5">
-            <input type="text" name="ssslCert" value="${gazee.SSL_CERT}" class="validate">
+            <input type="text" name="ssslCert" value="${gazee.SSL_CERT}" class="">
             <label for="ssslCert">SSL Cert Path</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field left col s6">
-            <input type="text" name="ssslKey" value="${gazee.SSL_KEY}" class="validate">
+            <input type="text" name="ssslKey" value="${gazee.SSL_KEY}" class="">
             <label for="ssslKey">SSL Key Path</label>
           </div>
         </div>
         <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
         </div>
+        <table class="bordered">
+          <thead>
+            <tr>
+              <th>Scan Status</th>
+              <th>Scan Length</th>
+              <th>Number of Comics</th>
+            </tr>
+          <thead>
+          <tbody>
+            <tr>
+  % if sip:
+              <td>In Progress</td>
+              <td>${scantime}</td>
+  % else:
+              <td>Not Running</td>
+              <td>${scantime}</td>
+  % endif
+              <td>${noc}</td>
+            </tr>
+          </tbody>
+        </table>
+        </br>
         <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
         </div>
@@ -105,7 +127,7 @@
       <form class="col s6" id="change-password-form">
         <div class="row">
           <div class="input-field col s6">
-            <input type="password" name=password id="change-password" value='' class="validate" >
+            <input type="password" name=password id="change-password" value='' class="" >
             <label for="change-password">New Password for ${user}</label>
           </div>
         </div>
@@ -116,13 +138,13 @@
       <form class="col s6" id="new-user-form">
         <div class="row">
           <div class="input-field col s6">
-            <input id="new-username" name="username" type="text" class="validate">
+            <input id="new-username" name="username" type="text" class="">
             <label for="new-username">Username</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
-            <input id="new-user-password" name="password" type="password" class="validate">
+            <input id="new-user-password" name="password" type="password" class="">
             <label for="new-user-password">Password</label>
           </div>
         </div>
