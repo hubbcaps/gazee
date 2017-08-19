@@ -31,10 +31,6 @@ from mako import exceptions
 import gazee
 from gazee.comicscan import ComicScanner
 
-DATA_DIR = 'data'
-logging.basicConfig(level=logging.DEBUG, filename=os.path.join(DATA_DIR, 'gazee.log'))
-logger = logging.getLogger(__name__)
-
 """
 This initializes our mako template serving directory and allows us to return it's compiled embeded html pages rather than the default return of a static html page.
 """
@@ -64,7 +60,10 @@ class Gazee(object):
     """
     @cherrypy.expose
     def index(self, page_num=1):
-        logging.info("Index Requested")
+
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Index Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -105,13 +104,15 @@ class Gazee(object):
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
 
-        logging.info("Index Served")
+        logger.info("Index Served")
 
         return serve_template(templatename="index.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level)
 
     @cherrypy.expose
     def search(self, page_num=1, search_string=''):
-        logging.info("Search Requested")
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Search Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -156,7 +157,7 @@ class Gazee(object):
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
 
-        logging.info("Search Served")
+        logger.info("Search Served")
 
         return serve_template(templatename="search.html", comics=comics, num_of_pages=num_of_pages, current_page=int(page_num), user_level=user_level, search_string=search_string)
 
@@ -166,7 +167,9 @@ class Gazee(object):
     # Library Page
     @cherrypy.expose
     def library(self, directory, page_num=1):
-        logging.info("Library Requested")
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Library Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -247,10 +250,10 @@ class Gazee(object):
                 prd = ''
 
             directories.sort()
-            logging.info("Library Served")
+            logger.info("Library Served")
 
         except IndexError:
-            logging.warning("No Child Directories, Scan your comic path")
+            logger.warning("No Child Directories, Scan your comic path")
             directories = []
             comics = []
             prd = ''
@@ -274,15 +277,17 @@ class Gazee(object):
     # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Reader Requested")
         username = cherrypy.request.login
-        logging.info("Reader Requested")
         scanner = ComicScanner()
         scanner.userUnpackComic(comic_path, username)
         image_list = scanner.readingImages(username)
         num_pages = len(image_list)
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
-        logging.info("Reader Served")
+        logger.info("Reader Served")
         return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=num_pages - 1, nop=num_pages)
 
     """
@@ -338,7 +343,10 @@ class Gazee(object):
             scan_in_progress = False
             scantime = ("%d:%02d:%02d" % (0, 0, 0))
 
-        logging.info("Settings Served")
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Settings Served")
+
         return serve_template(templatename="settings.html", user=user, user_level=user_level, sip=scan_in_progress, noc=num_of_comics, scantime=scantime)
 
     @cherrypy.expose
@@ -358,33 +366,43 @@ class Gazee(object):
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
         configfile.close()
-        logging.info("Settings Saved")
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Settings Saved")
         self.restart()
         return
 
     @cherrypy.expose
     def changePassword(self, password):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
         user = cherrypy.request.login
         gazee.authmech.changePass(user, password)
-        logging.info("Password Changed")
+        logger.info("Password Changed")
         return
 
     @cherrypy.expose
     def newUser(self, username, password, usertype):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
         gazee.authmech.addUser(username, password, usertype)
-        logging.info("New User Added")
+        logger.info("New User Added")
         return
 
     @cherrypy.expose
     def comicScan(self):
-        logging.info("DB Build Requested")
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("DB Build Requested")
         scanner = ComicScanner()
         scanner.dbBuilder()
-        logging.info("DB Build Finished")
+        logger.info("DB Build Finished")
         return
 
     @cherrypy.expose
     def shutdown(self):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         threading.Timer(1, lambda: os._exit(0)).start()
         logger.info('Gazee is shutting down...')
@@ -392,6 +410,8 @@ class Gazee(object):
 
     @cherrypy.expose
     def restart(self):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS

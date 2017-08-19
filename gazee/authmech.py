@@ -22,10 +22,6 @@ from pathlib import Path
 
 import gazee
 
-DATA_DIR = 'data'
-logging.basicConfig(level=logging.DEBUG, filename=os.path.join(DATA_DIR, 'gazee.log'))
-logger = logging.getLogger(__name__)
-
 # This is the function called when a user logs in, it returns their hashed password from the DB for checking by CherryPys auth mechanism.
 
 
@@ -96,7 +92,10 @@ def changePass(user, password):
 
     connection.commit()
     connection.close()
-    logging.info("Password Updated")
+
+    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logger = logging.getLogger(__name__)
+    logger.info("Password Updated")
     return
 
 
@@ -115,5 +114,7 @@ def addUser(user, password, ut):
     connection.commit()
     connection.close()
 
-    logging.info("User %s Added" % (user))
+    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logger = logging.getLogger(__name__)
+    logger.info("User %s Added" % (user))
     return
