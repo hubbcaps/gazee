@@ -26,21 +26,34 @@ import gazee.authmech
 __version__ = '0.0.1'
 __all__ = ['Gazee', 'ComicScanner']
 
-config = configparser.ConfigParser()
-config.read('data/app.ini')
-
 FULL_PATH = ""
-DB_NAME = config['GLOBAL']['DB_NAME']
-MYLAR_DB = config['GLOBAL']['MYLAR_DB']
-DATA_DIR = config['GLOBAL']['DATA_DIR']
-TEMP_DIR = config['GLOBAL']['TEMP_DIR']
+DB_NAME = 'gazee.db'
+DATA_DIR = 'data'
+TEMP_DIR = 'tmp'
+PIDFILE = '/tmp/gazee.pid'
+
+if not os.path.exists(os.path.join(DATA_DIR, 'app.ini')):
+    with open(os.path.join(DATA_DIR, 'app.ini'), 'a') as cf:
+        cf.write("[GLOBAL]\n")
+        cf.write("port = 4242\n")
+        cf.write("comic_path =\n")
+        cf.write("comic_scan_interval = 60\n")
+        cf.write("comics_per_page = 15\n")
+        cf.write("mylar_db =\n")
+        cf.write("ssl_key =\n")
+        cf.write("ssl_cert =\n")
+    cf.close()
+
+config = configparser.ConfigParser()
+config.read(os.path.join(DATA_DIR, 'app.ini'))
+
 PORT = int(config['GLOBAL']['PORT'])
 COMIC_PATH = config['GLOBAL']['COMIC_PATH']
 COMIC_SCAN_INTERVAL = config['GLOBAL']['COMIC_SCAN_INTERVAL']
 COMICS_PER_PAGE = int(config['GLOBAL']['COMICS_PER_PAGE'])
+MYLAR_DB = config['GLOBAL']['MYLAR_DB']
 SSL_KEY = config['GLOBAL']['SSL_KEY']
 SSL_CERT = config['GLOBAL']['SSL_CERT']
-PIDFILE = config['GLOBAL']['PIDFILE']
 ARGS = []
 THUMB_SIZE = 400, 300
 

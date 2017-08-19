@@ -84,9 +84,11 @@ class ComicScanner(object):
         logging.info("%s unpack requested" % comic_path)
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user), topdown=False):
             for f in files:
+                os.chmod(os.path.join(root, f), stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # 0777
                 os.remove(os.path.join(root, f))
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user), topdown=False):
             for d in dirs:
+                os.chmod(os.path.join(root, d), stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # 0777
                 os.rmdir(os.path.join(root, d))
         if comic_path.endswith(".cbr"):
             opened_rar = rarfile.RarFile(comic_path)
