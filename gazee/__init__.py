@@ -32,6 +32,15 @@ DATA_DIR = 'data'
 TEMP_DIR = 'tmp'
 PIDFILE = '/tmp/gazee.pid'
 
+if not os.path.exists(TEMP_DIR):
+    os.makedirs(TEMP_DIR)
+
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+
+if not os.path.exists(os.path.join(DATA_DIR, 'sessions')):
+    os.makedirs(os.path.join(DATA_DIR, 'sessions'))
+
 if not os.path.exists(os.path.join(DATA_DIR, 'app.ini')):
     with open(os.path.join(DATA_DIR, 'app.ini'), 'a') as cf:
         cf.write("[GLOBAL]\n")
@@ -56,12 +65,6 @@ SSL_KEY = config['GLOBAL']['SSL_KEY']
 SSL_CERT = config['GLOBAL']['SSL_CERT']
 ARGS = []
 THUMB_SIZE = 400, 300
-
-if not os.path.exists(TEMP_DIR):
-    os.makedirs(TEMP_DIR)
-
-if not os.path.exists(os.path.join(DATA_DIR, 'sessions')):
-    os.makedirs(os.path.join(DATA_DIR, 'sessions'))
 
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
