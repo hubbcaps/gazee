@@ -32,14 +32,6 @@ DATA_DIR = 'data'
 TEMP_DIR = 'tmp'
 PIDFILE = '/tmp/gazee.pid'
 
-if not os.path.exists(TEMP_DIR):
-    os.makedirs(TEMP_DIR)
-
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
-
-if not os.path.exists(os.path.join(DATA_DIR, 'sessions')):
-    os.makedirs(os.path.join(DATA_DIR, 'sessions'))
 
 if not os.path.exists(os.path.join(DATA_DIR, 'app.ini')):
     with open(os.path.join(DATA_DIR, 'app.ini'), 'a') as cf:
@@ -95,7 +87,7 @@ USERNAME = "username"
 PASSWORD = "password"
 TYPE = "type"
 
-logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
 logger = logging.getLogger(__name__)
 
 # Create DB if it doesn't already exist.

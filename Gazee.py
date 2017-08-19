@@ -26,8 +26,19 @@ import gazee
 from gazee import Gazee, ComicScanner
 
 gazee.FULL_PATH = os.path.abspath(__file__)
+DATA_DIR = 'data'
+TEMP_DIR = 'tmp'
 # Verify our app is working out of the install directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+if not os.path.exists(TEMP_DIR):
+    os.makedirs(gazee.TEMP_DIR)
+
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+
+if not os.path.exists(os.path.join(DATA_DIR, 'sessions')):
+    os.makedirs(os.path.join(DATA_DIR, 'sessions'))
 
 if (sys.platform == 'win32' and sys.executable.split('\\')[-1] == 'pythonw.exe'):
     sys.stdout = open(os.devnull, "w")
@@ -36,7 +47,7 @@ if (sys.platform == 'win32' and sys.executable.split('\\')[-1] == 'pythonw.exe')
 
 def daemonize():
 
-    logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
 
     if threading.activeCount() != 1:

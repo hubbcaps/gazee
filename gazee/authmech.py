@@ -22,7 +22,8 @@ from pathlib import Path
 
 import gazee
 
-logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+DATA_DIR = 'data'
+logging.basicConfig(level=logging.DEBUG, filename=os.path.join(DATA_DIR, 'gazee.log'))
 logger = logging.getLogger(__name__)
 
 # This is the function called when a user logs in, it returns their hashed password from the DB for checking by CherryPys auth mechanism.

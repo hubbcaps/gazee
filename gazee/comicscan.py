@@ -28,7 +28,8 @@ from PIL import Image
 
 import gazee
 
-logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+DATA_DIR = 'data'
+logging.basicConfig(level=logging.DEBUG, filename=os.path.join(DATA_DIR, 'gazee.log'))
 logger = logging.getLogger(__name__)
 
 # This class will hold the various methods needed to fill out the Directory Table and the Comics table in the DB.

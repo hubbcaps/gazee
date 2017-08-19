@@ -31,7 +31,8 @@ from mako import exceptions
 import gazee
 from gazee.comicscan import ComicScanner
 
-logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
+DATA_DIR = 'data'
+logging.basicConfig(level=logging.DEBUG, filename=os.path.join(DATA_DIR, 'gazee.log'))
 logger = logging.getLogger(__name__)
 
 """
