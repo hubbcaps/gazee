@@ -119,35 +119,35 @@ def main():
             Daemonizer(cherrypy.engine).subscribe()
 
     conf = {
-            '/': {
-                'tools.gzip.on': True,
-                'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'],
-                'tools.sessions.on': True,
-                'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
-                'tools.sessions.storage_path': "data/sessions",
-                'tools.staticdir.root': os.path.abspath(os.getcwd()),
-                'tools.basic_auth.on': True,
-                'tools.basic_auth.realm': 'Gazee',
-                'tools.basic_auth.users': gazee.authmech.getPassword,
-                'tools.basic_auth.encrypt': gazee.authmech.hashPass
-                },
-            '/static': {
-                'tools.staticdir.on': True,
-                'tools.staticdir.dir': "public"
-                },
-            '/data': {
-                'tools.staticdir.on': True,
-                'tools.staticdir.dir': "data"
-                },
-            '/tmp': {
-                'tools.staticdir.on': True,
-                'tools.staticdir.dir': "tmp"
-                },
-            '/favicon.ico': {
-                'tools.staticfile.on': True,
-                'tools.staticfile.filename': os.path.join(os.getcwd(), "public/images/favicon.ico")
-                }
-            }
+        '/': {
+            'tools.gzip.on': True,
+            'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'],
+            'tools.sessions.on': True,
+            'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
+            'tools.sessions.storage_path': "data/sessions",
+            'tools.staticdir.root': os.path.abspath(os.getcwd()),
+            'tools.basic_auth.on': True,
+            'tools.basic_auth.realm': 'Gazee',
+            'tools.basic_auth.users': gazee.authmech.getPassword,
+            'tools.basic_auth.encrypt': gazee.authmech.hashPass
+        },
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': "public"
+        },
+        '/data': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': "data"
+        },
+        '/tmp': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': "tmp"
+        },
+        '/favicon.ico': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': os.path.join(os.getcwd(), "public/images/favicon.ico")
+        }
+    }
 
     if (gazee.SSL_KEY == '') and (gazee.SSL_CERT == ''):
         options_dict = {
