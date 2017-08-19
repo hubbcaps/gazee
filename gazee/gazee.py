@@ -21,6 +21,7 @@ import sqlite3
 import configparser
 import logging
 import subprocess
+import threading
 
 from pathlib import Path
 
@@ -88,14 +89,14 @@ class Gazee(object):
         all_recent_comics_tup = c.fetchall()
         comics = []
         for f in all_recent_comics_tup:
-            comics.append({"Key":                f[0],
-                           "ComicName":          f[1],
-                           "ComicImage":         f[2],
-                           "ComicIssue":         f[3],
-                           "ComicVolume":        f[4],
-                           "ComicSummary":       f[5],
-                           "ComicPath":          f[6],
-                           "DateAdded":          f[7]})
+            comics.append({"Key": f[0],
+                           "ComicName": f[1],
+                           "ComicImage": f[2],
+                           "ComicIssue": f[3],
+                           "ComicVolume": f[4],
+                           "ComicSummary": f[5],
+                           "ComicPath": f[6],
+                           "DateAdded": f[7]})
 
         connection.commit()
         connection.close()
@@ -138,14 +139,14 @@ class Gazee(object):
         all_recent_comics_tup = c.fetchall()
         comics = []
         for f in all_recent_comics_tup:
-            comics.append({"Key":                f[0],
-                           "ComicName":          f[1],
-                           "ComicImage":         f[2],
-                           "ComicIssue":         f[3],
-                           "ComicVolume":        f[4],
-                           "ComicSummary":       f[5],
-                           "ComicPath":          f[6],
-                           "DateAdded":          f[7]})
+            comics.append({"Key": f[0],
+                           "ComicName": f[1],
+                           "ComicImage": f[2],
+                           "ComicIssue": f[3],
+                           "ComicVolume": f[4],
+                           "ComicSummary": f[5],
+                           "ComicPath": f[6],
+                           "DateAdded": f[7]})
 
         c.execute("DROP TABLE ComicSearch")
         connection.commit()
@@ -220,14 +221,14 @@ class Gazee(object):
             comicsinit = c.fetchall()
             comics = []
             for f in comicsinit:
-                comics.append({"Key":                f[0],
-                               "ComicName":          f[1],
-                               "ComicImage":         f[2],
-                               "ComicIssue":         f[3],
-                               "ComicVolume":        f[4],
-                               "ComicSummary":       f[5],
-                               "ComicPath":          f[6],
-                               "DateAdded":          f[7]})
+                comics.append({"Key": f[0],
+                               "ComicName": f[1],
+                               "ComicImage": f[2],
+                               "ComicIssue": f[3],
+                               "ComicVolume": f[4],
+                               "ComicSummary": f[5],
+                               "ComicPath": f[6],
+                               "DateAdded": f[7]})
 
             connection.commit()
             connection.close()
@@ -260,6 +261,10 @@ class Gazee(object):
         user_level = gazee.authmech.getUserLevel(user)
 
         return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory, user_level=user_level)
+
+    @cherrypy.expose
+    def downloadComic(self, comic_path):
+        return cherrypy.lib.static.serve_download(comic_path)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
@@ -351,8 +356,9 @@ class Gazee(object):
         config['GLOBAL']['SSL_CERT'] = ssslCert
         with open('data/app.ini', 'w') as configfile:
             config.write(configfile)
+        configfile.close()
         logging.info("Settings Saved")
-        cherrypy.engine.restart()
+        self.restart()
         return
 
     @cherrypy.expose
@@ -378,22 +384,20 @@ class Gazee(object):
 
     @cherrypy.expose
     def shutdown(self):
-
         cherrypy.engine.exit()
+        threading.Timer(1, lambda: os._exit(0)).start()
         logger.info('Gazee is shutting down...')
-
-        os._exit(0)
         return
 
     @cherrypy.expose
     def restart(self):
         cherrypy.engine.exit()
-        logger.info('Gazee is restarting...')
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
         logger.info('Restarting Gazee with ' + str(popen_list))
         subprocess.Popen(popen_list, cwd=os.getcwd())
-        os._exit(0)
+        threading.Timer(1, lambda: os._exit(0)).start()
+        logger.info('Gazee is restarting...')
         return
 
     @cherrypy.expose

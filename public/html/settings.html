@@ -95,32 +95,32 @@
         <div class="row">
           <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
         </div>
-        <table class="bordered">
-          <thead>
-            <tr>
-              <th>Scan Status</th>
-              <th>Scan Length</th>
-              <th>Number of Comics</th>
-            </tr>
-          <thead>
-          <tbody>
-            <tr>
-  % if sip:
-              <td>In Progress</td>
-              <td>${scantime}</td>
-  % else:
-              <td>Not Running</td>
-              <td>${scantime}</td>
-  % endif
-              <td>${noc}</td>
-            </tr>
-          </tbody>
-        </table>
-        </br>
-        <div class="row">
-          <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
-        </div>
       </form>
+      <table class="bordered">
+        <thead>
+          <tr>
+            <th>Scan Status</th>
+            <th>Scan Length</th>
+            <th>Number of Comics</th>
+          </tr>
+        <thead>
+        <tbody>
+          <tr>
+% if sip:
+            <td>In Progress</td>
+            <td>${scantime}</td>
+% else:
+            <td>Not Running</td>
+            <td>${scantime}</td>
+% endif
+            <td>${noc}</td>
+          </tr>
+        </tbody>
+      </table>
+      </br>
+      <div class="row">
+        <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
+      </div>
     </div>
 
     <div id="user-settings" class="col s12" style="padding: 15px;">

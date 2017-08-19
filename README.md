@@ -39,7 +39,7 @@ Double check this on Windows, different systems have different requirements for 
     python Gazee.py
 
 
-Go to <your-ip>:4242
+Go to http://<your-ip>:4242
 
 Default user and pass for the web interface is admin/gazee
 

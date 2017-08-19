@@ -5,6 +5,7 @@ data/ssl/*
 data/gazee.db
 data/gazee.log
 data/mylar.db
+data/app.bk
 tmp/*
 __pycache__/*
 *.pyc

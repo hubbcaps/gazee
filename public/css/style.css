@@ -11,6 +11,7 @@ body {
 }
 img[class*="reader-page-"] {
   position: absolute;
+  width: 100%;
   max-width:100%;
 }
 #breadcrumbs {
@@ -36,6 +37,9 @@ img[class*="reader-page-"] {
 #logo-wrapper {
   background: #757575;
 }
+i {
+  color: #FFF;
+}
 #nav-dropdown {
   background-color: #bdbdbd;
 }
@@ -44,6 +48,12 @@ img[class*="reader-page-"] {
 }
 #page-settings-text {
   color: #FFF;
+}
+#pagination-num a {
+  color: #FFF;
+}
+#pagination-num.active {
+  background-color: #bdbdbd;
 }
 #read-link {
   color: #FFF;

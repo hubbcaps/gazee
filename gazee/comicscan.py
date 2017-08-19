@@ -213,7 +213,9 @@ class ComicScanner(object):
         if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
             logging.info("Comic Scan Already Running, Skipping this run")
             return
-
+        elif gazee.COMIC_PATH == "":
+            logging.info("No Comic Path Set")
+            return
         else:
             with open(os.path.join(gazee.DATA_DIR, "db.lock"), 'w') as f:
                 f.write("locked")
