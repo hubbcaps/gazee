@@ -1,5 +1,5 @@
 <%!
-	import gazee
+	import gazee, os
 %>
 <!doctype html>
 <div class="whole-page">
@@ -74,7 +74,11 @@
                    <li class="waves-effect"><a href="/library?directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
 % for i in range(1, num_of_pages + 1):
-                   <li class="waves-effect"><a href="/library?directory=${current_dir | u}&page_num=${i}">${i}</a></li>
+    % if i == current_page:
+                   <li id="pagination-num" class="active"><a href="#!">${i}</a></li>
+    % else:
+                   <li id="pagination-num"><a href="/library?directory=${current_dir | u}&page_num=${i}">${i}</a></li>
+    % endif
 % endfor
 % if current_page == num_of_pages:
                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
@@ -92,8 +96,11 @@
                       <p class="activator flow-text" style="width:100%;">${comic['ComicName']} ${comic['ComicIssue']}</span>
                     </div>
                     <div class="card-reveal" id="summary-pane">
-                      <span class="card-title"><i class="material-icons right">close</i></span>
-                      <p class="flow-text" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
+                      <span class="card-title">
+                        <i class="material-icons right">close</i>
+                      </span>
+                      <a href="downloadComic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons">file_download</i></a>
+                      <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
                     </div>
                   </div>
                 </div>

@@ -71,7 +71,11 @@
   % endfor
 % else:
   % for i in range(1, 11):
+    % if i == current_page:
+                   <li id="pagination-num" class="active"><a href="#!">${i}</a></li>
+    % else:
                    <li id="pagination-num" class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
+    % endif
   % endfor
 % endif
 % if current_page == num_of_pages:
