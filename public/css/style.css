@@ -9,11 +9,6 @@ body {
   color: #FFF;
   background: #757575;
 }
-img[class*="reader-page-"] {
-  position: absolute;
-  width: 100%;
-  max-width:100%;
-}
 #breadcrumbs {
   background: #bdbdbd;
 }
@@ -62,6 +57,18 @@ i {
   color: #bdbdbd;
 }
 #settings-button {
+  background: #bdbdbd;
+  color: #FFF;
+}
+#size-height-button {
+  background: #bdbdbd;
+  color: #FFF;
+}
+#size-width-button {
+  background: #bdbdbd;
+  color: #FFF;
+}
+#size-normal-button {
   background: #bdbdbd;
   color: #FFF;
 }
@@ -173,8 +180,27 @@ i {
   z-index:1000;
   max-width:100%;
 }
-.reader-page {
+.reader-page-wide {
+  width:100%;
+}
+.reader-page-high {
   position: absolute;
+  margin: auto;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  height: 100%;
+  max-width:100%;
+}
+.reader-page-norm {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
   max-width:100%;
 }
 .settings-span-left {

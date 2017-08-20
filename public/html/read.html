@@ -1,10 +1,23 @@
-<%inherit file="read-base.html"/>
 <%!
   import gazee
 %>
 <%
   now_page = pages[current_page]
 %>
+<!doctype html>
+<html class="whole-page">
+  <head>
+  	<title>Gazee</title>
+  	<meta name="description" content="Gazee Base Mako Page - Made by Hubcaps / Jessi">
+  	<meta name="author" content="Hubcaps / Jessi Moss">
+  	
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  </head>
+
   <body class="inner-page">
   <div class="reader-whole">
     <div class="col s12 overlay-settings">
@@ -24,10 +37,18 @@
               <a class="waves-effect waves-light btn-large" id="settings-button" href="/library?directory=${gazee.COMIC_PATH}&page_num=1">Library</a>
               </br>
               </br>
+              <b>On Page ${current_page + 1} of ${nop} Pages</b>
+              </br>
+              </br>
               <a class="waves-effect waves-light btn-large" id="settings-button" action="action" value="Back" onclick="window.history.go(-1); return false">Close Book</a>
               </br>
               </br>
-              <b>On Page ${current_page + 1} of ${nop} Pages</b>
+              <b>Fit Comic to Height/Width/No Fit</b>
+              </br>
+              </br>
+              <a class="waves-effect waves-light btn-large" id="size-width-button" href="#!">Width</a>
+              <a class="waves-effect waves-light btn-large" id="size-height-button" href="#!">Height</a>
+              <a class="waves-effect waves-light btn-large" id="size-normal-button" href="#!">No Fit</a>
             </p>
           </span>
         </div>
@@ -41,7 +62,65 @@
       </div>
     </div>
     <div class="row reader-overlay">
-      <img style="" class="reader-page" src="${now_page}"/>
+% if size == "wide":
+      <img class="reader-page-wide" src="${now_page}"/>
+% elif size == "high":
+      <img class="reader-page-high" src="${now_page}"/>
+% elif size == "norm":
+      <img class="reader-page-norm" src="${now_page}"/>
+% else:
+      <img class="reader-page-wide" src="${now_page}"/>
+% endif:
     </div>
   </div>
   </body>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".page-settings").click(function() {
+        $(".page-settings").toggleClass( "dimmed" );
+        $(".page-left").toggleClass( "dimmed" );
+        $(".page-right").toggleClass( "dimmed" );
+        $("#page-settings-text").toggle();
+        $("#page-settings-left-text").toggle();
+        $("#page-settings-right-text").toggle();
+      });
+      $(".page-right").click(function() {
+        $(".whole-page").load("/changePage?page_str=${np}");
+      });
+      $(".page-left").click(function() {
+        $(".whole-page").load("/changePage?page_str=${lp}");
+      });
+      $(document).one("keyup", function(e) {
+        if (e.which == 39) {
+          $(".whole-page").load("/changePage?page_str=${np}");
+        }
+        });
+      $(document).one("keyup", function(e) {
+        if (e.which == 37) {
+          $(".whole-page").load("/changePage?page_str=${lp}");
+        }
+        });
+      $("#size-width-button").click(function() {
+        $(".reader-overlay").html("<img class='reader-page-wide' src='${now_page}'/>");
+        $.ajax({
+          url: "upSizePref?pref=wide"
+        });
+      });
+      $("#size-height-button").click(function() {
+        $(".reader-overlay").html("<img class='reader-page-high' src='${now_page}'/>");
+        $.ajax({
+          url: "upSizePref?pref=high"
+        });
+      });
+      $("#size-normal-button").click(function() {
+        $(".reader-overlay").html("<img class='reader-page-norm' src='${now_page}'/>");
+        $.ajax({
+          url: "upSizePref?pref=norm"
+        });
+      });
+    });
+  </script>
+</html>

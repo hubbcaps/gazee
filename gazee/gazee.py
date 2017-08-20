@@ -60,7 +60,9 @@ class Gazee(object):
     """
     @cherrypy.expose
     def index(self, page_num=1):
-
+        cherrypy.session.load()
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Index Requested")
@@ -110,6 +112,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def search(self, page_num=1, search_string=''):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Search Requested")
@@ -167,6 +170,7 @@ class Gazee(object):
     # Library Page
     @cherrypy.expose
     def library(self, directory, page_num=1):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Library Requested")
@@ -277,6 +281,8 @@ class Gazee(object):
     # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
+        cherrypy.session.load()
+        userSizePref = cherrypy.session['sizepref']
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Reader Requested")
@@ -288,13 +294,15 @@ class Gazee(object):
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
         logger.info("Reader Served")
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=num_pages - 1, nop=num_pages)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=num_pages - 1, nop=num_pages, size=userSizePref)
 
     """
     This allows us to change pages and do some basic sanity checking.
     """
     @cherrypy.expose
     def changePage(self, page_str):
+        cherrypy.session.load()
+        userSizePref = cherrypy.session['sizepref']
         username = cherrypy.request.login
         page_num = int(page_str)
         next_page = page_num + 1
@@ -310,13 +318,20 @@ class Gazee(object):
             page_num = 0
             next_page = 1
             last_page = num_pages - 1
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref)
 
+    @cherrypy.expose
+    def upSizePref(self, pref):
+        cherrypy.session.load()
+        cherrypy.session['sizepref'] = pref
+        cherrypy.session.save()
+        return
     """
     This returns the settings page.
     """
     @cherrypy.expose
     def settings(self):
+        cherrypy.session.load()
 
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -352,6 +367,7 @@ class Gazee(object):
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
     def saveSettings(self, scomicPath=None, scomicsPerPage=None, scomicScanInterval=None, smylarPath=None, ssslKey=None, ssslCert=None, sport=4242):
+        cherrypy.session.load()
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read('data/app.ini')
@@ -374,6 +390,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def changePassword(self, password):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         user = cherrypy.request.login
@@ -383,6 +400,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def newUser(self, username, password, usertype):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         gazee.authmech.addUser(username, password, usertype)
@@ -391,6 +409,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def comicScan(self):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
@@ -401,6 +420,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def shutdown(self):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
@@ -410,6 +430,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def restart(self):
+        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
@@ -423,5 +444,6 @@ class Gazee(object):
 
     @cherrypy.expose
     def opds(self):
+        cherrypy.session.load()
         # TODO
         return "not implemented yet"
