@@ -184,23 +184,36 @@ class ComicScanner(object):
             if any(x in f for x in ("ComicInfo", "Comicinfo" "comicInfo", "comicinfo", ".xml")):
                 logger.info("ComicInfo File Found")
                 with open(f) as fd:
-                    comic_attributes = xmltodict.parse(fd.read())
+                    try:
+                        comic_attributes = xmltodict.parse(fd.read())
+                        logger.debug("ComicInfo Parsed")
+                    except:
+                        logger.debug("ComicInfo Parsing Failed")
+                        break
                     try:
                         comic_name = comic_attributes['ComicInfo']['Series']
+                        logger.debug("Comic Name Assigned")
                     except:
                         comic_name = "Not Available"
+                        logger.debug("Comic Name Not Available")
                     try:
                         comic_issue = comic_attributes['ComicInfo']['Number']
+                        logger.debug("Comic Issue Assigned")
                     except:
                         comic_issue = "Not Available"
+                        logger.debug("Comic Issue Not Available")
                     try:
                         comic_volume = comic_attributes['ComicInfo']['Volume']
+                        logger.debug("Comic Volume Assigned")
                     except:
                         comic_volume = "Not Available"
+                        logger.debug("Comic Volume Not Available")
                     try:
                         comic_summary = comic_attributes['ComicInfo']['Summary']
+                        logger.debug("Comic Summary Assigned")
                     except:
                         comic_summary = "Not Available"
+                        logger.debug("Comic Summary Not Available")
                     break
 
         if not gazee.MYLAR_DB == "":
@@ -221,6 +234,7 @@ class ComicScanner(object):
                 connection.close()
             except:
                 logger.info("Mylar DB is locked or doesn't exist")
+
         if comic_name is "Not Available":
             comicinfo = FileNameParser().parseFilename(comicpath)
             comic_name = comicinfo['series']
