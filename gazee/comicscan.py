@@ -27,6 +27,7 @@ from pathlib import Path
 from PIL import Image
 
 import gazee
+from gazee.filenameparser import FileNameParser
 
 # This class will hold the various methods needed to fill out the Directory Table and the Comics table in the DB.
 
@@ -220,6 +221,13 @@ class ComicScanner(object):
                 connection.close()
             except:
                 logger.info("Mylar DB is locked or doesn't exist")
+        if comic_name is "Not Available":
+            comicinfo = FileNameParser().parseFilename(comicpath)
+            comic_name = comicinfo['series']
+            comic_issue = comicinfo['issue']
+            comic_volume = comicinfo['volume']
+            comic_summary = comicinfo['remainder']
+
         logger.info("ComicInfo Being Returned")
         return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
 

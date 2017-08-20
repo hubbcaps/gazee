@@ -6,8 +6,6 @@ Read your favorite digital comics from almost any web connected device.
 
 Works best with [Mylar](https://github.com/evilhero/mylar) comic book management, but not needed.
 
-Gazee is still under active development and at this time should be considered an Alpha while the base features are hammered out.
-
 ## Requirements
 * Python 3.6
 * CherryPy
@@ -56,7 +54,6 @@ You can easily run the program in Daemon mode by using the -d flag
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
 - [ ] Bookmarks/Remember where user was in comic.
-- [ ] Add more options for gathering comic metadata than parsing ComicInfo in archive and using Mylar DB if available.
 - [ ] Random First Issue of a series in library.
 - [ ] OPDS Support.
 - [ ] User set color changes.
