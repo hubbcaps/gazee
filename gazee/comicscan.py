@@ -14,7 +14,6 @@
 #  along with Mylar.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import sys
 import stat
 import sqlite3
 import zipfile
@@ -23,6 +22,7 @@ import zlib
 import xmltodict
 import logging
 import threading
+import hashlib
 
 from pathlib import Path
 from PIL import Image
@@ -121,8 +121,6 @@ class ComicScanner(object):
 
     # This method takes an argument of the comic name, it then looks in the temp directory after comic has been upacked for an image with 000, 001 and an image extnesion in the name. This image name and it's path are stored in variables, then makes directory named after them, and pushes the file into that directory. It then returns the path to that file to be inserted into the DB as the comics image in the library and recent comic views.
     def imageMove(self, comic_name, volume_number, issue_number):
-        if sys.platform is 'win32':
-            comic_name = comic_name.replace(':', '')
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Thumbnail Requested")
@@ -142,7 +140,9 @@ class ComicScanner(object):
                 image = image_split[-1]
                 break
 
-        absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number))
+        cname = hashlib.md5(bytes(comic_name, encoding='utf-8')).hexdigest()
+
+        absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number))
 
         if not os.path.exists(absPath):
             os.makedirs(absPath)
@@ -151,7 +151,7 @@ class ComicScanner(object):
             logger.info("Image Not Found")
             image_dest = 'static/images/imgnotfound.png'
         else:
-            image_dest = os.path.join(gazee.DATA_DIR, "cache", comic_name, volume_number, issue_number, image)
+            image_dest = os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number, image)
 
             if not os.path.exists(image_dest):
                 try:
