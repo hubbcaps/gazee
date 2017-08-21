@@ -61,3 +61,11 @@ These are features that will make Gazee better and more up to par in what should
 - [ ] User set color changes.
 - [ ] User set image sizes.
 - [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.
+
+## How it Looks
+
+![screen01](http://i.imgur.com/oirGqgS.png)
+![screen02](http://i.imgur.com/krgVV5F.png)
+![screen03](http://i.imgur.com/krL4XRh.png)
+![screen04](http://i.imgur.com/nRJcTwq.png)
+![screen05](http://i.imgur.com/UgLA7lx.png)
