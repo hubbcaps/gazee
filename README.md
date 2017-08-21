@@ -2,9 +2,11 @@
 
 Gazee is a comic viewer for the web browser.
 
-Read your favorite digital comics from almost any web connected device.
+Read and reach your favorite digital comics from almost any web connected device.
 
 Works best with [Mylar](https://github.com/evilhero/mylar) comic book management, but not needed.
+
+Check out [the Wiki](https://github.com/hubbcaps/gazee/wiki) for detailed instructions on setup if you need them.
 
 ## Requirements
 * Python 3.6
@@ -22,7 +24,7 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
 
 Double check this on Windows, different systems have different requirements for making sure you have unrar visbile in your users path.
 
-[Windows](http://www.rarlab.com/download.htm)
+[Unrar for Windows](http://www.rarlab.com/rar_add.htm)
 
 [Centos](https://www.rpmfind.net/linux/rpm2html/search.php?query=unrar) needs Unrar from RPMFusion, not Offical/EPEL unar application. unar is out of date and will fail with certain types of cbrs and other rar archives.
 
