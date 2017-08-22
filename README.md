@@ -17,6 +17,7 @@ Questions can also be asked in the #gazee channel on Freenode
 * xmltodict
 * Pillow
 * rarfile
+* GitPython
 
 Requirements can be installed easily in the setup section below.
 
