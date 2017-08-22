@@ -27,7 +27,7 @@ Unrar needs to be installed and visible in the path of the user Gazee is running
 
 Double check this on Windows, different systems have different requirements for making sure you have unrar visbile in your users path.
 
-[Unrar for Windows](http://www.rarlab.com/rar_add.htm)
+[Unrar for Windows](http://www.rarlab.com/rar_add.htm), windows also needs command line accessible Git installed, gone over in the [install guide on the wiki](https://github.com/hubbcaps/gazee/wiki/Windows-Install-Guide)
 
 [Centos](https://www.rpmfind.net/linux/rpm2html/search.php?query=unrar) needs Unrar from RPMFusion, not Offical/EPEL unar application. unar is out of date and will fail with certain types of cbrs and other rar archives.
 
