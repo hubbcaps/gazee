@@ -8,6 +8,8 @@ Works best with [Mylar](https://github.com/evilhero/mylar) comic book management
 
 Check out [the Wiki](https://github.com/hubbcaps/gazee/wiki) for detailed instructions on setup if you need them.
 
+Questions can also be asked in the #gazee channel on Freenode
+
 ## Requirements
 * Python 3.6
 * CherryPy

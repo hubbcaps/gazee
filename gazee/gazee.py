@@ -11,7 +11,7 @@
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Mylar.  If not, see <http://www.gnu.org/licenses/>.
+#  along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
@@ -440,6 +440,15 @@ class Gazee(object):
         subprocess.Popen(popen_list, cwd=os.getcwd())
         threading.Timer(1, lambda: os._exit(0)).start()
         logger.info('Gazee is restarting...')
+        return
+
+    @cherrypy.expose
+    def updateGazee(self):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        if gazee.versioning.updateApp():
+            logger.info('Gazee is restarting to apply update.')
+            self.restart()
         return
 
     @cherrypy.expose
