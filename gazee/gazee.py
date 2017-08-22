@@ -29,6 +29,7 @@ from mako.lookup import TemplateLookup
 from mako import exceptions
 
 import gazee
+import gazee.versioning
 from gazee.comicscan import ComicScanner
 
 """

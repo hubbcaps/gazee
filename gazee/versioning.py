@@ -21,13 +21,13 @@ import gazee
 
 
 def currentVersion():
-    repo = git.Repo(gazee.FULL_PATH)
+    repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
     local_commit = repo.commit()
     return local_commit.hexsha
 
 
 def latestVersion():
-    repo = git.Repo(gazee.FULL_PATH)
+    repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
     remote = git.remote.Remote(repo, 'origin')
     info = remote.fetch()[0]
     remote_commit = info.commit
@@ -46,7 +46,7 @@ def updateApp():
 
     if current_commit != latest_commit:
         logger.info("Updated Needed")
-        repo = git.Repo(gazee.FULL_PATH)
+        repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
         o = repo.remotes.origin
         o.pull()
         logger.info("Update Pulled")
