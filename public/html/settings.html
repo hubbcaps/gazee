@@ -22,11 +22,11 @@
   <header>
     <div>
       <ul class="dropdown-content" id="nav-dropdown">
-        <li id="dash_dashboard"><a class="waves-effect" href="/index"><b>Dashboard</b></a></li>
-        <li id="dash_library"><a class="waves-effect" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
+        <li id="dash_dashboard"><a id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
+        <li id="dash_library"><a id="dropdown-item" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
       </ul>
     </div>
-    <nav class="" role="navigation">
+    <nav role="navigation">
       <div class="nav-wrapper" id="logo-wrapper">
         <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
         <ul class="right">
@@ -186,11 +186,11 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
-  <!--
-  This function simply loads the recent method from mylar.py to generate the comics from the last week.
-  -->
   <script type="text/javascript">
       $(document).ready(function() {
+        $("#dropdown-item").click(function() {
+          window.location.href = $(this).attr('href');
+        });
         $("#update-app-submit").click(function() {
           $.ajax({
             url: "saveSettings",

@@ -19,30 +19,34 @@
 <body>
 
   <header>
-    <ul class="dropdown-content" id="nav-dropdown">
-      <li id="dash_library"><a class="waves-effect" href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
-%if user_level == 'admin':
-      <li id="dash_settings"><a class="waves-effect" href="/settings"><b>Settings</b></a></li>
-%endif
-    </ul>
-    <nav class="" role="navigation">
-      <div class="nav-wrapper" id="logo-wrapper">
-        <img id="logo-image" style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
+    <div>
+      <ul class="dropdown-content" id="nav-dropdown">
+        <li id="dash_library"><a href="/library?directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
+% if user_level == 'admin':
+        <li id="dash_settings"><a href="/settings"><b>Settings</b></a></li>
+% endif
+      </ul>
+    </div>
+    <nav>
+      <div id="logo-wrapper">
+        <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
         <ul class="right">
           <li>
-            <a class="right dropdown-button" href='#!' data-activates='nav-dropdown'>Dashboard</a>
+            <a class="right dropdown-button" href='#' data-activates='nav-dropdown'>Dashboard</a>
           </li>
         </ul>
       </div>
     </nav>
     <nav>
       <div class="nav-wrapper" id="breadcrumbs">
-        <form id="search_form" action="/search">
-          <div class="input-field col s6 right">
-            <input id="search_field" name="search_string" type="text">
-            <label for="search_string"><i class="material-icons">search</i></label>
-          </div>
-        </form>
+        <div>
+          <form id="search_form" action="/search">
+            <div class="input-field col s6 right">
+              <input id="search_field" name="search_string" type="text">
+              <label for="search_string"><i class="material-icons">search</i></label>
+            </div>
+          </form>
+        </div>
       </div>
     </nav>
   </header>
@@ -124,11 +128,11 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
-  <!--
-  This function simply loads the recent method from mylar.py to generate the comics from the last week.
-  -->
   <script type="text/javascript">
       $(document).ready(function() {
+        $("#dropdown-item").click(function() {
+          window.location.href = $(this).attr('href');
+        });
       });
   </script>
 	

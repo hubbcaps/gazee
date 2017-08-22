@@ -366,7 +366,7 @@ class ComicScanner(object):
                         logger.info("Unpacking Comic")
                         self.buildUnpackComic(f)
                         logger.info("Unpacking Successful")
-                    except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, OSError) as e:
+                    except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, rarfile.RarCreatError, OSError) as e:
                         logger.info("Unpacking Failed")
                         logger.info(str(e))
                         continue
