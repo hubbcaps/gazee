@@ -114,6 +114,8 @@ class Gazee(object):
     @cherrypy.expose
     def search(self, page_num=1, search_string=''):
         cherrypy.session.load()
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Search Requested")
@@ -172,6 +174,8 @@ class Gazee(object):
     @cherrypy.expose
     def library(self, directory, page_num=1):
         cherrypy.session.load()
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Library Requested")
@@ -283,6 +287,8 @@ class Gazee(object):
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
         cherrypy.session.load()
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
         userSizePref = cherrypy.session['sizepref']
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
@@ -303,6 +309,8 @@ class Gazee(object):
     @cherrypy.expose
     def changePage(self, page_str):
         cherrypy.session.load()
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
         userSizePref = cherrypy.session['sizepref']
         username = cherrypy.request.login
         page_num = int(page_str)

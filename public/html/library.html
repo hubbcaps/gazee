@@ -19,41 +19,47 @@
 <body>
 
   <header>
-    <div>
-      <ul class="dropdown-content" id="nav-dropdown">
-        <li id="dash_dashboard"><a class="waves-effect" id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
-  %if user_level == 'admin':
-        <li id="dash_settings"><a class="waves-effect" id="dropdown-item" href="/settings"><b>Settings</b></a></li>
-  %endif
-      </ul>
-    </div>
-    <nav class="" role="navigation">
+    <ul class="dropdown-content" id="nav-dropdown">
+      <li id="dash_dashboard"><a class="waves-effect" id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
+%if user_level == 'admin':
+      <li id="dash_settings"><a class="waves-effect" id="dropdown-item" href="/settings"><b>Settings</b></a></li>
+%endif
+    </ul>
+    <nav>
       <div class="nav-wrapper" id="logo-wrapper">
         <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
-        <ul class="right">
-          <li>
-            <a class="right dropdown-button" href='#!' data-activates='nav-dropdown'>Library</a>
-          </li>
-        </ul>
       </div>
     </nav>
+
     <nav>
       <div class="nav-wrapper" id="breadcrumbs">
-        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>
-%if parent_dir != '':
-        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${parent_dir}&page_num=1">${parent_dir}</a>
-%endif
-        <div class="input-field col s6 right">
+        <div class="row">
           <form id="search_form" action="/search">
-            <input id="search_field" name="search_string" type="text">
-            <label for="search_string"><i class="material-icons">search</i></label>
+            <div class="input-field col s8">
+              <input id="search_field" name="search_string" type="search">
+              <label for="search_string"><i class="material-icons">search</i></label>
+              <i class="material-icons icon-close">close</i>
+            </div>
+            <a class="dropdown-button" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
           </form>
         </div>
       </div>
     </nav>
+
   </header>
 
   <main id="whiteboard">
+    <div class="row">
+      <div class="col s8" id="library-breadcrumbs">
+        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>
+%if parent_dir != '':
+        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${parent_dir}&page_num=1">${parent_dir}</a>
+%endif
+%if current_dir != gazee.COMIC_PATH:
+        <a style="margin-left: 20px;" class="breadcrumb" href="#!">${current_dir}</a>
+%endif
+      </div>
+    </div>
     <div class="row">
       <div>
         <div class="row">

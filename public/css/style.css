@@ -10,6 +10,7 @@ body {
   background: #757575;
 }
 #breadcrumbs {
+  top: 0;
   background: #bdbdbd;
 }
 #comic-card-content {
@@ -96,7 +97,7 @@ i {
   object-fit: cover;
 }
 .card-content {
-  background: #ffb73d;
+  background: #bdbdbd;
   color: #FFF;
   text-align: center;
 }
@@ -134,6 +135,25 @@ i {
 .input-field input[type=password]:focus {
   border-bottom: 1px solid #FFF;
   box-shadow: 0 1px 0 0 #FFF;
+}
+.nav-wrapper .input-field input[type="search"] {
+  display: inline-block;
+  height: auto;
+  color: #FFF;
+  background: #bdbdbd;
+}
+.nav-wrapper .input-field input[type="search"]:focus {
+  background: #757575;
+  color: #FFF;
+  box-shadow: 0 1px 0 0 #757575;
+}
+.nav-wrapper .input-field input[type="search"]:focus ~ .material-icons.icon-close {
+  right: 2rem;
+}
+.nav-wrapper .dropdown-button {
+  position:absolute;
+  right: 0;
+  top: 0;
 }
 .overlay-settings {
   position: fixed;

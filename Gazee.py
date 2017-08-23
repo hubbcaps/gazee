@@ -123,6 +123,7 @@ def main():
             'tools.gzip.on': True,
             'tools.gzip.mime_types': ['text/*', 'application/*', 'image/*'],
             'tools.sessions.on': True,
+            'tools.sessions.timeout': 1440,
             'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
             'tools.sessions.storage_path': "data/sessions",
             'tools.staticdir.root': os.path.abspath(os.getcwd()),
@@ -181,6 +182,9 @@ def main():
     scanner = ComicScanner()
     scanner.rescanDB()
     cherrypy.engine.block()
+
+    if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
+        os.remove(gazee.DATA_DIR, 'db.lock')
     return
 
 
