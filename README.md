@@ -67,8 +67,8 @@ These are features that will make Gazee better and more up to par in what should
 
 ## How it Looks
 
-![screen01](http://i.imgur.com/oirGqgS.png)
-![screen02](http://i.imgur.com/krgVV5F.png)
-![screen03](http://i.imgur.com/krL4XRh.png)
-![screen04](http://i.imgur.com/nRJcTwq.png)
-![screen05](http://i.imgur.com/UgLA7lx.png)
+![screen01](http://i.imgur.com/jO0xONS.png)
+![screen02](http://i.imgur.com/2Y21JIQ.png)
+![screen03](http://i.imgur.com/45rUwEj.png)
+![screen04](http://i.imgur.com/kImjBIV.png)
+![screen05](http://i.imgur.com/lW9Tt9U.png)
