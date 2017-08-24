@@ -395,6 +395,51 @@ class ComicScanner(object):
                     connection.commit()
                     logger.info("Comic %s Inserted into DB Successfully" % (name))
 
+            # Now that we have comic images moved and created, we're going to rebreak down the Directories and pick their images from an alphabet breakdown of their contained comics.
+            logger.debug("Creating Dir Images")
+            c.execute("SELECT {cn} FROM {tn}".format(cn=gazee.NICE_NAME, tn=gazee.DIR_NAMES))
+            nninit = c.fetchall()
+            nice_names = [tup[0] for tup in nninit]
+            logger.debug("Nice Names Returned")
+            last_name = ""
+            last_counter = 0
+
+            nice_names.sort()
+
+            for f in nice_names:
+                if last_name == f:
+                    logger.debug("Same Nice Name")
+                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC LIMIT 1 OFFSET ?".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME), ('%' + f + '%', last_counter,))
+                    cinit = c.fetchall()
+                    c_image = [tup[0] for tup in cinit]
+                    if len(c_image) == 0:
+                        logger.debug("Comic Image Not Returned")
+                        c_image = "static/images/imgnotfound.png"
+                        c.execute("UPDATE {tn} SET {di}=? WHERE {nn}=?".format(tn=gazee.DIR_NAMES, di=gazee.DIR_IMAGE, nn=gazee.NICE_NAME), (c_image, f,))
+                    else:
+                        logger.debug("Comic Image Returned")
+                        c.execute("UPDATE {tn} SET {di}=? WHERE {nn}=?".format(tn=gazee.DIR_NAMES, di=gazee.DIR_IMAGE, nn=gazee.NICE_NAME), (c_image[0], f,))
+                    logger.debug("Dir Image Added")
+                    connection.commit()
+                    last_counter += 1
+                    last_name = f
+                else:
+                    logger.debug("New Nice Name")
+                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC LIMIT 1".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME), ('%' + f + '%',))
+                    cinit = c.fetchall()
+                    c_image = [tup[0] for tup in cinit]
+                    if len(c_image) == 0:
+                        logger.debug("Comic Image Not Returned")
+                        c_image = "static/images/imgnotfound.png"
+                        c.execute("UPDATE {tn} SET {di}=? WHERE {nn}=?".format(tn=gazee.DIR_NAMES, di=gazee.DIR_IMAGE, nn=gazee.NICE_NAME), (c_image, f,))
+                    else:
+                        logger.debug("Comic Image Returned")
+                        c.execute("UPDATE {tn} SET {di}=? WHERE {nn}=?".format(tn=gazee.DIR_NAMES, di=gazee.DIR_IMAGE, nn=gazee.NICE_NAME), (c_image[0], f,))
+                    logger.debug("Dir Image Added")
+                    connection.commit()
+                    last_counter = 0
+                    last_name = f
+
             connection.commit()
             connection.close()
 

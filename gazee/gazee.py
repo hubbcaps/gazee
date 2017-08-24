@@ -213,10 +213,17 @@ class Gazee(object):
 
         # Select all the Nice Names from the Dir Names table.
         try:
-            c.execute("SELECT {nn} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY), (pk[0],))
+            c.execute("SELECT {nn}, {di} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, di=gazee.DIR_IMAGE, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY), (pk[0],))
 
             dirsinit = c.fetchall()
-            directories = [tup[0] for tup in dirsinit]
+            directories = []
+            for d in dirsinit:
+                if d[1] is None:
+                    directories.append({"DirectoryName": d[0],
+                                        "DirectoryImage": "static/images/imgnotfound.png"})
+                else:
+                    directories.append({"DirectoryName": d[0],
+                                        "DirectoryImage": d[1]})
 
             c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY), (pk[0],))
             numcinit = c.fetchone()
@@ -262,7 +269,8 @@ class Gazee(object):
             if prd == cp_split[1]:
                 prd = ''
 
-            directories.sort()
+            new_dirs = sorted(directories, key=lambda k: k['DirectoryName'])
+            directories = new_dirs
             logger.info("Library Served")
 
         except IndexError:

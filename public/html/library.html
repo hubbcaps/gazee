@@ -66,10 +66,13 @@
             <div id="library">
               <div class="row center-cols center-align">
 % for directory in directories:
-                <div class="col s5 m5 l2">
+                <div class="col s10 m5 l2">
                   <div class="card">
+                    <div class="card-image hoverable">
+                      <a href="/library?parent=${parent_dir | u}&directory=${directory['DirectoryName'] | u}&page_num=1"><img id="comic-image" src="${directory['DirectoryImage']}"></a>
+                    </div>
                     <div class="card-content hoverable" id="directory-card-content">
-                      <p class="flow-text" style="width:100%;"><a href="/library?parent=${parent_dir | u}&directory=${directory | u}&page_num=1" id="library-link">${directory}</span></a>
+                      <p class="flow-text" style="width:100%;"><a href="/library?parent=${parent_dir | u}&directory=${directory['DirectoryName'] | u}&page_num=1" id="library-link">${directory['DirectoryName']}</span></a>
                     </div>
                   </div>
                 </div>

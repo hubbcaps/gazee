@@ -80,6 +80,7 @@ KEY = "key"
 # Directory Names. This will hold the actual names of directories and their associated parent keys.
 DIR_NAMES = "dir_names"
 NICE_NAME = "nice_name"
+DIR_IMAGE = "dir_image"
 PARENT_KEY = "parent_key"
 
 # Comics table and various attributes we associate with them.
@@ -110,6 +111,7 @@ if not db.is_file():
 
     # Create the Directory table.
     c.execute('CREATE TABLE {tn} ({nf} {ft})'.format(tn=DIR_NAMES, nf=NICE_NAME, ft="TEXT"))
+    c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=DIR_NAMES, cn=DIR_IMAGE, ft="TEXT"))
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=DIR_NAMES, cn=PARENT_KEY, ft="INTEGER"))
 
     # Create Comics table and necessary columns.
