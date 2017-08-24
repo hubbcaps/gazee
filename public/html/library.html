@@ -82,19 +82,19 @@
                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 % else:
 
-                   <li class="waves-effect"><a href="/library?directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+                   <li class="waves-effect"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
 % for i in range(1, num_of_pages + 1):
     % if i == current_page:
                    <li id="pagination-num" class="active"><a href="#!">${i}</a></li>
     % else:
-                   <li id="pagination-num"><a href="/library?directory=${current_dir | u}&page_num=${i}">${i}</a></li>
+                   <li id="pagination-num"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${i}">${i}</a></li>
     % endif
 % endfor
 % if current_page == num_of_pages:
                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 % else:
-                    <li class="waves-effect"><a href="/library?directory=${current_dir | u}&page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
 % endif
                 </ul>
 % for comic in comics:
