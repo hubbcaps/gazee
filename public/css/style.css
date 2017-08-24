@@ -14,11 +14,6 @@ body {
   background: #bdbdbd;
 }
 #comic-card-content {
-  display:flex;
-  height: 125px;
-  color: #FFF;
-  background-color: #bdbdbd;
-  text-position: center;
 }
 #directory-card-content {
   display:flex;
@@ -86,17 +81,17 @@ i {
   color: #FFF;
 }
 .card {
-  max-width: 300px;
   background-color: #bdbdbd;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 .card img {
-  height: 100%;
-  max-height: 400px;
-  max-width: 300px;
+  height: 400px;
+  width: 300px;
   object-fit: cover;
 }
 .card-content {
+  display:flex;
+  height: 125px;
   background: #bdbdbd;
   color: #FFF;
   text-align: center;
