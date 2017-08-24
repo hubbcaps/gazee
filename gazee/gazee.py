@@ -172,7 +172,7 @@ class Gazee(object):
     """
     # Library Page
     @cherrypy.expose
-    def library(self, directory, page_num=1):
+    def library(self, parent, directory, page_num=1):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
@@ -195,10 +195,14 @@ class Gazee(object):
             ptkinit = c.fetchall()
             parent_key = [tup[0] for tup in ptkinit]
 
-            c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY), (parent_key[0],))
+            for n in parent_key:
+                c.execute("SELECT {fp} FROM {tn} WHERE {prk}=?".format(fp=gazee.FULL_DIR_PATH, tn=gazee.ALL_DIRS, prk=gazee.KEY), (n,))
 
-            pdirinit = c.fetchall()
-            parent_dir = [tup[0] for tup in pdirinit]
+                pdirinit = c.fetchall()
+                parent_dir = [tup[0] for tup in pdirinit]
+
+                if parent in parent_dir:
+                    break
 
             full_dir = os.path.join(parent_dir[0], directory)
 

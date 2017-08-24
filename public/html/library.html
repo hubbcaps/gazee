@@ -51,9 +51,9 @@
   <main id="whiteboard">
     <div class="row">
       <div class="col s8" id="library-breadcrumbs">
-        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>
+        <a style="margin-left: 20px;" class="breadcrumb" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>
 %if parent_dir != '':
-        <a style="margin-left: 20px;" class="breadcrumb" href="/library?directory=${parent_dir}&page_num=1">${parent_dir}</a>
+        <a style="margin-left: 20px;" class="breadcrumb" action="action" value="Back" onclick="window.history.go(-1); return false">${parent_dir}</a>
 %endif
 %if current_dir != gazee.COMIC_PATH:
         <a style="margin-left: 20px;" class="breadcrumb" href="#!">${current_dir}</a>
@@ -69,7 +69,7 @@
                 <div class="col s5 m5 l2">
                   <div class="card">
                     <div class="card-content hoverable" id="directory-card-content">
-                      <p class="flow-text" style="width:100%;"><a href="/library?directory=${directory | u}&page_num=1" id="library-link">${directory}</span></a>
+                      <p class="flow-text" style="width:100%;"><a href="/library?parent=${parent_dir | u}&directory=${directory | u}&page_num=1" id="library-link">${directory}</span></a>
                     </div>
                   </div>
                 </div>
