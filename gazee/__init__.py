@@ -54,6 +54,9 @@ if not os.path.exists(os.path.join(DATA_DIR, 'app.ini')):
         cf.write("mylar_db =\n")
         cf.write("ssl_key =\n")
         cf.write("ssl_cert =\n")
+        cf.write("web_text_color = FFFFFF")
+        cf.write("main_color = 757575")
+        cf.write("accent_color = bdbdbd")
     cf.close()
 
 config = configparser.ConfigParser()
@@ -66,6 +69,9 @@ COMICS_PER_PAGE = int(config['GLOBAL']['COMICS_PER_PAGE'])
 MYLAR_DB = config['GLOBAL']['MYLAR_DB']
 SSL_KEY = config['GLOBAL']['SSL_KEY']
 SSL_CERT = config['GLOBAL']['SSL_CERT']
+WEB_TEXT_COLOR = config['GLOBAL']['WEB_TEXT_COLOR']
+MAIN_COLOR = config['GLOBAL']['MAIN_COLOR']
+ACCENT_COLOR = config['GLOBAL']['ACCENT_COLOR']
 ARGS = []
 THUMB_SIZE = 400, 300
 
