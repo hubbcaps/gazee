@@ -67,8 +67,18 @@ These are features that will make Gazee better and more up to par in what should
 
 ## How it Looks
 
-![screen01](http://i.imgur.com/jO0xONS.png)
-![screen02](http://i.imgur.com/2Y21JIQ.png)
-![screen03](http://i.imgur.com/45rUwEj.png)
-![screen04](http://i.imgur.com/kImjBIV.png)
-![screen05](http://i.imgur.com/lW9Tt9U.png)
+Recent Comics View
+![screen01](http://i.imgur.com/4cRYbJP.jpg)
+
+Top Level Library View
+![screen02](http://i.imgur.com/LuJDAAG.jpg)
+
+Bottom Level Library View
+![screen03](http://i.imgur.com/NcgCQTq.jpg)
+
+User Theme Settings
+![screen04](http://i.imgur.com/xCLoowh.jpg)
+![screen05](http://i.imgur.com/F5mb0bA.jpg)
+
+Reader View / Settings Overlay
+![screen06](http://i.imgur.com/t0NsWMp.jpg)
