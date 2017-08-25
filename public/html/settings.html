@@ -15,6 +15,7 @@
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
       <link rel="stylesheet" type="text/css" href="static/css/style.css">
+      <script src="static/js/jscolor.js"></script>
     </head>
 
     <body>
@@ -50,6 +51,7 @@
             <ul class="tabs">
               <li class="tab col s3"><a class="active" href="#server-settings">Server Settings</a></li>
               <li class="tab col s3"><a href="#user-settings">User Settings</a></li>
+              <li class="tab col s3"><a href="#theme-settings">Theme Settings</a></li>
               <li class="tab col s3"><a href="#server-ops">System Operations</a></li>
             </ul>
           </div>
@@ -132,8 +134,8 @@
         <div id="user-settings" class="col s12" style="padding: 15px;">
           <form class="col s6" id="change-password-form">
             <div class="row">
-              <div class="input-field col s6">
-                <input type="password" name=password id="change-password" value='' class="" >
+              <div class="input-field col s4">
+                <input type="password" name="password" id="change-password" value='' class="" >
                 <label for="change-password">New Password for ${user}</label>
               </div>
             </div>
@@ -143,19 +145,19 @@
           </form>
           <form class="col s6" id="new-user-form">
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s4">
                 <input id="new-username" name="username" type="text" class="">
                 <label for="new-username">Username</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s4">
                 <input id="new-user-password" name="password" type="password" class="">
                 <label for="new-user-password">Password</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s4">
                   <input id="user-type-admin" type="radio" name="usertype" value="admin">
                   <label for="user-type-admin">Admin</label>
                   <input id="user-type-user" type="radio" name="usertype" value="user">
@@ -167,6 +169,33 @@
             </div>
           </form>
         </div>
+
+        <div id="theme-settings" class="col s12" style="padding: 15px;">
+          <form class="col s6" id="change-theme-form">
+            <div class="row">
+              <div class="input-field col s2">
+                <input type="text" name="mainColor" value='${gazee.MAIN_COLOR}' class="jscolor" >
+                <label for="mainColor">Main Color</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s2">
+                <input type="text" name="accentColor" value='${gazee.ACCENT_COLOR}' class="jscolor" >
+                <label for="accentColor">Accent Color</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s2">
+                <input type="text" name="webTextColor" value='${gazee.WEB_TEXT_COLOR}' class="jscolor" >
+                <label for="webTextColor">Text Color</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="btn-flat waves-effect" type="submit" id="change-theme-submit">Change Theme</a>
+            </div>
+          </form>
+        </div>
+
         <div id="server-ops" class="col s12" style="padding: 15px;">
           <div class="row">
             <a class="btn-flat waves-effect" id="shutdown-server">Shutdown Server</a>
@@ -218,6 +247,12 @@
               $.ajax({
                 url: "newUser",
                 data: $("#new-user-form").serialize()
+              });
+            });
+            $("#change-theme-submit").click(function() {
+              $.ajax({
+                url: "changeTheme",
+                data: $("#change-theme-form").serialize()
               });
             });
             $("#shutdown-server").click(function() {

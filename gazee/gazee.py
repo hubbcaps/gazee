@@ -388,7 +388,6 @@ class Gazee(object):
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
     def saveSettings(self, scomicPath=None, scomicsPerPage=None, scomicScanInterval=None, smylarPath=None, ssslKey=None, ssslCert=None, sport=4242):
-        cherrypy.session.load()
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read('data/app.ini')
@@ -410,8 +409,38 @@ class Gazee(object):
         return
 
     @cherrypy.expose
+    def changeTheme(self, mainColor, accentColor, webTextColor):
+        # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
+        config = configparser.ConfigParser()
+        config.read('data/app.ini')
+
+        config['GLOBAL']['MAIN_COLOR'] = mainColor
+        config['GLOBAL']['ACCENT_COLOR'] = accentColor
+        config['GLOBAL']['WEB_TEXT_COLOR'] = webTextColor
+        with open('data/app.ini', 'w') as configfile:
+            config.write(configfile)
+        configfile.close()
+
+        with open('public/css/style.css') as f:
+            style = f.read()
+
+        with open('public/css/style.css', "w") as f:
+            style = style.replace(gazee.MAIN_COLOR, mainColor)
+            style = style.replace(gazee.ACCENT_COLOR, accentColor)
+            style = style.replace(gazee.WEB_TEXT_COLOR, webTextColor)
+            f.write(style)
+
+        gazee.MAIN_COLOR = mainColor
+        gazee.ACCENT_COLOR = accentColor
+        gazee.WEB_TEXT_COLOR = webTextColor
+
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        logger.info("Theme Saved")
+        return
+
+    @cherrypy.expose
     def changePassword(self, password):
-        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         user = cherrypy.request.login
@@ -421,7 +450,6 @@ class Gazee(object):
 
     @cherrypy.expose
     def newUser(self, username, password, usertype):
-        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         gazee.authmech.addUser(username, password, usertype)
@@ -430,7 +458,6 @@ class Gazee(object):
 
     @cherrypy.expose
     def comicScan(self):
-        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
@@ -441,7 +468,6 @@ class Gazee(object):
 
     @cherrypy.expose
     def shutdown(self):
-        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
@@ -451,7 +477,6 @@ class Gazee(object):
 
     @cherrypy.expose
     def restart(self):
-        cherrypy.session.load()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
@@ -474,6 +499,5 @@ class Gazee(object):
 
     @cherrypy.expose
     def opds(self):
-        cherrypy.session.load()
         # TODO
         return "not implemented yet"
