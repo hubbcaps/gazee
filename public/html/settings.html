@@ -4,242 +4,240 @@
 %if user_level == 'admin':
 <!doctype html>
 <div class="whole-page">
-<html>
-<head>
-	<title>Gazee</title>
-	<meta name="description" content="Gazee Base Mako Page - Made by Hubcaps / Jessi">
-	<meta name="author" content="Hubcaps / Jessi">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-  <link rel="stylesheet" type="text/css" href="static/css/style.css">
-</head>
+  <html>
+    <head>
+    	<title>Gazee</title>
+    	<meta name="description" content="Gazee Base Mako Page - Made by Hubcaps / Jessi">
+    	<meta name="author" content="Hubcaps / Jessi">
 
-<body>
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <header>
-    <ul class="dropdown-content" id="nav-dropdown">
-      <li id="dash_dashboard"><a id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
-      <li id="dash_library"><a id="dropdown-item" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
-    </ul>
-    <nav>
-      <div class="nav-wrapper" id="logo-wrapper">
-        <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
-      </div>
-    </nav>
-    <nav>
-      <div class="nav-wrapper" id="breadcrumbs">
-        <div class="row">
-          <form id="search_form" action="/search">
-            <div class="input-field col s8">
-              <input id="search_field" name="search_string" type="search" required>
-              <label for="search_string"><i class="material-icons">search</i></label>
-              <i class="material-icons icon-close">close</i>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+      <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    </head>
+
+    <body>
+      <header>
+        <ul class="dropdown-content" id="nav-dropdown">
+          <li id="dash_dashboard"><a id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
+          <li id="dash_library"><a id="dropdown-item" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
+        </ul>
+        <nav>
+          <div class="nav-wrapper" id="logo-wrapper">
+            <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
+          </div>
+        </nav>
+        <nav>
+          <div class="nav-wrapper" id="breadcrumbs">
+            <div class="row">
+              <form id="search_form" action="/search">
+                <div class="input-field col s5 right">
+                  <input id="search_field" name="search_string" type="search" required>
+                  <label for="search_string"><i class="material-icons">search</i></label>
+                  <i class="material-icons icon-close">close</i>
+                </div>
+                <a class="dropdown-button" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
+              </form>
             </div>
-            <a class="dropdown-button" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
+          </div>
+        </nav>
+      </header>
+
+      <main id="whiteboard">
+        <div class="row" id="tab-row">
+          <div class="col s12">
+            <ul class="tabs">
+              <li class="tab col s3"><a class="active" href="#server-settings">Server Settings</a></li>
+              <li class="tab col s3"><a href="#user-settings">User Settings</a></li>
+              <li class="tab col s3"><a href="#server-ops">System Operations</a></li>
+            </ul>
+          </div>
+        </div>
+        <div id="server-settings" class="col s12" style="padding: 15px;">
+          <form class="col s6" id="server-settings-form">
+            <div class="row">
+              <div class="input-field left col s4">
+                <input type="text" name="sport" value="${gazee.PORT}" class="">
+                <label for="sport">Port</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s4">
+                <input type="text" name="scomicsPerPage" value="${gazee.COMICS_PER_PAGE}" class="">
+                <label for="scomicsPerPage">Comics Per Page</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s5">
+                <input type="text" name="scomicPath" value="${gazee.COMIC_PATH}" class="">
+                <label for="scomicPath">Comic Library Path</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s4">
+                <input type="text" name="scomicScanInterval" value="${gazee.COMIC_SCAN_INTERVAL}" class="">
+                <label for="scomicScanInterval">Comic Scan Interval</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s5">
+                <input type="text" name="smylarPath" value="${gazee.MYLAR_DB}" class="">
+                <label for="smylarPath">Mylar DB Path</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s5">
+                <input type="text" name="ssslCert" value="${gazee.SSL_CERT}" class="">
+                <label for="ssslCert">SSL Cert Path</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field left col s6">
+                <input type="text" name="ssslKey" value="${gazee.SSL_KEY}" class="">
+                <label for="ssslKey">SSL Key Path</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
+            </div>
+          </form>
+          <table class="bordered">
+            <thead>
+              <tr>
+                <th>Scan Status</th>
+                <th>Scan Length</th>
+                <th>Number of Comics</th>
+              </tr>
+            <thead>
+            <tbody>
+              <tr>
+    % if sip:
+                <td>In Progress</td>
+                <td>${scantime}</td>
+    % else:
+                <td>Not Running</td>
+                <td>${scantime}</td>
+    % endif
+                <td>${noc}</td>
+              </tr>
+            </tbody>
+          </table>
+          </br>
+          <div class="row">
+            <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
+          </div>
+        </div>
+
+        <div id="user-settings" class="col s12" style="padding: 15px;">
+          <form class="col s6" id="change-password-form">
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="password" name=password id="change-password" value='' class="" >
+                <label for="change-password">New Password for ${user}</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="btn-flat waves-effect" type="submit" id="change-pass-submit">Change Password</a>
+            </div>
+          </form>
+          <form class="col s6" id="new-user-form">
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="new-username" name="username" type="text" class="">
+                <label for="new-username">Username</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="new-user-password" name="password" type="password" class="">
+                <label for="new-user-password">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                  <input id="user-type-admin" type="radio" name="usertype" value="admin">
+                  <label for="user-type-admin">Admin</label>
+                  <input id="user-type-user" type="radio" name="usertype" value="user">
+                  <label for="user-type-user">User</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="btn-flat waves-effect" type="submit" id="new-user-submit">Add New User</a>
+            </div>
           </form>
         </div>
-      </div>
-    </nav>
-  </header>
+        <div id="server-ops" class="col s12" style="padding: 15px;">
+          <div class="row">
+            <a class="btn-flat waves-effect" id="shutdown-server">Shutdown Server</a>
+          </div>
+          <div class="row">
+            <a class="btn-flat waves-effect" id="restart-server">Restart Server</a>
+          </div>
+          <div class="row">
+            <a class="btn-flat waves-effect" id="update-server">Update Server</a>
+          </div>
+        </div>
+      </main>
 
-  <main id="whiteboard">
-    <div class="row" id="tab-row">
-      <div class="col s12">
-        <ul class="tabs">
-          <li class="tab col s3"><a class="active" href="#server-settings">Server Settings</a></li>
-          <li class="tab col s3"><a href="#user-settings">User Settings</a></li>
-          <li class="tab col s3"><a href="#server-ops">System Operations</a></li>
-        </ul>
-      </div>
-    </div>
-    <div id="server-settings" class="col s12" style="padding: 15px;">
-      <form class="col s6" id="server-settings-form">
-        <div class="row">
-          <div class="input-field left col s4">
-            <input type="text" name="sport" value="${gazee.PORT}" class="">
-            <label for="sport">Port</label>
+      <footer class="page-footer" id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col s12">
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="input-field left col s4">
-            <input type="text" name="scomicsPerPage" value="${gazee.COMICS_PER_PAGE}" class="">
-            <label for="scomicsPerPage">Comics Per Page</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field left col s5">
-            <input type="text" name="scomicPath" value="${gazee.COMIC_PATH}" class="">
-            <label for="scomicPath">Comic Library Path</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field left col s4">
-            <input type="text" name="scomicScanInterval" value="${gazee.COMIC_SCAN_INTERVAL}" class="">
-            <label for="scomicScanInterval">Comic Scan Interval</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field left col s5">
-            <input type="text" name="smylarPath" value="${gazee.MYLAR_DB}" class="">
-            <label for="smylarPath">Mylar DB Path</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field left col s5">
-            <input type="text" name="ssslCert" value="${gazee.SSL_CERT}" class="">
-            <label for="ssslCert">SSL Cert Path</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field left col s6">
-            <input type="text" name="ssslKey" value="${gazee.SSL_KEY}" class="">
-            <label for="ssslKey">SSL Key Path</label>
-          </div>
-        </div>
-        <div class="row">
-          <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
-        </div>
-      </form>
-      <table class="bordered">
-        <thead>
-          <tr>
-            <th>Scan Status</th>
-            <th>Scan Length</th>
-            <th>Number of Comics</th>
-          </tr>
-        <thead>
-        <tbody>
-          <tr>
-% if sip:
-            <td>In Progress</td>
-            <td>${scantime}</td>
-% else:
-            <td>Not Running</td>
-            <td>${scantime}</td>
-% endif
-            <td>${noc}</td>
-          </tr>
-        </tbody>
-      </table>
-      </br>
-      <div class="row">
-        <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
-      </div>
-    </div>
+      </footer>
 
-    <div id="user-settings" class="col s12" style="padding: 15px;">
-      <form class="col s6" id="change-password-form">
-        <div class="row">
-          <div class="input-field col s6">
-            <input type="password" name=password id="change-password" value='' class="" >
-            <label for="change-password">New Password for ${user}</label>
-          </div>
-        </div>
-        <div class="row">
-          <a class="btn-flat waves-effect" type="submit" id="change-pass-submit">Change Password</a>
-        </div>
-      </form>
-      <form class="col s6" id="new-user-form">
-        <div class="row">
-          <div class="input-field col s6">
-            <input id="new-username" name="username" type="text" class="">
-            <label for="new-username">Username</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s6">
-            <input id="new-user-password" name="password" type="password" class="">
-            <label for="new-user-password">Password</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s6">
-              <input id="user-type-admin" type="radio" name="usertype" value="admin">
-              <label for="user-type-admin">Admin</label>
-              <input id="user-type-user" type="radio" name="usertype" value="user">
-              <label for="user-type-user">User</label>
-          </div>
-        </div>
-        <div class="row">
-          <a class="btn-flat waves-effect" type="submit" id="new-user-submit">Add New User</a>
-        </div>
-      </form>
-    </div>
-    <div id="server-ops" class="col s12" style="padding: 15px;">
-      <div class="row">
-        <a class="btn-flat waves-effect" id="shutdown-server">Shutdown Server</a>
-      </div>
-      <div class="row">
-        <a class="btn-flat waves-effect" id="restart-server">Restart Server</a>
-      </div>
-      <div class="row">
-        <a class="btn-flat waves-effect" id="update-server">Update Server</a>
-      </div>
-    </div>
-  </main>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
-  <footer class="page-footer" id="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col s12">
-        </div>
-      </div>
-    </div>
-  </footer>
-	
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-
-  <script type="text/javascript">
-      $(document).ready(function() {
-        $("#dropdown-item").click(function() {
-          window.location.href = $(this).attr('href');
-        });
-        $("#update-app-submit").click(function() {
-          $.ajax({
-            url: "saveSettings",
-            data: $("#server-settings-form").serialize()
+      <script type="text/javascript">
+          $(document).ready(function() {
+            $("#dropdown-item").click(function() {
+              window.location.href = $(this).attr('href');
+            });
+            $("#update-app-submit").click(function() {
+              $.ajax({
+                url: "saveSettings",
+                data: $("#server-settings-form").serialize()
+              });
+            });
+            $("#scan-comics-submit").click(function() {
+              $.ajax({
+                url: "comicScan"
+              });
+            });
+            $("#change-pass-submit").click(function() {
+              $.ajax({
+                url: "changePassword",
+                data: $("#change-password-form").serialize()
+              });
+            });
+            $("#new-user-submit").click(function() {
+              $.ajax({
+                url: "newUser",
+                data: $("#new-user-form").serialize()
+              });
+            });
+            $("#shutdown-server").click(function() {
+              $.ajax({
+                url: "shutdown"
+              });
+            });
+            $("#restart-server").click(function() {
+              $.ajax({
+                url: "restart"
+              });
+            });
+            $("#update-server").click(function() {
+              $.ajax({
+                url: "updateGazee"
+              });
+            });
           });
-        });
-        $("#scan-comics-submit").click(function() {
-          $.ajax({
-            url: "comicScan"
-          });
-        });
-        $("#change-pass-submit").click(function() {
-          $.ajax({
-            url: "changePassword",
-            data: $("#change-password-form").serialize()
-          });
-        });
-        $("#new-user-submit").click(function() {
-          $.ajax({
-            url: "newUser",
-            data: $("#new-user-form").serialize()
-          });
-        });
-        $("#shutdown-server").click(function() {
-          $.ajax({
-            url: "shutdown"
-          });
-        });
-        $("#restart-server").click(function() {
-          $.ajax({
-            url: "restart"
-          });
-        });
-        $("#update-server").click(function() {
-          $.ajax({
-            url: "updateGazee"
-          });
-        });
-      });
-  </script>
-	
-</body>
-</html>
+      </script>
+    </body>
+  </html>
 </div>
 %endif
