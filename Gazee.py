@@ -155,7 +155,6 @@ def main():
             'server.socket_port': gazee.PORT,
             'server.socket_host': '0.0.0.0',
             'server.thread_pool': 10,
-            'server.shutdown_timeout': 1,
             'log.screen': False,
             'engine.autoreload.on': False,
         }
