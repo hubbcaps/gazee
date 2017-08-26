@@ -88,19 +88,19 @@
         $("#page-settings-right-text").toggle();
       });
       $(".page-right").click(function() {
-        $(".whole-page").load("/changePage?page_str=${np}");
+        $(".whole-page").load("/changePage?page_str=${np}&cookieComic=${cc}");
       });
       $(".page-left").click(function() {
-        $(".whole-page").load("/changePage?page_str=${lp}");
+        $(".whole-page").load("/changePage?page_str=${lp}&cookieComic=${cc}");
       });
       $(document).one("keyup", function(e) {
         if (e.which == 39) {
-          $(".whole-page").load("/changePage?page_str=${np}");
+          $(".whole-page").load("/changePage?page_str=${np}&cookieComic=${cc}");
         }
         });
       $(document).one("keyup", function(e) {
         if (e.which == 37) {
-          $(".whole-page").load("/changePage?page_str=${lp}");
+          $(".whole-page").load("/changePage?page_str=${lp}&cookieComic=${cc}");
         }
         });
       $("#size-width-button").click(function() {
