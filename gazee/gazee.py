@@ -471,6 +471,8 @@ class Gazee(object):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
+        if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
+            os.remove(gazee.DATA_DIR, 'db.lock')
         threading.Timer(1, lambda: os._exit(0)).start()
         logger.info('Gazee is shutting down...')
         return
@@ -480,6 +482,8 @@ class Gazee(object):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
+        if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
+            os.remove(gazee.DATA_DIR, 'db.lock')
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
         logger.info('Restarting Gazee with ' + str(popen_list))
@@ -494,6 +498,8 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         if gazee.versioning.updateApp():
             logger.info('Gazee is restarting to apply update.')
+            if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
+                os.remove(gazee.DATA_DIR, 'db.lock')
             self.restart()
         return
 
