@@ -6,8 +6,7 @@
 #  (at your option) any later version.
 #
 #  Gazee is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
@@ -130,7 +129,8 @@ def main():
             'tools.basic_auth.on': True,
             'tools.basic_auth.realm': 'Gazee',
             'tools.basic_auth.users': gazee.authmech.getPassword,
-            'tools.basic_auth.encrypt': gazee.authmech.hashPass
+            'tools.basic_auth.encrypt': gazee.authmech.hashPass,
+            'request.show_tracebacks': False
         },
         '/static': {
             'tools.staticdir.on': True,
