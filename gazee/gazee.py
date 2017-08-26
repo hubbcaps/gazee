@@ -14,6 +14,7 @@
 #  along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import sys
 import time
 import cherrypy
@@ -298,28 +299,50 @@ class Gazee(object):
     # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
-        cherrypy.session.load()
-        if 'sizepref' not in cherrypy.session:
-            cherrypy.session['sizepref'] = 'wide'
-        userSizePref = cherrypy.session['sizepref']
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Reader Requested")
+
+        cherrypy.session.load()
         username = cherrypy.request.login
+
+        if 'sizepref' not in cherrypy.session:
+            cherrypy.session['sizepref'] = 'wide'
+        userSizePref = cherrypy.session['sizepref']
+
         scanner = ComicScanner()
         scanner.userUnpackComic(comic_path, username)
         image_list = scanner.readingImages(username)
         num_pages = len(image_list)
+
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
+
+        cookieComic = re.sub(r'\W+', '', comic_path)
+        cookieCheck = cherrypy.request.cookie
+        if cookieComic not in cookieCheck:
+            logger.debug("Cookie Creation")
+            cookieSet = cherrypy.response.cookie
+            cookieSet[cookieComic] = 0
+            cookieSet[cookieComic]['path'] = '/'
+            cookieSet[cookieComic]['max-age'] = 2419200
+            next_page = 1
+            last_page = num_pages - 1
+        else:
+            logger.debug("Cookie Read")
+            page_num = int(cookieCheck[cookieComic].value)
+            logger.debug("Cookie Set To %d" % page_num)
+            next_page = page_num + 1
+            last_page = page_num - 1
+
         logger.info("Reader Served")
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=1, lp=num_pages - 1, nop=num_pages, size=userSizePref)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref, cc=cookieComic)
 
     """
     This allows us to change pages and do some basic sanity checking.
     """
     @cherrypy.expose
-    def changePage(self, page_str):
+    def changePage(self, page_str, cookieComic):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
@@ -339,7 +362,13 @@ class Gazee(object):
             page_num = 0
             next_page = 1
             last_page = num_pages - 1
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref)
+
+        cookieSet = cherrypy.response.cookie
+        cookieSet[cookieComic] = page_num
+        cookieSet[cookieComic]['path'] = '/'
+        cookieSet[cookieComic]['max-age'] = 2419200
+
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref, cc=cookieComic)
 
     @cherrypy.expose
     def upSizePref(self, pref):
