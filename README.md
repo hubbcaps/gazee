@@ -29,7 +29,9 @@ Settings overlay to make the comic feel how you want it.
 ![screen06](http://i.imgur.com/t0NsWMp.jpg)
 
 HTTPS Support
+
 Bookmarks remember where you left off as you read.
+
 Multiple Users and Admins
 
 Much more to come!
