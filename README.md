@@ -4,11 +4,35 @@ Gazee is a comic viewer for the web browser.
 
 Read and reach your favorite digital comics from almost any web connected device.
 
-Works best with [Mylar](https://github.com/evilhero/mylar) comic book management, but not needed.
+Works great with [Mylar](https://github.com/evilhero/mylar) comic book management, but not needed.
 
 Check out [the Wiki](https://github.com/hubbcaps/gazee/wiki) for detailed instructions on setup if you need them.
 
 Questions can also be asked in the #gazee channel on Freenode
+
+## Features
+
+Recent Comics
+![screen01](http://i.imgur.com/4cRYbJP.jpg)
+
+Exposes your sorting structure in a library view
+![screen02](http://i.imgur.com/LuJDAAG.jpg)
+
+Download your issue if you have a preferred reader outside of Gazee and read a summary of the issue in line if available with your archive
+![screen03](http://i.imgur.com/NcgCQTq.jpg)
+
+Make Gazee yours and change up the color scheme
+![screen04](http://i.imgur.com/xCLoowh.jpg)
+![screen05](http://i.imgur.com/F5mb0bA.jpg)
+
+Settings overlay to make the comic feel how you want it.
+![screen06](http://i.imgur.com/t0NsWMp.jpg)
+
+HTTPS Support
+Bookmarks remember where you left off as you read.
+Multiple Users and Admins
+
+Much more to come!
 
 ## Requirements
 * Python 3.6
@@ -58,27 +82,6 @@ You can easily run the program in Daemon mode by using the -d flag
 
 These are features that will make Gazee better and more up to par in what should be expected of a modern comic reader, but aren't needed for actual usability.
 
-- [ ] Bookmarks/Remember where user was in comic.
 - [ ] Random First Issue of a series in library.
 - [ ] OPDS Support.
-- [ ] User set color changes.
 - [ ] User set image sizes.
-- [ ] [Mylar](https://github.com/evilhero/mylar) integration and API sharing.
-
-## How it Looks
-
-Recent Comics View
-![screen01](http://i.imgur.com/4cRYbJP.jpg)
-
-Top Level Library View
-![screen02](http://i.imgur.com/LuJDAAG.jpg)
-
-Bottom Level Library View
-![screen03](http://i.imgur.com/NcgCQTq.jpg)
-
-User Theme Settings
-![screen04](http://i.imgur.com/xCLoowh.jpg)
-![screen05](http://i.imgur.com/F5mb0bA.jpg)
-
-Reader View / Settings Overlay
-![screen06](http://i.imgur.com/t0NsWMp.jpg)
