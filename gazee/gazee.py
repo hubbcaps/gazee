@@ -381,8 +381,6 @@ class Gazee(object):
     """
     @cherrypy.expose
     def settings(self):
-        cherrypy.session.load()
-
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
