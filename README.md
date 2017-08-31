@@ -87,3 +87,5 @@ These are features that will make Gazee better and more up to par in what should
 - [ ] Random First Issue of a series in library.
 - [ ] OPDS Support.
 - [ ] User set image sizes.
+- [ ] Notifications
+- [ ] Reports on various stats of your library; number of bad archives, comics without metadata, etc etc
