@@ -47,20 +47,24 @@ def updateApp():
     if current_commit != latest_commit:
         logger.info("Updated Needed")
 
-        os.remove('public/css/style.css')
+        os.rename('public/css/style.css', 'public/css/style.css.bak')
 
         repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
         o = repo.remotes.origin
         o.pull()
 
-        with open('public/css/style.css') as f:
-            style = f.read()
+        if os.exists('public/css/style.css'):
+            with open('public/css/style.css') as f:
+                style = f.read()
 
-        with open('public/css/style.css', "w") as f:
-            style = style.replace("757575", gazee.MAIN_COLOR)
-            style = style.replace("BDBDBD", gazee.ACCENT_COLOR)
-            style = style.replace("FFFFFF", gazee.WEB_TEXT_COLOR)
-            f.write(style)
+            with open('public/css/style.css', "w") as f:
+                style = style.replace("757575", gazee.MAIN_COLOR)
+                style = style.replace("BDBDBD", gazee.ACCENT_COLOR)
+                style = style.replace("FFFFFF", gazee.WEB_TEXT_COLOR)
+                f.write(style)
+            os.remove('public/css/style.css.bak')
+        else:
+            os.rename('public/css/style.css.bak', 'public/css/style.css')
 
         logger.info("Update Pulled")
         return True
