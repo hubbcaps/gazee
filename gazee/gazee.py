@@ -489,7 +489,7 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
         scanner = ComicScanner()
-        scanner.dbBuilder()
+        scanner.scanDB()
         logger.info("DB Build Finished")
         return
 
