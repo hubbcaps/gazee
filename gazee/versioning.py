@@ -53,7 +53,7 @@ def updateApp():
         o = repo.remotes.origin
         o.pull()
 
-        if os.exists('public/css/style.css'):
+        if os.path.exists('public/css/style.css'):
             with open('public/css/style.css') as f:
                 style = f.read()
 
