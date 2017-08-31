@@ -154,7 +154,7 @@ def main():
         options_dict = {
             'server.socket_port': gazee.PORT,
             'server.socket_host': '0.0.0.0',
-            'server.thread_pool': 10,
+            'server.thread_pool': 30,
             'log.screen': False,
             'engine.autoreload.on': False,
         }
@@ -162,7 +162,7 @@ def main():
         options_dict = {
             'server.socket_port': gazee.PORT,
             'server.socket_host': '0.0.0.0',
-            'server.thread_pool': 10,
+            'server.thread_pool': 30,
             'server.ssl_module': 'builtin',
             'server.ssl_certificate': gazee.SSL_CERT,
             'server.ssl_private_key': gazee.SSL_KEY,
