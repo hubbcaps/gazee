@@ -489,8 +489,8 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
         scanner = ComicScanner()
-        scanner.scanDB()
-        logger.info("DB Build Finished")
+        t1 = threading.Thread(target=scanner.dbBuilder)
+        t1.start()
         return
 
     @cherrypy.expose

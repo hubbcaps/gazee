@@ -448,11 +448,6 @@ class ComicScanner(object):
             logger.info("DB Build succesful")
             return
 
-    def scanDB(self):
-
-        t1 = threading.Thread(target=self.dbBuilder)
-        t1.start()
-
     def rescanDB(self):
 
         self.dbBuilder()
