@@ -54,9 +54,9 @@ if not os.path.exists(os.path.join(DATA_DIR, 'app.ini')):
         cf.write("mylar_db =\n")
         cf.write("ssl_key =\n")
         cf.write("ssl_cert =\n")
-        cf.write("web_text_color = FFFFFF")
-        cf.write("main_color = 757575")
-        cf.write("accent_color = bdbdbd")
+        cf.write("web_text_color = FFFFFF\n")
+        cf.write("main_color = 757575\n")
+        cf.write("accent_color = bdbdbd\n")
     cf.close()
 
 config = configparser.ConfigParser()
