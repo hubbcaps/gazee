@@ -74,8 +74,9 @@ Double check this on Windows, different systems have different requirements for 
   Go to **http://your-ip:4242**
   
   Default username and password for the web interface:
-    * **Username:** `admin`
-    * **Password:** `gazee`
+  
+  * **Username:** `admin`
+  * **Password:** `gazee`
   
   Proceed to the settings page and change your admin pass, and enter the path to your comic library   and optionally your Mylar DB for better comic info extraction.
 
@@ -89,17 +90,23 @@ You can easily run the program in Daemon mode by using the -d flag
 
 [Dockerfile](./Dockerfile) associated in this repository allows you to containerize the service starting from a light weight [python:3.6.2-alpine](https://hub.docker.com/_/python/) (~30 MB). It installs all dependencies and required python packages automatically. You can find the docker image [here in docker hub](https://hub.docker.com/r/mayankt/gazee/).
 
+**Step 1A: Pull Docker image for Gazee**
+
 You can pull the image directly from docker hub using the following commands: 
  
  `docker pull mayankt/gazee`
 
-You can build your own docker image locally by entering in the following commands: 
+**Step 1B: Build Docker image for Gazee**
+
+Alternatively you can build your own docker image locally by entering in the following commands: 
 
 ```bash
 git clone https://github.com/hubbcaps/gazee.git
 cd /gazee
 docker build -t mayankt/gazee .
 ```
+**Step 2: Run docker container**
+
 To run the container, enter the following command on your docker host: 
 
 ```
@@ -111,6 +118,7 @@ docker run -dt \
 -p 4242:4242 \
 mayankt/gazee
 ```
+**Note:** 
 
 `-v ${local-comics-dir}:/data` is a volume mount from your local host directory where you have stored your comicbook files `${local-comics-dir}` to the `/data` directory within the container. 
 
@@ -118,13 +126,16 @@ mayankt/gazee
 
 `-v ${local-certs-dir}:/certs` **Optional Flag** is a volume mount from your local host directory where you have stored your server certificate `${local-certs-dir}` to the `/certs` directory within the container.
 
+**Step 3: Logon to Gazee's Web UI**
+
 You can use the above volume mounts to configure the settings of the app and dictate where to find you comic library, Mylar DB, and certificates.
 
 Go to **http://your-ip:4242**
   
   Default username and password for the web interface:
-    * **Username:** `admin`
-    * **Password:** `gazee`
+  
+  * **Username:** `admin`
+  * **Password:** `gazee`
 
 ### QOL Features on the Roadmap
 
