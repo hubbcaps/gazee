@@ -104,27 +104,31 @@
               <a class="btn-flat waves-effect" type="submit" id="update-app-submit">Update Application Settings</a>
             </div>
           </form>
-          <table class="bordered">
-            <thead>
-              <tr>
-                <th>Scan Status</th>
-                <th>Scan Length</th>
-                <th>Number of Comics</th>
-              </tr>
-            <thead>
-            <tbody>
-              <tr>
-    % if sip:
-                <td>In Progress</td>
-                <td>${scantime}</td>
-    % else:
-                <td>Not Running</td>
-                <td>${scantime}</td>
-    % endif
-                <td>${noc}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="input-field col s4">
+            <div class="row">
+              <table class="bordered">
+                <thead>
+                  <tr>
+                    <th>Scan Status</th>
+                    <th>Scan Length</th>
+                    <th>Number of Comics</th>
+                  </tr>
+                <thead>
+                <tbody>
+                  <tr>
+        % if sip:
+                    <td>In Progress</td>
+                    <td>${scantime}</td>
+        % else:
+                    <td>Not Running</td>
+                    <td>${scantime}</td>
+        % endif
+                    <td>${noc}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
           </br>
           <div class="row">
             <a class="btn-flat waves-effect" type="submit" id="scan-comics-submit">Scan Current Comic Path</a>
@@ -141,6 +145,37 @@
             </div>
             <div class="row">
               <a class="btn-flat waves-effect" type="submit" id="change-pass-submit">Change Password</a>
+            </div>
+          </form>
+            <div class="row">
+              <div class="input-field col s4">
+                <table class="bordered">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>User Type</th>
+                    </tr>
+                  <thead>
+                  <tbody>
+% for u in users:
+                    <tr>
+                      <td>${u['User']}</td>
+                      <td>${u['Type']}</td>
+                    </tr>
+% endfor
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          <form class="col s6" id="del-user-form">
+            <div class="row">
+              <div class="input-field col s4">
+                <input id="user-del" type="text" name="username" value="">
+                <label for="user-del">User to Delete</label>
+              </div>
+            </div>
+            <div class="row">
+              <a class="btn-flat waves-effect" type="submit" id="del-user-submit">Delete User</a>
             </div>
           </form>
           <form class="col s6" id="new-user-form">
@@ -247,6 +282,12 @@
               $.ajax({
                 url: "newUser",
                 data: $("#new-user-form").serialize()
+              });
+            });
+            $("#del-user-submit").click(function() {
+              $.ajax({
+                url: "delUser",
+                data: $("#del-user-form").serialize()
               });
             });
             $("#change-theme-submit").click(function() {
