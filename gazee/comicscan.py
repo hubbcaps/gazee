@@ -142,7 +142,7 @@ class ComicScanner(object):
 
         cname = hashlib.md5(bytes(comic_name, encoding='utf-8')).hexdigest()
 
-        absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number))
+        absPath = os.path.abspath(os.path.join("/data", "cache", cname, volume_number, issue_number))
 
         if not os.path.exists(absPath):
             os.makedirs(absPath)
@@ -151,7 +151,7 @@ class ComicScanner(object):
             logger.info("Image Not Found")
             image_dest = 'static/images/imgnotfound.png'
         else:
-            image_dest = os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number, image)
+            image_dest = os.path.join("/data", "cache", cname, volume_number, issue_number, image)
 
             if not os.path.exists(image_dest):
                 try:
