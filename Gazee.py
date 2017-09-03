@@ -144,7 +144,6 @@ def main():
             'tools.sessions.timeout': 1440,
             'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
             'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
-            'tools.staticdir.root': os.path.abspath(os.getcwd()),
             'tools.basic_auth.on': True,
             'tools.basic_auth.realm': 'Gazee',
             'tools.basic_auth.users': gazee.authmech.getPassword,
@@ -153,6 +152,7 @@ def main():
         },
         '/static': {
             'tools.staticdir.on': True,
+            'tools.staticdir.root': os.path.abspath(os.getcwd()),
             'tools.staticdir.dir': "public"
         },
         '/data': {
