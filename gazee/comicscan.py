@@ -142,16 +142,16 @@ class ComicScanner(object):
 
         cname = hashlib.md5(bytes(comic_name, encoding='utf-8')).hexdigest()
 
-        absPath = os.path.abspath(os.path.join("/data", "cache", cname, volume_number, issue_number))
+        absPath = os.path.abspath(os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number))
 
         if not os.path.exists(absPath):
             os.makedirs(absPath)
 
         if len(image) == 0:
             logger.info("Image Not Found")
-            image_dest = 'static/images/imgnotfound.png'
+            real_dest = 'static/images/imgnotfound.png'
         else:
-            image_dest = os.path.join("/data", "cache", cname, volume_number, issue_number, image)
+            image_dest = os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number, image)
 
             if not os.path.exists(image_dest):
                 try:
@@ -162,9 +162,10 @@ class ComicScanner(object):
                 except IOError:
                     logger.info("Thumbnail Generation failed")
                     image_dest = 'static/images/imgnotfound.png'
+            real_dest = os.path.join("data", "cache", cname, volume_number, issue_number, image)
 
         logger.info("Thumbnail Generated")
-        return image_dest
+        return real_dest
 
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
     def comicInfoParse(self, comicpath):
