@@ -88,13 +88,13 @@ You can easily run the program in Daemon mode by using the -d flag
 
 ## Docker Container
 
-[Dockerfile](./Dockerfile) associated in this repository allows you to containerize the service starting from a light weight [python:3.6.2-alpine](https://hub.docker.com/_/python/) (~30 MB). It installs all dependencies and required python packages automatically. You can find the docker image [here in docker hub](https://hub.docker.com/r/mayankt/gazee/).
+[Dockerfile](./Dockerfile) associated in this repository allows you to containerize the service starting from a light weight [python:3.6.2-alpine](https://hub.docker.com/_/python/) (~30 MB). It installs all dependencies and required python packages automatically. You can find the docker image [here in docker hub](https://hub.docker.com/r/hubcapps/gazee/).
 
 **Step 1A: Pull Docker image for Gazee**
 
 You can pull the image directly from docker hub using the following commands: 
  
- `docker pull mayankt/gazee`
+ `docker pull hubcapps/gazee`
 
 **Step 1B: Build Docker image for Gazee**
 
@@ -103,7 +103,7 @@ Alternatively you can build your own docker image locally by entering in the fol
 ```bash
 git clone https://github.com/hubbcaps/gazee.git
 cd /gazee
-docker build -t mayankt/gazee .
+docker build -t hubcapps/gazee .
 ```
 **Step 2: Run docker container**
 
@@ -112,15 +112,18 @@ To run the container, enter the following command on your docker host:
 ```
 docker run -dt \
 --name=gazee \
--v ${local-comics-dir}:/data \
+-v ${local-comics-dir}:/comics \
+-v ${local-gazee-dir}:/gazee \ 
 -v ${local-mylarDB-dir}:/mylar \
 -v ${local-certs-dir}:/certs \
 -p 4242:4242 \
-mayankt/gazee
+hubcapps/gazee
 ```
 **Note:** 
 
-`-v ${local-comics-dir}:/data` is a volume mount from your local host directory where you have stored your comicbook files `${local-comics-dir}` to the `/data` directory within the container. 
+`-v ${local-comics-dir}:/comics` is a volume mount from your local host directory where you have stored your comicbook files `${local-comics-dir}` to the `/comics` directory within the container. 
+
+`-v ${local-gazee-dir}:/gazee` is a volume mount from your local host directory to expose the configs inside the docker container to your host file system for easy log parsing, app configuration and backup ability.`
 
 `-v ${local-mylarDB-dir}:/mylar` **Optional Flag** is a volume mount from your local host directory where you have stored your mylar db `${local-mylarDB-dir}` to the `/mylar` directory within the container.
 
