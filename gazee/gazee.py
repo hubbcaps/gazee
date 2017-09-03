@@ -394,6 +394,13 @@ class Gazee(object):
         user = cherrypy.request.login
         user_level = gazee.authmech.getUserLevel(user)
 
+        c.execute("SELECT * FROM {tn}".format(tn=gazee.USERS))
+        usersinit = c.fetchall()
+        users = []
+        for f in usersinit:
+            users.append({"User": f[0],
+                          "Type": f[2]})
+
         if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
             scan_in_progress = True
             made = os.path.getmtime(os.path.join(gazee.DATA_DIR, "db.lock"))
@@ -410,7 +417,7 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         logger.info("Settings Served")
 
-        return serve_template(templatename="settings.html", user=user, user_level=user_level, sip=scan_in_progress, noc=num_of_comics, scantime=scantime)
+        return serve_template(templatename="settings.html", user=user, user_level=user_level, users=users, sip=scan_in_progress, noc=num_of_comics, scantime=scantime)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
@@ -481,6 +488,19 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         gazee.authmech.addUser(username, password, usertype)
         logger.info("New User Added")
+        return
+
+    @cherrypy.expose
+    def delUser(self, username):
+        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logger = logging.getLogger(__name__)
+        db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
+        connection = sqlite3.connect(str(db))
+        c = connection.cursor()
+        c.execute("DELETE FROM {tn} WHERE {cn}=?".format(tn=gazee.USERS, cn=gazee.USERNAME), (username,))
+        connection.commit()
+        connection.close()
+        logger.info("User Deleted")
         return
 
     @cherrypy.expose
