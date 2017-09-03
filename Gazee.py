@@ -25,8 +25,6 @@ import gazee
 from gazee import Gazee, ComicScanner
 
 gazee.FULL_PATH = os.path.abspath(__file__)
-DATA_DIR = 'data'
-TEMP_DIR = 'tmp'
 # Verify our app is working out of the install directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -93,14 +91,32 @@ def daemonize():
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG, filename='data/gazee.log')
-    logger = logging.getLogger(__name__)
 
     parser = argparse.ArgumentParser(description='Gazee - Open Comic Book Reader')
 
     parser.add_argument('-d', '--daemon', action='store_true', help='Run as a daemon')
+    parser.add_argument('-c', '--datadir', help='Set data directory')
 
     args = parser.parse_args()
+
+    if args.datadir:
+        gazee.DATA_DIR = args.datadir
+        gazee.TEMP_DIR = os.path.join(args.datadir, 'tmp')
+
+    if not os.path.exists(gazee.DATA_DIR):
+        os.makedirs(os.path.abspath(gazee.DATA_DIR))
+
+    if not os.path.exists(os.path.join(gazee.DATA_DIR, 'sessions')):
+        os.makedirs(os.path.abspath(os.path.join(gazee.DATA_DIR, 'sessions')))
+
+    if not os.path.exists(gazee.TEMP_DIR):
+        os.makedirs(os.path.abspath(gazee.TEMP_DIR))
+
+    gazee.db.dbCreation()
+    gazee.config.configRead()
+
+    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logger = logging.getLogger(__name__)
 
     if args.daemon:
         if sys.platform == 'win32':
@@ -115,6 +131,9 @@ def main():
                 PIDFile(cherrypy.engine, gazee.PIDFILE).subscribe()
             except IOError as e:
                 raise SystemExit("Unable to write PID file: %s [%d]" % (e.strerror, e.errno))
+            if gazee.DATA_DIR is not 'data':
+                gazee.ARGS += ["-c", gazee.DATA_DIR]
+            gazee.ARGS += ["-d"]
             Daemonizer(cherrypy.engine).subscribe()
 
     conf = {
@@ -124,8 +143,7 @@ def main():
             'tools.sessions.on': True,
             'tools.sessions.timeout': 1440,
             'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
-            'tools.sessions.storage_path': "data/sessions",
-            'tools.staticdir.root': os.path.abspath(os.getcwd()),
+            'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
             'tools.basic_auth.on': True,
             'tools.basic_auth.realm': 'Gazee',
             'tools.basic_auth.users': gazee.authmech.getPassword,
@@ -134,15 +152,16 @@ def main():
         },
         '/static': {
             'tools.staticdir.on': True,
+            'tools.staticdir.root': os.path.abspath(os.getcwd()),
             'tools.staticdir.dir': "public"
         },
         '/data': {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': "data"
+            'tools.staticdir.dir': gazee.DATA_DIR
         },
         '/tmp': {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': "tmp"
+            'tools.staticdir.dir': gazee.TEMP_DIR
         },
         '/favicon.ico': {
             'tools.staticfile.on': True,

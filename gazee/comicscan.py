@@ -114,7 +114,7 @@ class ComicScanner(object):
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             for f in files:
                 if f.endswith((".png", ".gif", ".bmp", ".dib", ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".tiff", ".tif")):
-                    image_list.append(os.path.join(root, f))
+                    image_list.append(os.path.join(root, f).replace(gazee.DATA_DIR, ""))
                     image_list.sort()
         logger.info("Image List Created")
         return image_list
@@ -149,7 +149,7 @@ class ComicScanner(object):
 
         if len(image) == 0:
             logger.info("Image Not Found")
-            image_dest = 'static/images/imgnotfound.png'
+            real_dest = 'static/images/imgnotfound.png'
         else:
             image_dest = os.path.join(gazee.DATA_DIR, "cache", cname, volume_number, issue_number, image)
 
@@ -162,9 +162,10 @@ class ComicScanner(object):
                 except IOError:
                     logger.info("Thumbnail Generation failed")
                     image_dest = 'static/images/imgnotfound.png'
+            real_dest = os.path.join("data", "cache", cname, volume_number, issue_number, image)
 
         logger.info("Thumbnail Generated")
-        return image_dest
+        return real_dest
 
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
     def comicInfoParse(self, comicpath):

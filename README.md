@@ -17,7 +17,6 @@ Recent Comics
 
 Exposes your sorting structure in a library view
 ![screen02](http://i.imgur.com/LuJDAAG.jpg)
-
 Download your issue if you have a preferred reader outside of Gazee and read a summary of the issue in line if available with your archive
 ![screen03](http://i.imgur.com/NcgCQTq.jpg)
 
@@ -61,24 +60,36 @@ Double check this on Windows, different systems have different requirements for 
 
 ## Setup
 
+**Step 1: Clone the repository and install python dependencies**
+
     cd <directory you want to install to>
     git clone https://github.com/hubbcaps/gazee.git
     cd gazee
     sudo pip install -r requirements.txt
     python Gazee.py
 
+**Step 2: Logon to Gazee's Web UI**)
 
-Go to http://your-ip:4242
+  Go to **http://your-ip:4242**
+  
+  Default username and password for the web interface:
+  
+  * **Username:** `admin`
+  * **Password:** `gazee`
+  
+  Proceed to the settings page and change your admin pass, and enter the path to your comic library   and optionally your Mylar DB for better comic info extraction.
 
-Default user and pass for the web interface is admin/gazee
-
-Proceed to the settings page and change your admin pass, and enter the path to your comic library and optionally your Mylar DB for better comic info extraction.
-
-## Daemonize (Linux only)
+### Daemonize (Linux only)
 
 You can easily run the program in Daemon mode by using the -d flag
 
     python Gazee.py -d
+
+## Docker Container
+
+Alternatively, instead of doing a local install, you can install the docker container.
+
+The docket container can be pulled from [here](https://github.com/hubbcaps/docker-gazee) or from [dockerhub](https://hub.docker.com/r/hubcapps/gazee/).
 
 ### QOL Features on the Roadmap
 
