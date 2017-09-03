@@ -17,7 +17,6 @@ Recent Comics
 
 Exposes your sorting structure in a library view
 ![screen02](http://i.imgur.com/LuJDAAG.jpg)
-
 Download your issue if you have a preferred reader outside of Gazee and read a summary of the issue in line if available with your archive
 ![screen03](http://i.imgur.com/NcgCQTq.jpg)
 
