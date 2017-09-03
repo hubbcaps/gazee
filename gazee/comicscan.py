@@ -114,7 +114,7 @@ class ComicScanner(object):
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             for f in files:
                 if f.endswith((".png", ".gif", ".bmp", ".dib", ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".tiff", ".tif")):
-                    image_list.append(os.path.join(root, f).remove(gazee.DATA_DIR))
+                    image_list.append(os.path.join(root, f).replace(gazee.DATA_DIR, ""))
                     image_list.sort()
         logger.info("Image List Created")
         return image_list
