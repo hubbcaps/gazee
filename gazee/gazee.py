@@ -417,7 +417,7 @@ class Gazee(object):
     def saveSettings(self, scomicPath=None, scomicsPerPage=None, scomicScanInterval=None, smylarPath=None, ssslKey=None, ssslCert=None, sport=4242):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
-        config.read('data/app.ini')
+        config.read(os.path.join(gazee.DATA_DIR, 'app.ini'))
 
         config['GLOBAL']['PORT'] = sport
         config['GLOBAL']['COMIC_PATH'] = scomicPath
@@ -426,7 +426,7 @@ class Gazee(object):
         config['GLOBAL']['MYLAR_DB'] = smylarPath
         config['GLOBAL']['SSL_KEY'] = ssslKey
         config['GLOBAL']['SSL_CERT'] = ssslCert
-        with open('data/app.ini', 'w') as configfile:
+        with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'w') as configfile:
             config.write(configfile)
         configfile.close()
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
@@ -439,12 +439,12 @@ class Gazee(object):
     def changeTheme(self, mainColor, accentColor, webTextColor):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
-        config.read('data/app.ini')
+        config.read(os.path.join(gazee.DATA_DIR, 'app.ini'))
 
         config['GLOBAL']['MAIN_COLOR'] = mainColor
         config['GLOBAL']['ACCENT_COLOR'] = accentColor
         config['GLOBAL']['WEB_TEXT_COLOR'] = webTextColor
-        with open('data/app.ini', 'w') as configfile:
+        with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'w') as configfile:
             config.write(configfile)
         configfile.close()
 
@@ -510,12 +510,12 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
-            os.remove(gazee.DATA_DIR, 'db.lock')
+            os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
         logger.info('Restarting Gazee with ' + str(popen_list))
         subprocess.Popen(popen_list, cwd=os.getcwd())
-        threading.Timer(1, lambda: os._exit(0)).start()
+        os._exit(0)
         logger.info('Gazee is restarting...')
         return
 
