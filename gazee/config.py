@@ -1,15 +1,10 @@
 import os
 import configparser
-import logging
 
 import gazee
 
 
 def configRead():
-
-    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
-
     if not os.path.exists(os.path.join(gazee.DATA_DIR, 'app.ini')):
         with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'a') as cf:
             cf.write("[GLOBAL]\n")
@@ -22,7 +17,7 @@ def configRead():
             cf.write("ssl_cert =\n")
             cf.write("web_text_color = FFFFFF\n")
             cf.write("main_color = 757575\n")
-            cf.write("accent_color = bdbdbd\n")
+            cf.write("accent_color = BDBDBD\n")
         cf.close()
 
     config = configparser.ConfigParser()
