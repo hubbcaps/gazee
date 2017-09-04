@@ -217,14 +217,14 @@ class Gazee(object):
             c.execute("SELECT {nn}, {di} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, di=gazee.DIR_IMAGE, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY), (pk[0],))
 
             dirsinit = c.fetchall()
-            directories = []
+            unsorted_directories = []
             for d in dirsinit:
                 if d[1] is None:
-                    directories.append({"DirectoryName": d[0],
-                                        "DirectoryImage": "static/images/imgnotfound.png"})
+                    unsorted_directories.append({"DirectoryName": d[0],
+                                                 "DirectoryImage": "static/images/imgnotfound.png"})
                 else:
-                    directories.append({"DirectoryName": d[0],
-                                        "DirectoryImage": d[1]})
+                    unsorted_directories.append({"DirectoryName": d[0],
+                                                 "DirectoryImage": d[1]})
 
             c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY), (pk[0],))
             numcinit = c.fetchone()
@@ -260,7 +260,7 @@ class Gazee(object):
 
             cp_split = os.path.split(gazee.COMIC_PATH)
 
-            # End it all by grinding the breadcrumb.
+            # Grinding the breadcrumb.
             if parent_dir == '':
                 prd = ''
             else:
@@ -270,8 +270,37 @@ class Gazee(object):
             if prd == cp_split[1]:
                 prd = ''
 
-            new_dirs = sorted(directories, key=lambda k: k['DirectoryName'])
-            directories = new_dirs
+            # Sort and filter the directories
+            new_dirs = sorted(unsorted_directories, key=lambda k: k['DirectoryName'])
+            sorted_dirs = new_dirs
+            directories = sorted_dirs
+
+            for d in sorted_dirs:
+                if d['DirectoryName'].startswith('.'):
+                    directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                if parent_dir == '':
+                    if len(os.listdir(os.path.join(directory, d['DirectoryName']))) == 0:
+                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                    else:
+                        dir_contents = os.listdir(os.path.join(directory, d['DirectoryName']))
+                        comic_types = [".cbz", ".cbr"]
+                        for f in dir_contents:
+                            if os.path.isdir(os.path.join(directory, d['DirectoryName'], f)):
+                                break
+                            elif not any(s in f for s in comic_types):
+                                directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                else:
+                    if len(os.listdir(os.path.join(parent_dir[0], directory, d['DirectoryName']))) == 0:
+                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                    else:
+                        dir_contents = os.listdir(os.path.join(parent_dir[0], directory, d['DirectoryName']))
+                        comic_types = [".cbz", ".cbr"]
+                        for f in dir_contents:
+                            if os.path.isdir(os.path.join(parent_dir[0], directory, d['DirectoryName'], f)):
+                                break
+                            if not any(s in f for s in comic_types):
+                                directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+
             logger.info("Library Served")
 
         except IndexError:
