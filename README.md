@@ -67,6 +67,19 @@ Double check this on Windows, different systems have different requirements for 
     cd gazee
     sudo pip install -r requirements.txt
     python Gazee.py
+    
+**Note**
+If you see an error similar to the following
+
+    $ python Gazee.py
+    File "Gazee.py", line 194
+    cherrypy.engine.timeout_monitor.on: False
+    ^
+    SyntaxError: invalid syntax
+
+This likely means your systems default version of python is 2.x. Verify you have python 3.6 installed and call it explicitly with python3 or python3.6
+
+    python3 Gazee.py
 
 **Step 2: Logon to Gazee's Web UI**)
 
