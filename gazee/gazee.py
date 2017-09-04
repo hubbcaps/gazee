@@ -255,9 +255,6 @@ class Gazee(object):
                                "ComicPath": f[6],
                                "DateAdded": f[7]})
 
-            connection.commit()
-            connection.close()
-
             cp_split = os.path.split(gazee.COMIC_PATH)
 
             # Grinding the breadcrumb.
@@ -278,28 +275,9 @@ class Gazee(object):
             for d in sorted_dirs:
                 if d['DirectoryName'].startswith('.'):
                     directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
-                if parent_dir == '':
-                    if len(os.listdir(os.path.join(directory, d['DirectoryName']))) == 0:
-                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
-                    else:
-                        dir_contents = os.listdir(os.path.join(directory, d['DirectoryName']))
-                        comic_types = [".cbz", ".cbr"]
-                        for f in dir_contents:
-                            if os.path.isdir(os.path.join(directory, d['DirectoryName'], f)):
-                                break
-                            elif not any(s in f for s in comic_types):
-                                directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
-                else:
-                    if len(os.listdir(os.path.join(parent_dir[0], directory, d['DirectoryName']))) == 0:
-                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
-                    else:
-                        dir_contents = os.listdir(os.path.join(parent_dir[0], directory, d['DirectoryName']))
-                        comic_types = [".cbz", ".cbr"]
-                        for f in dir_contents:
-                            if os.path.isdir(os.path.join(parent_dir[0], directory, d['DirectoryName'], f)):
-                                break
-                            if not any(s in f for s in comic_types):
-                                directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+
+            connection.commit()
+            connection.close()
 
             logger.info("Library Served")
 
@@ -324,8 +302,6 @@ class Gazee(object):
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
     """
-    # TODO
-    # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
