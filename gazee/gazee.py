@@ -273,7 +273,6 @@ class Gazee(object):
             directories = sorted_dirs
 
             filelist = []
-            comic_types = ['.cbz', '.cbr']
 
             for d in sorted_dirs:
                 if d['DirectoryName'].startswith('.'):
@@ -281,7 +280,10 @@ class Gazee(object):
                 if parent_dir == '':
                     for root, dirs, files in os.walk(os.path.join(directory, d['DirectoryName'])):
                         filelist.extend(f for f in files)
-                    if any(comic_types in s for s in filelist):
+                    if any(".cbz" in s for s in filelist):
+                        filelist = []
+                        continue
+                    elif any(".cbr" in s for s in filelist):
                         filelist = []
                         continue
                     else:
@@ -290,7 +292,10 @@ class Gazee(object):
                 else:
                     for root, dirs, files in os.walk(os.path.join(parent_dir[0], directory, d['DirectoryName'])):
                         filelist.extend(f for f in files)
-                    if any(comic_types in s for s in filelist):
+                    if any(".cbz" in s for s in filelist):
+                        filelist = []
+                        continue
+                    elif any(".cbr" in s for s in filelist):
                         filelist = []
                         continue
                     else:
