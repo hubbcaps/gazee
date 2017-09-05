@@ -217,14 +217,14 @@ class Gazee(object):
             c.execute("SELECT {nn}, {di} FROM {tn} WHERE {ptk}=?".format(nn=gazee.NICE_NAME, di=gazee.DIR_IMAGE, tn=gazee.DIR_NAMES, ptk=gazee.PARENT_KEY), (pk[0],))
 
             dirsinit = c.fetchall()
-            directories = []
+            unsorted_directories = []
             for d in dirsinit:
                 if d[1] is None:
-                    directories.append({"DirectoryName": d[0],
-                                        "DirectoryImage": "static/images/imgnotfound.png"})
+                    unsorted_directories.append({"DirectoryName": d[0],
+                                                 "DirectoryImage": "static/images/imgnotfound.png"})
                 else:
-                    directories.append({"DirectoryName": d[0],
-                                        "DirectoryImage": d[1]})
+                    unsorted_directories.append({"DirectoryName": d[0],
+                                                 "DirectoryImage": d[1]})
 
             c.execute("SELECT COUNT(*) FROM {tn} WHERE {pk}=?".format(tn=gazee.ALL_COMICS, pk=gazee.PARENT_KEY), (pk[0],))
             numcinit = c.fetchone()
@@ -255,12 +255,9 @@ class Gazee(object):
                                "ComicPath": f[6],
                                "DateAdded": f[7]})
 
-            connection.commit()
-            connection.close()
-
             cp_split = os.path.split(gazee.COMIC_PATH)
 
-            # End it all by grinding the breadcrumb.
+            # Grinding the breadcrumb.
             if parent_dir == '':
                 prd = ''
             else:
@@ -270,8 +267,18 @@ class Gazee(object):
             if prd == cp_split[1]:
                 prd = ''
 
-            new_dirs = sorted(directories, key=lambda k: k['DirectoryName'])
-            directories = new_dirs
+            # Sort and filter the directories
+            new_dirs = sorted(unsorted_directories, key=lambda k: k['DirectoryName'])
+            sorted_dirs = new_dirs
+            directories = sorted_dirs
+
+            for d in sorted_dirs:
+                if d['DirectoryName'].startswith('.'):
+                    directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+
+            connection.commit()
+            connection.close()
+
             logger.info("Library Served")
 
         except IndexError:
@@ -295,8 +302,6 @@ class Gazee(object):
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
     """
-    # TODO
-    # Good place to pass in a bookmark, how do we make them?
     @cherrypy.expose
     def readComic(self, comic_path, page_num=0):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
