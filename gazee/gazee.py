@@ -272,9 +272,35 @@ class Gazee(object):
             sorted_dirs = new_dirs
             directories = sorted_dirs
 
+            filelist = []
+
             for d in sorted_dirs:
                 if d['DirectoryName'].startswith('.'):
                     directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                if parent_dir == '':
+                    for root, dirs, files in os.walk(os.path.join(directory, d['DirectoryName'])):
+                        filelist.extend(f for f in files)
+                    if any(".cbz" in s for s in filelist):
+                        filelist = []
+                        continue
+                    elif any(".cbr" in s for s in filelist):
+                        filelist = []
+                        continue
+                    else:
+                        filelist = []
+                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
+                else:
+                    for root, dirs, files in os.walk(os.path.join(parent_dir[0], directory, d['DirectoryName'])):
+                        filelist.extend(f for f in files)
+                    if any(".cbz" in s for s in filelist):
+                        filelist = []
+                        continue
+                    elif any(".cbr" in s for s in filelist):
+                        filelist = []
+                        continue
+                    else:
+                        filelist = []
+                        directories[:] = [r for r in directories if r.get('DirectoryName') != d['DirectoryName']]
 
             connection.commit()
             connection.close()

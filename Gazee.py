@@ -136,6 +136,16 @@ def main():
             gazee.ARGS += ["-d"]
             Daemonizer(cherrypy.engine).subscribe()
 
+    if os.path.exists('public/css/style.css'):
+        with open('public/css/style.css') as f:
+            style = f.read()
+
+        with open('public/css/style.css', "w") as f:
+            style = style.replace("757575", gazee.MAIN_COLOR)
+            style = style.replace("BDBDBD", gazee.ACCENT_COLOR)
+            style = style.replace("FFFFFF", gazee.WEB_TEXT_COLOR)
+            f.write(style)
+
     if gazee.DATA_DIR is not 'data':
         conf = {
             '/': {
