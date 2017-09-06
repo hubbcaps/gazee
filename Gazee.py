@@ -246,7 +246,7 @@ def main():
     cherrypy.engine.block()
 
     if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
-        os.remove(gazee.DATA_DIR, 'db.lock')
+        os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
     return
 
 
