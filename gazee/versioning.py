@@ -28,7 +28,7 @@ def currentVersion():
 
 def latestVersion():
     repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
-    remote = git.remote.Remote(repo, 'origin')
+    remote = repo.remotes.origin
     info = remote.fetch()[0]
     remote_commit = info.commit
     return remote_commit.hexsha
