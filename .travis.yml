@@ -11,3 +11,6 @@ install:
 
 script:
   - python Gazee.py --daemon
+
+notifications:
+  irc: "chat.freenode.net#gazee"
