@@ -246,3 +246,33 @@ i {
 .tabs .indicator {
   background-color: #FFFFFF;
 }
+
+@media only screen and (min-width : 601px) and (max-width : 1260px) {
+  .toast {
+    border-radius: 0;
+  }
+}
+
+@media only screen and (min-width : 1261px) {
+  .toast {
+    border-radius: 0;
+  }
+}
+
+@media only screen and (min-width : 601px) and (max-width : 1260px) {
+  #toast-container {
+    bottom: 0;
+    top: 90%;
+    right: 50%;
+    transform: translate(50%, 0);
+  }
+}
+
+@media only screen and (min-width : 1261px) {
+  #toast-container {
+    bottom: 0;
+    top: 90%;
+    right: 50%;
+    transform: translate(50%, 0);
+  }
+}
