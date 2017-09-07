@@ -103,13 +103,8 @@
                 <thead>
                 <tbody>
                   <tr>
-        % if sip:
-                    <td>In Progress</td>
+                    <td id="scan-status">${"In Progress" if sip else "Not Running"}</td>
                     <td>${scantime}</td>
-        % else:
-                    <td>Not Running</td>
-                    <td>${scantime}</td>
-        % endif
                     <td>${noc}</td>
                   </tr>
                 </tbody>
@@ -147,7 +142,7 @@
                       <th>User Type</th>
                     </tr>
                   <thead>
-                  <tbody>
+                  <tbody id="user-rows">
 % for u in users:
                     <tr id="user-${u['User']}">
                       <td>${u['User']}</td>
@@ -201,19 +196,19 @@
             <div class="row">
               <div class="input-field col s2">
                 <input type="text" name="mainColor" value='${gazee.MAIN_COLOR}' class="jscolor" >
-                <label for="mainColor">Main Color</label>
+                <label for="mainColor" style="padding-bottom: 5px">Main Color</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s2">
                 <input type="text" name="accentColor" value='${gazee.ACCENT_COLOR}' class="jscolor" >
-                <label for="accentColor">Accent Color</label>
+                <label for="accentColor" style="padding-bottom: 5px">Accent Color</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s2">
                 <input type="text" name="webTextColor" value='${gazee.WEB_TEXT_COLOR}' class="jscolor" >
-                <label for="webTextColor">Text Color</label>
+                <label for="webTextColor" style="padding-bottom: 5px">Text Color</label>
               </div>
             </div>
             <div class="row">
@@ -224,7 +219,7 @@
 
         <div id="server-ops" class="col s12" style="padding: 15px;">
           <div class="row">
-            Gazee Version: ${gazee_version}<br />
+            Gazee Version: <span id="gazee-version">${gazee_version}</span><br />
             Python Version: ${'.'.join(map(str,python_version[:3]))}
           </div>
           <div class="row">
@@ -256,56 +251,99 @@
             $("#update-app-submit").click(function() {
               $.ajax({
                 url: "saveSettings",
-                data: $("#server-settings-form").serialize()
+                data: $("#server-settings-form").serialize(),
+                success: function() {
+                  Materialize.toast("Settings saved. Restarting server.", 4000);
+                  $.get("restart");
+                }
               });
             });
             $("#scan-comics-submit").click(function() {
               $.ajax({
-                url: "comicScan"
+                url: "comicScan",
+                success: function() {
+                  Materialize.toast("Comic scan started.", 4000);
+                  $("#scan-status").text("In Progress");
+                }
               });
             });
             $("#change-pass-submit").click(function() {
               $.ajax({
                 url: "changePassword",
-                data: $("#change-password-form").serialize()
+                data: $("#change-password-form").serialize(),
+                success: function() {
+                  Materialize.toast("Password updated for " + $("#user-password").val() + ".", 4000);
+                }
               });
             });
             $("#new-user-submit").click(function() {
               $.ajax({
                 url: "newUser",
-                data: $("#new-user-form").serialize()
+                data: $("#new-user-form").serialize(),
+                success: function(response) {
+                  response = JSON.parse(response);
+                  var user = $("#new-username");
+                  var type = $("input[name=usertype]:checked");
+                  if (response['added']) {
+                    Materialize.toast("New " + type.val() + " " + user.val() + " added.", 4000);
+                    $("#user-rows").append('                    <tr id="user-' + user.val() + '">\n' +
+                    '                      <td>' + user.val() + '</td>\n' +
+                    '                      <td>' + type.val() + '</td>\n' +
+                    '                    </tr>');
+                  }
+                  else {
+                    Materialize.toast("User " + user.val() + " already exists.", 4000);
+                  }
+
+                  user.val("").blur();
+                  $("#new-user-password").val("").blur();
+                  type.prop("checked", false);
+                }
               });
             });
             $("#del-user-submit").click(function() {
               $.ajax({
                 url: "delUser",
                 data: $("#del-user-form").serialize(),
-                success: function(response) {
-                  var user = $("#user-del").val();
-                  Materialize.toast("User " + user + " deleted", 4000);
-                  $("#user-" + user).remove();
+                success: function() {
+                  var user = $("#user-del");
+                  Materialize.toast("User " + user.val() + " deleted.", 4000);
+                  $("#user-" + user.val()).remove();
+                  user.val("").blur();
                 }
               });
             });
             $("#change-theme-submit").click(function() {
               $.ajax({
                 url: "changeTheme",
-                data: $("#change-theme-form").serialize()
+                data: $("#change-theme-form").serialize(),
+                success: function() {
+                  Materialize.toast("Theme updated.", 4000);
+                }
               });
             });
             $("#shutdown-server").click(function() {
-              $.ajax({
-                url: "shutdown"
-              });
+              Materialize.toast("Shutting down server.", 4000);
+              $.get("shutdown");
             });
             $("#restart-server").click(function() {
-              $.ajax({
-                url: "restart"
-              });
+              Materialize.toast("Restarting server.", 4000);
+              $.get("restart");
             });
             $("#update-server").click(function() {
-              $.ajax({
-                url: "updateGazee"
+              $.get("updateGazee", function(response) {
+                response = JSON.parse(response);
+                if (response['update'] && response['current_version'] === response['latest_version']) {
+                  Materialize.toast("Server updated to version " + response['latest_version'] + ". Restarting Server.", 4000);
+                  $("#gazee-version").text(response['latest_version']);
+                  $.get("restart");
+                }
+                else if (!response['update'] && response['current_version'] !== response['latest_version']) {
+                  Materialize.toast("Failed to update to latest version. Check log.", 4000);
+                }
+                else {
+                  Materialize.toast("Server up to date.", 4000);
+                }
               });
             });
           });
