@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #  This file is part of Gazee.
 #
 #  Gazee is free software: you can redistribute it and/or modify
@@ -155,10 +156,9 @@ def main():
                 'tools.sessions.timeout': 1440,
                 'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
                 'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
-                'tools.basic_auth.on': True,
-                'tools.basic_auth.realm': 'Gazee',
-                'tools.basic_auth.users': gazee.authmech.getPassword,
-                'tools.basic_auth.encrypt': gazee.authmech.hashPass,
+                'tools.auth_basic.on': True,
+                'tools.auth_basic.realm': 'Gazee',
+                'tools.auth_basic.checkpassword': gazee.authmech.checkPassword,
                 'request.show_tracebacks': False
             },
             '/static': {
@@ -189,10 +189,9 @@ def main():
                 'tools.sessions.timeout': 1440,
                 'tools.sessions.storage_class': cherrypy.lib.sessions.FileSession,
                 'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
-                'tools.basic_auth.on': True,
-                'tools.basic_auth.realm': 'Gazee',
-                'tools.basic_auth.users': gazee.authmech.getPassword,
-                'tools.basic_auth.encrypt': gazee.authmech.hashPass,
+                'tools.auth_basic.on': True,
+                'tools.auth_basic.realm': 'Gazee',
+                'tools.auth_basic.checkpassword': gazee.authmech.checkPassword,
                 'request.show_tracebacks': False
             },
             '/static': {
