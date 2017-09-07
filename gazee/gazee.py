@@ -508,10 +508,9 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def changePassword(self, password):
+    def changePassword(self, user, password):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        user = cherrypy.request.login
         gazee.authmech.changePass(user, password)
         logger.info("Password Changed")
         return

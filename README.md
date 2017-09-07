@@ -1,5 +1,7 @@
 ![Gazee](/public/images/logo.png)
 
+[![Build Status](https://travis-ci.org/hubbcaps/gazee.svg?branch=master)](https://travis-ci.org/hubbcaps/gazee)
+
 Gazee is a comic viewer for the web browser.
 
 Read and reach your favorite digital comics from almost any web connected device.
