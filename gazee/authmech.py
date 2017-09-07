@@ -99,6 +99,8 @@ def changePass(user, password):
 
 
 def addUser(user, password, ut):
+    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logger = logging.getLogger(__name__)
     hashedPass = hashPass(password)
 
     # Here we set the db file path.
@@ -107,13 +109,14 @@ def addUser(user, password, ut):
     # Here we make the inital DB connection that we will be using throughout this function.
     connection = sqlite3.connect(str(db))
     c = connection.cursor()
+    try:
+        c.execute('INSERT INTO {tn} ({un}, {pw}, {ut}) VALUES (?,?,?)'.format(tn=gazee.USERS, un=gazee.USERNAME, pw=gazee.PASSWORD, ut=gazee.TYPE), (user, hashedPass, ut,))
+    except sqlite3.IntegrityError:
+        logger.info("User %s Already Exists" % user)
+        return False
+    finally:
+        connection.commit()
+        connection.close()
 
-    c.execute('INSERT INTO {tn} ({un}, {pw}, {ut}) VALUES (?,?,?)'.format(tn=gazee.USERS, un=gazee.USERNAME, pw=gazee.PASSWORD, ut=gazee.TYPE), (user, hashedPass, ut,))
-
-    connection.commit()
-    connection.close()
-
-    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
     logger.info("User %s Added" % (user))
-    return
+    return True

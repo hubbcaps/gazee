@@ -51,17 +51,23 @@ def updateApp():
 
         repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
         o = repo.remotes.origin
-        o.pull()
+        try:
+            o.pull()
+        except git.exc.GitCommandError:
+            logger.exception('Failed to pull version')
+            os.rename('public/css/style.css.bak', 'public/css/style.css')
+            return False
 
         if os.path.exists('public/css/style.css'):
-            with open('public/css/style.css') as f:
+            with open('public/css/style.css', 'r+') as f:
                 style = f.read()
-
-            with open('public/css/style.css', "w") as f:
+                f.seek(0)
                 style = style.replace("757575", gazee.MAIN_COLOR)
                 style = style.replace("BDBDBD", gazee.ACCENT_COLOR)
                 style = style.replace("FFFFFF", gazee.WEB_TEXT_COLOR)
                 f.write(style)
+                f.truncate()
+
             os.remove('public/css/style.css.bak')
         else:
             os.rename('public/css/style.css.bak', 'public/css/style.css')
