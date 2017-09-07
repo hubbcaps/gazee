@@ -22,10 +22,10 @@ from pathlib import Path
 
 import gazee
 
-# This is the function called when a user logs in, it returns their hashed password from the DB for checking by CherryPys auth mechanism.
+# This is the function called when a user logs in, it's given a realm (Gazee) and the user inputted username and password
+# We get the hashed password from the DB for username and then check that against the hashed version of the inputted password
 
-
-def getPassword(username):
+def checkPassword(realm, username, password):
 
     userstring = str(username)
 
@@ -38,15 +38,14 @@ def getPassword(username):
 
     c.execute('SELECT {pw} FROM {tn} WHERE {un}=?'.format(pw=gazee.PASSWORD, tn=gazee.USERS, un=gazee.USERNAME), (userstring,))
     passinit = c.fetchone()
-    if passinit is not None:
-        password = passinit[0]
-    else:
-        password = 'nil'
+    if passinit is None:
+        return False
 
+    db_password = passinit[0]
     connection.commit()
     connection.close()
 
-    return password
+    return db_password == hashPass(password)
 
 
 def getUserLevel(username):
