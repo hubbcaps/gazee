@@ -265,6 +265,7 @@ i {
     top: 90%;
     right: 50%;
     transform: translate(50%, 0);
+    white-space: nowrap;
   }
 }
 
@@ -274,5 +275,6 @@ i {
     top: 90%;
     right: 50%;
     transform: translate(50%, 0);
+    white-space: nowrap;
   }
 }

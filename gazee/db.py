@@ -40,7 +40,7 @@ def dbCreation():
         c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}'".format(tn=gazee.ALL_COMICS, cn=gazee.INSERT_DATE))
 
         # Create Users colume and necessary columns.
-        c.execute('CREATE TABLE {tn} ({nf} {ft})'.format(tn=gazee.USERS, nf=gazee.USERNAME, ft="TEXT"))
+        c.execute('CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)'.format(tn=gazee.USERS, nf=gazee.USERNAME, ft="TEXT"))
         c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=gazee.USERS, cn=gazee.PASSWORD, ft="TEXT"))
         c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ft}".format(tn=gazee.USERS, cn=gazee.TYPE, ft="TEXT"))
 

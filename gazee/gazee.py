@@ -13,6 +13,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import os
 import re
 import sys
@@ -21,7 +22,6 @@ import cherrypy
 import sqlite3
 import configparser
 import logging
-import subprocess
 import threading
 
 from pathlib import Path
@@ -473,7 +473,6 @@ class Gazee(object):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Settings Saved")
-        self.restart()
         return
 
     @cherrypy.expose
@@ -489,14 +488,14 @@ class Gazee(object):
             config.write(configfile)
         configfile.close()
 
-        with open('public/css/style.css') as f:
+        with open('public/css/style.css', 'r+') as f:
             style = f.read()
-
-        with open('public/css/style.css', "w") as f:
+            f.seek(0)
             style = style.replace(gazee.MAIN_COLOR, mainColor)
             style = style.replace(gazee.ACCENT_COLOR, accentColor)
             style = style.replace(gazee.WEB_TEXT_COLOR, webTextColor)
             f.write(style)
+            f.truncate()
 
         gazee.MAIN_COLOR = mainColor
         gazee.ACCENT_COLOR = accentColor
@@ -519,9 +518,11 @@ class Gazee(object):
     def newUser(self, username, password, usertype):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        gazee.authmech.addUser(username, password, usertype)
-        logger.info("New User Added")
-        return
+        added = False
+        if gazee.authmech.addUser(username, password, usertype):
+            logger.info("New " + usertype.title() + " " + username  + " Added")
+            added = True
+        return json.dumps({'added': added})
 
     @cherrypy.expose
     def delUser(self, username):
@@ -552,7 +553,7 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
-            os.remove(gazee.DATA_DIR, 'db.lock')
+            os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
         threading.Timer(1, lambda: os._exit(0)).start()
         logger.info('Gazee is shutting down...')
         return
@@ -567,8 +568,7 @@ class Gazee(object):
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
         logger.info('Restarting Gazee with ' + str(popen_list))
-        subprocess.Popen(popen_list, cwd=os.getcwd())
-        os._exit(0)
+        os.execv(sys.executable, popen_list)
         logger.info('Gazee is restarting...')
         return
 
@@ -576,12 +576,14 @@ class Gazee(object):
     def updateGazee(self):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
+        updated = False
         if gazee.versioning.updateApp():
             logger.info('Gazee is restarting to apply update.')
             if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
                 os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
-            self.restart()
-        return
+            updated = True
+        return json.dumps({'update': updated, 'current_version': gazee.versioning.currentVersion(),
+                           'latest_version': gazee.versioning.latestVersion()})
 
     @cherrypy.expose
     def opds(self):
