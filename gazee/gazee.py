@@ -448,7 +448,10 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         logger.info("Settings Served")
 
-        return serve_template(templatename="settings.html", user=user, user_level=user_level, users=users, sip=scan_in_progress, noc=num_of_comics, scantime=scantime)
+        return serve_template(templatename="settings.html", user=user, user_level=user_level,
+                              users=users, sip=scan_in_progress, noc=num_of_comics,
+                              scantime=scantime, gazee_version=gazee.versioning.currentVersion(),
+                              python_version=sys.version_info)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
@@ -577,7 +580,7 @@ class Gazee(object):
         if gazee.versioning.updateApp():
             logger.info('Gazee is restarting to apply update.')
             if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
-                os.remove(gazee.DATA_DIR, 'db.lock')
+                os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
             self.restart()
         return
 
