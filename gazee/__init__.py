@@ -13,9 +13,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import logging
-
 from gazee.gazee import Gazee
 from gazee.comicscan import ComicScanner
 import gazee.authmech
@@ -41,8 +38,8 @@ SSL_CERT = ''
 WEB_TEXT_COLOR = 'FFFFFF'
 MAIN_COLOR = '757575'
 ACCENT_COLOR = 'BDBDBD'
-ARGS = []
 THUMB_SIZE = 400, 300
+ARGS = []
 
 # Declare DB variables, such as table names and field names
 # This is mostly so the names are in a central area for later reference.
