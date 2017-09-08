@@ -3,15 +3,15 @@ html {
 header,
 main,
 footer {
-  background: #757575;
+  background: #557075;
 }
 body {
   color: #FFFFFF;
-  background: #757575;
+  background: #557075;
 }
 #breadcrumbs {
   top: 0;
-  background: #BDBDBD;
+  background: #BDA76E;
 }
 #comic-card-content {
 }
@@ -19,20 +19,20 @@ body {
   display:flex;
   height: 125px;
   color: #FFFFFF;
-  background-color: #BDBDBD;
+  background-color: #BDA76E;
   text-position: center;
 }
 #footer {
-  background: #757575;
+  background: #557075;
 }
 #logo-wrapper {
-  background: #757575;
+  background: #557075;
 }
 i {
   color: #FFFFFF;
 }
 #nav-dropdown {
-  background-color: #BDBDBD;
+  background-color: #BDA76E;
 }
 #nav-dropdown a {
   color: #FFFFFF;
@@ -44,44 +44,44 @@ i {
   color: #FFFFFF;
 }
 #pagination-num.active {
-  background-color: #BDBDBD;
+  background-color: #BDA76E;
 }
 #read-link {
   color: #FFFFFF;
 }
 #settings-arrow {
-  color: #BDBDBD;
+  color: #BDA76E;
 }
 #settings-button {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 #size-height-button {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 #size-width-button {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 #size-normal-button {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 #summary-pane {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 #tab-row {
-  background: #757575;
+  background: #557075;
   color: #FFFFFF;
 }
 .btn-flat {
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
 }
 .card {
-  background-color: #BDBDBD;
+  background-color: #BDA76E;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 .card img {
@@ -92,7 +92,7 @@ i {
 .card-content {
   display:flex;
   height: 125px;
-  background: #BDBDBD;
+  background: #BDA76E;
   color: #FFFFFF;
   text-align: center;
 }
@@ -108,7 +108,7 @@ i {
   background-color: rgba(0, 0, 0, 0.7);
 }
 .dropdown-button {
-  background-color: #BDBDBD;
+  background-color: #BDA76E;
   color: #FFFFFF;
 }
 .input-field {
@@ -135,12 +135,12 @@ i {
   display: inline-block;
   height: auto;
   color: #FFFFFF;
-  background: #BDBDBD;
+  background: #BDA76E;
 }
 .nav-wrapper .input-field input[type="search"]:focus {
-  background: #757575;
+  background: #557075;
   color: #FFFFFF;
-  box-shadow: 0 1px 0 0 #757575;
+  box-shadow: 0 1px 0 0 #557075;
 }
 .nav-wrapper .input-field input[type="search"]:focus ~ .material-icons.icon-close {
   right: 2rem;
@@ -237,11 +237,11 @@ i {
   line-height: normal;
 }
 .tabs .tab a {
-  background: #757575;
+  background: #557075;
   color: #FFFFFF;
 }
 .tabs .tab a:hover {
-  color: #BDBDBD;
+  color: #BDA76E;
 }
 .tabs .indicator {
   background-color: #FFFFFF;

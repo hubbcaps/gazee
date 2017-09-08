@@ -250,7 +250,7 @@
             });
             $("#update-app-submit").click(function() {
               $.ajax({
-                url: "saveSettings",
+                url: "save_settings",
                 data: $("#server-settings-form").serialize(),
                 success: function() {
                   Materialize.toast("Settings saved. Restarting server.", 4000);
@@ -260,7 +260,7 @@
             });
             $("#scan-comics-submit").click(function() {
               $.ajax({
-                url: "comicScan",
+                url: "comic_scan",
                 success: function() {
                   Materialize.toast("Comic scan started.", 4000);
                   $("#scan-status").text("In Progress");
@@ -269,7 +269,7 @@
             });
             $("#change-pass-submit").click(function() {
               $.ajax({
-                url: "changePassword",
+                url: "change_password",
                 data: $("#change-password-form").serialize(),
                 success: function() {
                   Materialize.toast("Password updated for " + $("#user-password").val() + ".", 4000);
@@ -278,7 +278,7 @@
             });
             $("#new-user-submit").click(function() {
               $.ajax({
-                url: "newUser",
+                url: "new_user",
                 data: $("#new-user-form").serialize(),
                 success: function(response) {
                   response = JSON.parse(response);
@@ -303,7 +303,7 @@
             });
             $("#del-user-submit").click(function() {
               $.ajax({
-                url: "delUser",
+                url: "del_user",
                 data: $("#del-user-form").serialize(),
                 success: function() {
                   var user = $("#user-del");
@@ -315,7 +315,7 @@
             });
             $("#change-theme-submit").click(function() {
               $.ajax({
-                url: "changeTheme",
+                url: "change_theme",
                 data: $("#change-theme-form").serialize(),
                 success: function() {
                   Materialize.toast("Theme updated.", 4000);
@@ -331,7 +331,7 @@
               $.get("restart");
             });
             $("#update-server").click(function() {
-              $.get("updateGazee", function(response) {
+              $.get("update_gazee", function(response) {
                 response = JSON.parse(response);
                 if (response['update'] && response['current_version'] === response['latest_version']) {
                   Materialize.toast("Server updated to version " + response['latest_version'] + ". Restarting Server.", 4000);

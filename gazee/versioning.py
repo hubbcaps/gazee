@@ -20,13 +20,13 @@ import git
 import gazee
 
 
-def currentVersion():
+def current_version():
     repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
     local_commit = repo.commit()
     return local_commit.hexsha
 
 
-def latestVersion():
+def latest_version():
     repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
     remote = repo.remotes.origin
     info = remote.fetch()[0]
@@ -34,11 +34,11 @@ def latestVersion():
     return remote_commit.hexsha
 
 
-def updateApp():
+def update_app():
     logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
-    current_commit = currentVersion()
-    latest_commit = latestVersion()
+    current_commit = current_version()
+    latest_commit = latest_version()
 
     if current_commit == latest_commit:
         logger.info("No update needed")

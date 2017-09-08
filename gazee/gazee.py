@@ -67,7 +67,7 @@ class Gazee(object):
             cherrypy.session['sizepref'] = 'wide'
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Index Requested")
+        logger.debug("Index Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -106,7 +106,7 @@ class Gazee(object):
         connection.close()
 
         user = cherrypy.request.login
-        user_level = gazee.authmech.getUserLevel(user)
+        user_level = gazee.authmech.get_user_level(user)
 
         logger.info("Index Served")
 
@@ -162,7 +162,7 @@ class Gazee(object):
         connection.close()
 
         user = cherrypy.request.login
-        user_level = gazee.authmech.getUserLevel(user)
+        user_level = gazee.authmech.get_user_level(user)
 
         logger.info("Search Served")
 
@@ -317,19 +317,19 @@ class Gazee(object):
             directory = gazee.COMIC_PATH
 
         user = cherrypy.request.login
-        user_level = gazee.authmech.getUserLevel(user)
+        user_level = gazee.authmech.get_user_level(user)
 
         return serve_template(templatename="library.html", directories=directories, comics=comics, parent_dir=prd, num_of_pages=num_of_pages, current_page=int(page_num), current_dir=directory, user_level=user_level)
 
     @cherrypy.expose
-    def downloadComic(self, comic_path):
+    def download_comic(self, comic_path):
         return cherrypy.lib.static.serve_download(comic_path)
 
     """
     This returns the reading view of the selected comic after being passed the comic path and forcing the default of starting at page 0.
     """
     @cherrypy.expose
-    def readComic(self, comic_path, page_num=0):
+    def read_comic(self, comic_path, page_num=0):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Reader Requested")
@@ -339,51 +339,51 @@ class Gazee(object):
 
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
-        userSizePref = cherrypy.session['sizepref']
+        user_size_pref = cherrypy.session['sizepref']
 
         scanner = ComicScanner()
-        scanner.userUnpackComic(comic_path, username)
-        image_list = scanner.readingImages(username)
+        scanner.user_unpack_comic(comic_path, username)
+        image_list = scanner.reading_images(username)
         num_pages = len(image_list)
 
         if num_pages == 0:
             image_list = ['static/images/imgnotfound.png']
 
-        cookieComic = re.sub(r'\W+', '', comic_path)
-        cookieCheck = cherrypy.request.cookie
-        if cookieComic not in cookieCheck:
+        cookie_comic = re.sub(r'\W+', '', comic_path)
+        cookie_check = cherrypy.request.cookie
+        if cookie_comic not in cookie_check:
             logger.debug("Cookie Creation")
-            cookieSet = cherrypy.response.cookie
-            cookieSet[cookieComic] = 0
-            cookieSet[cookieComic]['path'] = '/'
-            cookieSet[cookieComic]['max-age'] = 2419200
+            cookie_set = cherrypy.response.cookie
+            cookie_set[cookie_comic] = 0
+            cookie_set[cookie_comic]['path'] = '/'
+            cookie_set[cookie_comic]['max-age'] = 2419200
             next_page = 1
             last_page = num_pages - 1
         else:
             logger.debug("Cookie Read")
-            page_num = int(cookieCheck[cookieComic].value)
+            page_num = int(cookie_check[cookie_comic].value)
             logger.debug("Cookie Set To %d" % page_num)
             next_page = page_num + 1
             last_page = page_num - 1
 
         logger.info("Reader Served")
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref, cc=cookieComic)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=user_size_pref, cc=cookie_comic)
 
     """
     This allows us to change pages and do some basic sanity checking.
     """
     @cherrypy.expose
-    def changePage(self, page_str, cookieComic):
+    def change_page(self, page_str, cookie_comic):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
-        userSizePref = cherrypy.session['sizepref']
+        user_size_pref = cherrypy.session['sizepref']
         username = cherrypy.request.login
         page_num = int(page_str)
         next_page = page_num + 1
         last_page = page_num - 1
         scanner = ComicScanner()
-        image_list = scanner.readingImages(username)
+        image_list = scanner.reading_images(username)
         num_pages = len(image_list)
         if page_num == -1:
             page_num = num_pages - 1
@@ -394,15 +394,15 @@ class Gazee(object):
             next_page = 1
             last_page = num_pages - 1
 
-        cookieSet = cherrypy.response.cookie
-        cookieSet[cookieComic] = page_num
-        cookieSet[cookieComic]['path'] = '/'
-        cookieSet[cookieComic]['max-age'] = 2419200
+        cookie_set = cherrypy.response.cookie
+        cookie_set[cookie_comic] = page_num
+        cookie_set[cookie_comic]['path'] = '/'
+        cookie_set[cookie_comic]['max-age'] = 2419200
 
-        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=userSizePref, cc=cookieComic)
+        return serve_template(templatename="read.html", pages=image_list, current_page=page_num, np=next_page, lp=last_page, nop=num_pages, size=user_size_pref, cc=cookie_comic)
 
     @cherrypy.expose
-    def upSizePref(self, pref):
+    def up_size_pref(self, pref):
         cherrypy.session.load()
         cherrypy.session['sizepref'] = pref
         cherrypy.session.save()
@@ -423,7 +423,7 @@ class Gazee(object):
         num_of_comics = numcinit[0]
 
         user = cherrypy.request.login
-        user_level = gazee.authmech.getUserLevel(user)
+        user_level = gazee.authmech.get_user_level(user)
 
         c.execute("SELECT * FROM {tn}".format(tn=gazee.USERS))
         usersinit = c.fetchall()
@@ -450,12 +450,12 @@ class Gazee(object):
 
         return serve_template(templatename="settings.html", user=user, user_level=user_level,
                               users=users, sip=scan_in_progress, noc=num_of_comics,
-                              scantime=scantime, gazee_version=gazee.versioning.currentVersion(),
+                              scantime=scantime, gazee_version=gazee.versioning.current_version(),
                               python_version=sys.version_info)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
-    def saveSettings(self, scomicPath=None, scomicsPerPage=None, scomicScanInterval=None, smylarPath=None, ssslKey=None, ssslCert=None, sport=4242):
+    def save_settings(self, scomicPath=None, scomicsPerPage=None, scomicScanInterval=None, smylarPath=None, ssslKey=None, ssslCert=None, sport=4242):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read(os.path.join(gazee.DATA_DIR, 'app.ini'))
@@ -476,7 +476,7 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def changeTheme(self, mainColor, accentColor, webTextColor):
+    def change_theme(self, mainColor, accentColor, webTextColor):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read(os.path.join(gazee.DATA_DIR, 'app.ini'))
@@ -507,25 +507,25 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def changePassword(self, user, password):
+    def change_password(self, user, password):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        gazee.authmech.changePass(user, password)
+        gazee.authmech.change_pass(user, password)
         logger.info("Password Changed")
         return
 
     @cherrypy.expose
-    def newUser(self, username, password, usertype):
+    def new_user(self, username, password, usertype):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         added = False
-        if gazee.authmech.addUser(username, password, usertype):
-            logger.info("New " + usertype.title() + " " + username  + " Added")
+        if gazee.authmech.add_user(username, password, usertype):
+            logger.info("New " + usertype.title() + " " + username + " Added")
             added = True
         return json.dumps({'added': added})
 
     @cherrypy.expose
-    def delUser(self, username):
+    def del_user(self, username):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -538,12 +538,12 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def comicScan(self):
+    def comic_scan(self):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
         scanner = ComicScanner()
-        t1 = threading.Thread(target=scanner.dbBuilder)
+        t1 = threading.Thread(target=scanner.db_builder)
         t1.start()
         return
 
@@ -573,17 +573,17 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def updateGazee(self):
+    def update_gazee(self):
         logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         updated = False
-        if gazee.versioning.updateApp():
+        if gazee.versioning.update_app():
             logger.info('Gazee is restarting to apply update.')
             if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
                 os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
             updated = True
-        return json.dumps({'update': updated, 'current_version': gazee.versioning.currentVersion(),
-                           'latest_version': gazee.versioning.latestVersion()})
+        return json.dumps({'update': updated, 'current_version': gazee.versioning.current_version(),
+                           'latest_version': gazee.versioning.latest_version()})
 
     @cherrypy.expose
     def opds(self):

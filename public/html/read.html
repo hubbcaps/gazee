@@ -76,37 +76,37 @@
         $("#page-settings-right-text").toggle();
       });
       $(".page-right").click(function() {
-        $(".whole-page").load("/changePage?page_str=${np}&cookieComic=${cc}");
+        $(".whole-page").load("/change_page?page_str=${np}&cookie_comic=${cc}");
       });
       $(".page-left").click(function() {
-        $(".whole-page").load("/changePage?page_str=${lp}&cookieComic=${cc}");
+        $(".whole-page").load("/change_page?page_str=${lp}&cookie_comic=${cc}");
       });
       $(document).one("keyup", function(e) {
         if (e.which == 39) {
-          $(".whole-page").load("/changePage?page_str=${np}&cookieComic=${cc}");
+          $(".whole-page").load("/change_page?page_str=${np}&cookie_comic=${cc}");
         }
         });
       $(document).one("keyup", function(e) {
         if (e.which == 37) {
-          $(".whole-page").load("/changePage?page_str=${lp}&cookieComic=${cc}");
+          $(".whole-page").load("/change_page?page_str=${lp}&cookie_comic=${cc}");
         }
         });
       $("#size-width-button").click(function() {
         $(".reader-overlay").html("<img class='reader-page-wide' src='${now_page}'/>");
         $.ajax({
-          url: "upSizePref?pref=wide"
+          url: "up_size_pref?pref=wide"
         });
       });
       $("#size-height-button").click(function() {
         $(".reader-overlay").html("<img class='reader-page-high' src='${now_page}'/>");
         $.ajax({
-          url: "upSizePref?pref=high"
+          url: "up_size_pref?pref=high"
         });
       });
       $("#size-normal-button").click(function() {
         $(".reader-overlay").html("<img class='reader-page-norm' src='${now_page}'/>");
         $.ajax({
-          url: "upSizePref?pref=norm"
+          url: "up_size_pref?pref=norm"
         });
       });
     });

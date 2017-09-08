@@ -4,7 +4,7 @@ import configparser
 import gazee
 
 
-def configRead():
+def config_read():
     if not os.path.exists(os.path.join(gazee.DATA_DIR, 'app.ini')):
         with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'a') as cf:
             cf.write("[GLOBAL]\n")

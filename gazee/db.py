@@ -7,11 +7,10 @@ import gazee
 from pathlib import Path
 
 
-def dbCreation():
+def db_creation():
 
     logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
-
 
     # Create DB if it doesn't already exist.
     db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -60,7 +59,7 @@ def dbCreation():
 
     if len(adminCheck) == 0:
         c.execute('INSERT INTO {tn} ({cn1}, {cn2}, {cn3}) VALUES ("admin", "87f69abe62021d9ab8497e052c65ee79ca6705169916b930ea3e6979a0555c4d", "admin")'.format(tn=gazee.USERS, cn1=gazee.USERNAME, cn2=gazee.PASSWORD, cn3=gazee.TYPE))
-        logging.info("Admin inserted into DB")
+        logger.info("Admin inserted into DB")
 
     connection.commit()
     connection.close()

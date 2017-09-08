@@ -22,10 +22,10 @@ from pathlib import Path
 
 import gazee
 
+
 # This is the function called when a user logs in, it's given a realm (Gazee) and the user inputted username and password
 # We get the hashed password from the DB for username and then check that against the hashed version of the inputted password
-
-def checkPassword(realm, username, password):
+def check_password(realm, username, password):
 
     userstring = str(username)
 
@@ -45,10 +45,10 @@ def checkPassword(realm, username, password):
     connection.commit()
     connection.close()
 
-    return db_password == hashPass(password)
+    return db_password == hash_pass(password)
 
 
-def getUserLevel(username):
+def get_user_level(username):
 
     db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -70,15 +70,14 @@ def getUserLevel(username):
     return userlevel
 
 
-def hashPass(password):
-    hashedPass = hashlib.sha256(bytes(password, encoding='utf-8')).hexdigest()
-    return hashedPass
+def hash_pass(password):
+    hashed_pass = hashlib.sha256(bytes(password, encoding='utf-8')).hexdigest()
+    return hashed_pass
+
 
 # This simply updates the currently logged in users password in the DB to their set and hashed password.
-
-
-def changePass(user, password):
-    hashedPass = hashPass(password)
+def change_pass(user, password):
+    hashed_pass = hash_pass(password)
 
     # Here we set the db file path.
     db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -87,7 +86,7 @@ def changePass(user, password):
     connection = sqlite3.connect(str(db))
     c = connection.cursor()
 
-    c.execute('UPDATE {tn} SET {pw}=? WHERE {un}=?'.format(tn=gazee.USERS, pw=gazee.PASSWORD, un=gazee.USERNAME), (hashedPass, user,))
+    c.execute('UPDATE {tn} SET {pw}=? WHERE {un}=?'.format(tn=gazee.USERS, pw=gazee.PASSWORD, un=gazee.USERNAME), (hashed_pass, user,))
 
     connection.commit()
     connection.close()
@@ -98,10 +97,10 @@ def changePass(user, password):
     return
 
 
-def addUser(user, password, ut):
+def add_user(user, password, ut):
     logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
-    hashedPass = hashPass(password)
+    hashed_pass = hash_pass(password)
 
     # Here we set the db file path.
     db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -110,7 +109,7 @@ def addUser(user, password, ut):
     connection = sqlite3.connect(str(db))
     c = connection.cursor()
     try:
-        c.execute('INSERT INTO {tn} ({un}, {pw}, {ut}) VALUES (?,?,?)'.format(tn=gazee.USERS, un=gazee.USERNAME, pw=gazee.PASSWORD, ut=gazee.TYPE), (user, hashedPass, ut,))
+        c.execute('INSERT INTO {tn} ({un}, {pw}, {ut}) VALUES (?,?,?)'.format(tn=gazee.USERS, un=gazee.USERNAME, pw=gazee.PASSWORD, ut=gazee.TYPE), (user, hashed_pass, ut,))
     except sqlite3.IntegrityError:
         logger.info("User %s Already Exists" % user)
         return False

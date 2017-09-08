@@ -113,8 +113,8 @@ def main():
     if not os.path.exists(gazee.TEMP_DIR):
         os.makedirs(os.path.abspath(gazee.TEMP_DIR))
 
-    gazee.db.dbCreation()
-    gazee.config.configRead()
+    gazee.db.db_creation()
+    gazee.config.config_read()
 
     logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
@@ -137,6 +137,7 @@ def main():
             gazee.ARGS += ["-d"]
             Daemonizer(cherrypy.engine).subscribe()
 
+    # This verifies the color scheme stays between automated updates as what the user set.
     if os.path.exists('public/css/style.css'):
         with open('public/css/style.css') as f:
             style = f.read()
@@ -158,7 +159,7 @@ def main():
                 'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
                 'tools.auth_basic.on': True,
                 'tools.auth_basic.realm': 'Gazee',
-                'tools.auth_basic.checkpassword': gazee.authmech.checkPassword,
+                'tools.auth_basic.checkpassword': gazee.authmech.check_password,
                 'request.show_tracebacks': False
             },
             '/static': {
@@ -191,7 +192,7 @@ def main():
                 'tools.sessions.storage_path': os.path.join(gazee.DATA_DIR, "sessions"),
                 'tools.auth_basic.on': True,
                 'tools.auth_basic.realm': 'Gazee',
-                'tools.auth_basic.checkpassword': gazee.authmech.checkPassword,
+                'tools.auth_basic.checkpassword': gazee.authmech.check_password,
                 'request.show_tracebacks': False
             },
             '/static': {
@@ -241,7 +242,7 @@ def main():
 
     cherrypy.engine.start()
     scanner = ComicScanner()
-    scanner.rescanDB()
+    scanner.rescan_db()
     cherrypy.engine.block()
 
     if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
