@@ -15,7 +15,6 @@
 
 import os
 import sys
-import threading
 import argparse
 import logging
 
@@ -34,65 +33,7 @@ if (sys.platform == 'win32' and sys.executable.split('\\')[-1] == 'pythonw.exe')
     sys.stderr = open(os.devnull, "w")
 
 
-def daemonize():
-
-    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
-
-    if threading.activeCount() != 1:
-        logger.warn('There are %r active threads. Daemonizing may cause \
-                        strange behavior.' % threading.enumerate())
-
-    sys.stdout.flush()
-    sys.stderr.flush()
-
-    # Do first fork
-    try:
-        pid = os.fork()
-        if pid == 0:
-            pass
-        else:
-            # Exit the parent process
-            logger.debug('Forking once...')
-            os._exit(0)
-    except OSError as e:
-        sys.exit("1st fork failed: %s [%d]" % (e.strerror, e.errno))
-
-    os.setsid()
-
-    # Make sure I can read my own files and shut out others
-    prev = os.umask(0)  # @UndefinedVariable - only available in UNIX
-    os.umask(prev and int('077', 8))
-
-    # Do second fork
-    try:
-        pid = os.fork()
-        if pid > 0:
-            logger.debug('Forking twice...')
-            os._exit(0)  # Exit second parent process
-    except OSError as e:
-        sys.exit("2nd fork failed: %s [%d]" % (e.strerror, e.errno))
-
-    with open('/dev/null', 'r') as dev_null:
-        os.dup2(dev_null.fileno(), sys.stdin.fileno())
-
-    si = open('/dev/null', "r")
-    so = open('/dev/null', "a+")
-    se = open('/dev/null', "a+")
-
-    os.dup2(si.fileno(), sys.stdin.fileno())
-    os.dup2(so.fileno(), sys.stdout.fileno())
-    os.dup2(se.fileno(), sys.stderr.fileno())
-
-    pid = os.getpid()
-    logger.info('Daemonized to PID: %s' % pid)
-    logger.info("Writing PID %d to %s", pid, gazee.PIDFILE)
-    with open(gazee.PIDFILE, 'w') as fp:
-        fp.write("%s\n" % pid)
-
-
 def main():
-
     parser = argparse.ArgumentParser(description='Gazee - Open Comic Book Reader')
 
     parser.add_argument('-d', '--daemon', action='store_true', help='Run as a daemon')
@@ -116,7 +57,7 @@ def main():
     gazee.db.db_creation()
     gazee.config.config_read()
 
-    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
 
     if args.daemon:

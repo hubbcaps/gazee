@@ -65,7 +65,7 @@ class Gazee(object):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.debug("Index Requested")
         # Here we set the db file path.
@@ -117,9 +117,9 @@ class Gazee(object):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Search Requested")
+        logger.debug("Search Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -177,9 +177,9 @@ class Gazee(object):
         cherrypy.session.load()
         if 'sizepref' not in cherrypy.session:
             cherrypy.session['sizepref'] = 'wide'
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Library Requested")
+        logger.debug("Library Requested")
         # Here we set the db file path.
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
 
@@ -308,7 +308,7 @@ class Gazee(object):
             logger.info("Library Served")
 
         except IndexError:
-            logger.warning("No Child Directories, Scan your comic path")
+            logger.info("No Child Directories, Scan your comic path")
             directories = []
             comics = []
             prd = ''
@@ -330,9 +330,9 @@ class Gazee(object):
     """
     @cherrypy.expose
     def read_comic(self, comic_path, page_num=0):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Reader Requested")
+        logger.debug("Reader Requested")
 
         cherrypy.session.load()
         username = cherrypy.request.login
@@ -444,7 +444,7 @@ class Gazee(object):
             scan_in_progress = False
             scantime = ("%d:%02d:%02d" % (0, 0, 0))
 
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Settings Served")
 
@@ -470,7 +470,7 @@ class Gazee(object):
         with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'w') as configfile:
             config.write(configfile)
         configfile.close()
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Settings Saved")
         return
@@ -501,14 +501,14 @@ class Gazee(object):
         gazee.ACCENT_COLOR = accentColor
         gazee.WEB_TEXT_COLOR = webTextColor
 
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Theme Saved")
         return
 
     @cherrypy.expose
     def change_password(self, user, password):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         gazee.authmech.change_pass(user, password)
         logger.info("Password Changed")
@@ -516,7 +516,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def new_user(self, username, password, usertype):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         added = False
         if gazee.authmech.add_user(username, password, usertype):
@@ -526,7 +526,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def del_user(self, username):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
         connection = sqlite3.connect(str(db))
@@ -539,7 +539,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def comic_scan(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("DB Build Requested")
         scanner = ComicScanner()
@@ -549,7 +549,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def shutdown(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
@@ -560,7 +560,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def restart(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         cherrypy.engine.exit()
         if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
@@ -574,7 +574,7 @@ class Gazee(object):
 
     @cherrypy.expose
     def update_gazee(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         updated = False
         if gazee.versioning.update_app():

@@ -39,6 +39,7 @@ WEB_TEXT_COLOR = 'FFFFFF'
 MAIN_COLOR = '757575'
 ACCENT_COLOR = 'BDBDBD'
 THUMB_SIZE = 400, 300
+LOG_LEVEL = 'logging.INFO'
 ARGS = []
 
 # Declare DB variables, such as table names and field names

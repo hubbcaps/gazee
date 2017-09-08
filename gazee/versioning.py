@@ -35,7 +35,7 @@ def latest_version():
 
 
 def update_app():
-    logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
     logger = logging.getLogger(__name__)
     current_commit = current_version()
     latest_commit = latest_version()
