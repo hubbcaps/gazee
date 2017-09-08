@@ -78,7 +78,7 @@
                   <div class="col s10 m5 l2">
                     <div class="card">
                       <div class="card-image hoverable">
-                        <a href="/readComic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
+                        <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
                       </div>
                       <div class="card-content hoverable" id="comic-card-content">
                         <p class="activator flow-text">${comic['ComicName']} ${comic['ComicIssue']}</p>
@@ -87,8 +87,8 @@
                         <span class="card-title">
                           <i class="material-icons right">close</i>
                         </span>
-                        <a href="downloadComic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons">file_download</i></a>
-                        <p class="" style="font-size: 0.9em"><a href="/readComic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
+                        <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons">file_download</i></a>
+                        <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
                       </div>
                     </div>
                   </div>

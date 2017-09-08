@@ -36,10 +36,10 @@ from gazee.filenameparser import FileNameParser
 class ComicScanner(object):
 
     # This method will handle scanning the directories and returning a list of them all.
-    def dirScan(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def dir_scan(self):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Dir Scan Requested")
+        logger.debug("Dir Scan Requested")
         full_paths = []
         full_paths.append(gazee.COMIC_PATH)
         for root, dirs, files in os.walk(gazee.COMIC_PATH):
@@ -50,10 +50,10 @@ class ComicScanner(object):
         return full_paths
 
     # This method will handle scanning the comics and returning a list of them all.
-    def comicScan(self):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def comic_scan(self):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Comic Scan Requested")
+        logger.debug("Comic Scan Requested")
         full_paths = []
         for root, dirs, files in os.walk(gazee.COMIC_PATH):
             for f in files:
@@ -65,8 +65,8 @@ class ComicScanner(object):
         return full_paths
 
     # This method takes an argument of the full comic path and will simply unpack the requested comic into the temp directory. It first checks if there are already files in the temp directory. If so, it removes all of them and then unpacks the comic. It doesn't return anything currently, and will be used for both scanning and reading comics.
-    def buildUnpackComic(self, comic_path):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def build_unpack_comic(self, comic_path):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("%s unpack requested" % comic_path)
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, "build"), topdown=False):
@@ -85,8 +85,8 @@ class ComicScanner(object):
             opened_zip.extractall(os.path.join(gazee.TEMP_DIR, "build"))
         return
 
-    def userUnpackComic(self, comic_path, user):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def user_unpack_comic(self, comic_path, user):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("%s unpack requested" % comic_path)
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user), topdown=False):
@@ -106,10 +106,10 @@ class ComicScanner(object):
         return
 
     # This method will return a list of .jpg files in their numberical order to be fed into the reading view.
-    def readingImages(self, user):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def reading_images(self, user):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Image List Requested")
+        logger.debug("Image List Requested")
         image_list = []
         for root, dirs, files in os.walk(os.path.join(gazee.TEMP_DIR, user)):
             for f in files:
@@ -120,10 +120,10 @@ class ComicScanner(object):
         return image_list
 
     # This method takes an argument of the comic name, it then looks in the temp directory after comic has been upacked for an image with 000, 001 and an image extnesion in the name. This image name and it's path are stored in variables, then makes directory named after them, and pushes the file into that directory. It then returns the path to that file to be inserted into the DB as the comics image in the library and recent comic views.
-    def imageMove(self, comic_name, volume_number, issue_number):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def image_move(self, comic_name, volume_number, issue_number):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Thumbnail Requested")
+        logger.debug("Thumbnail Requested")
         image_temp_path = []
         image = []
         sorted_files = []
@@ -158,7 +158,7 @@ class ComicScanner(object):
                     im = Image.open(image_temp_path)
                     im.thumbnail(gazee.THUMB_SIZE)
                     im.save(image_dest)
-                    logger.info("Thumbnail Saved")
+                    logger.debug("Thumbnail Saved")
                 except IOError:
                     logger.info("Thumbnail Generation failed")
                     image_dest = 'static/images/imgnotfound.png'
@@ -168,10 +168,10 @@ class ComicScanner(object):
         return real_dest
 
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
-    def comicInfoParse(self, comicpath):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+    def comic_info_parse(self, comicpath):
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
-        logger.info("Comic Info Requested")
+        logger.debug("Comic Info Requested")
         comic_name = "Not Available"
         comic_issue = "Not Available"
         comic_volume = "Not Available"
@@ -250,9 +250,9 @@ class ComicScanner(object):
         return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
 
     # This method is where the magic actually happens. This will use all the previous functions to build out our two DB tables, Directories and Comics respectively.
-    def dbBuilder(self):
+    def db_builder(self):
 
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
+        logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
 
         if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
@@ -266,7 +266,7 @@ class ComicScanner(object):
                 f.write("locked")
             f.close()
 
-            logger.info("DB Build Requested")
+            logger.debug("DB Build Requested")
             logger.info("Begining Full Directory and Comic Scan")
             # Here we set the db file path.
             db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
@@ -277,20 +277,20 @@ class ComicScanner(object):
 
             # Here we define some variables we will use to check for existing directories and directories that need to be removed from the db.
             c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
-            pathsInDB = c.fetchall()
-            dictOfParents = []
-            keyNames = ['ParentKey', 'Path']
+            paths_in_db = c.fetchall()
+            dict_of_parents = []
+            key_names = ['ParentKey', 'Path']
             # Convert tuple to list
-            dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
+            dict_of_parents = [dict(zip(key_names, tup)) for tup in paths_in_db]
             logger.info("Grabbed Directories Currently in DB")
 
-            # Here we call the dirScan directory to get a list of all the directories under the set comic directory.
-            logger.info("Requesting Directory Scan")
-            directories = self.dirScan()
-            logger.info("Directory Scan Returned")
+            # Here we call the dir_scan directory to get a list of all the directories under the set comic directory.
+            logger.debug("Requesting Directory Scan")
+            directories = self.dir_scan()
+            logger.debug("Directory Scan Returned")
 
             # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them and their children from the db.
-            for d in dictOfParents:
+            for d in dict_of_parents:
                 for key, value in d.items():
                     if key == 'Path':
                         if value not in directories:
@@ -300,7 +300,7 @@ class ComicScanner(object):
 
             # Here we iterate over the scanned directories and check if any match any of the earlier returned paths. If they do, we skip to the next scanned directory, otherwise we insert them.
             for d in directories:
-                if d in [dic['Path'] for dic in dictOfParents]:
+                if d in [dic['Path'] for dic in dict_of_parents]:
                     logger.debug("Directory exists in DB, Skipping")
                     continue
                 else:
@@ -312,23 +312,23 @@ class ComicScanner(object):
             connection.commit()
 
             c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
-            pathsInDB = c.fetchall()
-            dictOfParents = []
-            keyNames = ['ParentKey', 'Path']
+            paths_in_db = c.fetchall()
+            dict_of_parents = []
+            key_names = ['ParentKey', 'Path']
             # Convert tuple to list
-            dictOfParents = [dict(zip(keyNames, tup)) for tup in pathsInDB]
+            dict_of_parents = [dict(zip(key_names, tup)) for tup in paths_in_db]
 
             c.execute('SELECT * FROM {tn}'.format(tn=gazee.DIR_NAMES))
-            namesInDB = c.fetchall()
-            namesOfDirs = []
+            names_in_db = c.fetchall()
+            names_of_dirs = []
             # Convert tuple to list
-            namesOfDirs = [tup[0] for tup in namesInDB]
+            names_of_dirs = [tup[0] for tup in names_in_db]
 
-            for d in dictOfParents:
-                dirContents = os.listdir(d['Path'])
-                for dc in dirContents:
-                    if dc in namesOfDirs:
-                        logger.info("Dir Name exists, skipping")
+            for d in dict_of_parents:
+                dir_contents = os.listdir(d['Path'])
+                for dc in dir_contents:
+                    if dc in names_of_dirs:
+                        logger.debug("Dir Name exists, skipping")
                         continue
                     elif os.path.isdir(os.path.join(d['Path'], dc)):
                         logger.info("Dir name %s being added to DB" % (dc))
@@ -341,40 +341,40 @@ class ComicScanner(object):
             # Here we define some variables we will use to check for existing comics and comics that need to be removed from the db.
             logger.info("Gathering all Comics in DB")
             c.execute('SELECT ({col}) FROM {tn}'.format(col=gazee.COMIC_FULL_PATH, tn=gazee.ALL_COMICS))
-            comicPathsInDB = c.fetchall()
-            listOfComicPaths = []
+            comic_paths_in_db = c.fetchall()
+            list_of_comic_paths = []
             # Convert tuple to list
-            listOfComicPaths = [tup[0] for tup in comicPathsInDB]
+            list_of_comic_paths = [tup[0] for tup in comic_paths_in_db]
 
             # Here we call comic scan and get the paths of all comics to iterate over.
-            logger.info("Comic Scan Requested")
-            all_comics = self.comicScan()
-            logger.info("Comic Scan Returned")
+            logger.debug("Comic Scan Requested")
+            all_comics = self.comic_scan()
+            logger.debug("Comic Scan Returned")
 
             # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them from the db.
-            for f in listOfComicPaths:
+            for f in list_of_comic_paths:
                 if f not in all_comics:
                     logger.info("Comic Being Removed from DB")
                     c.execute('DELETE FROM {tn} WHERE {cn}=?'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_FULL_PATH), (f,))
 
             # Here we start iterating, inside we'll call the rest of the functions, gather the rest of the info and then insert it a row at a time into the DB.
             for f in all_comics:
-                if f in listOfComicPaths:
-                    logger.info("Comic exists in DB, Skipping")
+                if f in list_of_comic_paths:
+                    logger.debug("Comic exists in DB, Skipping")
                     continue
                 else:
                     try:
-                        logger.info("Unpacking Comic")
-                        self.buildUnpackComic(f)
-                        logger.info("Unpacking Successful")
+                        logger.debug("Unpacking Comic")
+                        self.build_unpack_comic(f)
+                        logger.debug("Unpacking Successful")
                     except (zipfile.BadZipFile, rarfile.RarWarning, zlib.error, rarfile.BadRarFile, rarfile.RarCRCError, rarfile.RarCreateError, OSError) as e:
                         logger.info("Unpacking Failed")
                         logger.info(str(e))
                         continue
 
-                    logger.info("Comic Info being requested")
-                    info = self.comicInfoParse(f)
-                    logger.info("Comic Info Successfully returned")
+                    logger.debug("Comic Info being requested")
+                    info = self.comic_info_parse(f)
+                    logger.debug("Comic Info Successfully returned")
                     # After unpacking the comic, we now assign the values returned to variables we can use in our insert statement.
                     name = info['name']
                     issue = info['issue']
@@ -382,16 +382,16 @@ class ComicScanner(object):
                     summary = info['summary']
 
                     # Here we call the image move method with the previously retrieved comic name as its argument. This returns the image path to be stored in the coming insert function.
-                    image = self.imageMove(name, volume, issue)
+                    image = self.image_move(name, volume, issue)
 
                     pk = 1
                     bp = os.path.split(f)
                     parent = bp[0]
-                    for d in dictOfParents:
+                    for d in dict_of_parents:
                         if parent == d['Path']:
                             pk = d['ParentKey']
 
-                    logger.info("Comic %s Being Inserted into DB" % (name))
+                    logger.debug("Comic %s Being Inserted into DB" % (name))
                     c.execute('INSERT INTO {tn} ({cn}, {ci}, {cv}, {cs}, {cimg}, {cp}, {pk}, {it}) VALUES (?, ?, ?, ?, ?, ?, ?, DATE("now"))'.format(tn=gazee.ALL_COMICS, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, cv=gazee.COMIC_VOLUME, cs=gazee.COMIC_SUMMARY, cimg=gazee.COMIC_IMAGE, cp=gazee.COMIC_FULL_PATH, pk=gazee.PARENT_KEY, it=gazee.INSERT_DATE), (name, issue, volume, summary, image, f, pk))
                     connection.commit()
                     logger.info("Comic %s Inserted into DB Successfully" % (name))
@@ -449,7 +449,7 @@ class ComicScanner(object):
             logger.info("DB Build succesful")
             return
 
-    def rescanDB(self):
+    def rescan_db(self):
 
-        self.dbBuilder()
-        threading.Timer((int(gazee.COMIC_SCAN_INTERVAL) * 60), self.rescanDB).start()
+        self.db_builder()
+        threading.Timer((int(gazee.COMIC_SCAN_INTERVAL) * 60), self.rescan_db).start()
