@@ -13,19 +13,21 @@
         </ul>
         <nav>
           <div class="nav-wrapper" id="logo-wrapper">
-            <img style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
+            <img style="margin-top: -3px;" width="250" height="65" src="static/images/logos/solid/logo-white.png"/>
           </div>
         </nav>
         <nav>
           <div class="nav-wrapper" id="breadcrumbs">
             <div class="row">
               <form id="search_form" action="/search">
+                <a class="dropdown-button hide-on-large-only" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
+                <a class="hide-on-med-and-down" id="dash_dashboard" href="/index"><i class="material-icons">home</i></a>
+                <a class="hide-on-med-and-down" id="dash_library" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><i class="material-icons">library_books</i></a>
                 <div class="input-field col s5 right">
                   <input id="search_field" name="search_string" type="search" required>
                   <label for="search_string"><i class="material-icons">search</i></label>
                   <i class="material-icons icon-close">close</i>
                 </div>
-                <a class="dropdown-button" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
               </form>
             </div>
           </div>
@@ -219,7 +221,8 @@
 
         <div id="server-ops" class="col s12" style="padding: 15px;">
           <div class="row">
-            Gazee Version: <span id="gazee-version">${gazee_version}</span><br />
+            Current Version: <span id="gazee-version">${gazee_version}</span><br />
+            Latest Version: <span id="gazee-version">${latest_version}</span><br />
             Python Version: ${'.'.join(map(str,python_version[:3]))}
           </div>
           <div class="row">
