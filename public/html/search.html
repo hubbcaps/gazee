@@ -18,19 +18,24 @@
     </ul>
     <nav>
       <div class="nav-wrapper" id="logo-wrapper">
-        <img id="logo-image" style="margin-top: -2px; margin-left: -9px;" width="250" height="70" src="static/images/logo.png"/>
+        <img style="margin-top: -3px;" width="250" height="65" src="static/images/logos/solid/logo-white.png"/>
       </div>
     </nav>
     <nav>
       <div class="nav-wrapper" id="breadcrumbs">
         <div class="row">
           <form id="search_form" action="/search">
+            <a class="dropdown-button hide-on-large-only" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
+            <a class="hide-on-med-and-down" id="dash_library" href="/index"><i class="material-icons">home</i></a>
+            <a class="hide-on-med-and-down" id="dash_library" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><i class="material-icons">library_books</i></a>
+      % if user_level == 'admin':
+            <a class="hide-on-med-and-down" id="dash_settings" href="/settings"><i class="material-icons">settings</i></a>
+      % endif
             <div class="input-field col s5 right">
               <input id="search_field" name="search_string" type="search" required>
               <label for="search_string"><i class="material-icons">search</i></label>
               <i class="material-icons icon-close">close</i>
             </div>
-            <a class="dropdown-button" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
           </form>
         </div>
       </div>
@@ -83,9 +88,13 @@
                       <div class="card-content hoverable" id="comic-card-content">
                         <p class="activator flow-text">${comic['ComicName']} ${comic['ComicIssue']}</p>
                       </div>
+                      <div class="card-action">
+                        <i class="material-icons activator">arrow_upward</i>
+                        <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                      </div>
                       <div class="card-reveal" id="summary-pane">
                         <span class="card-title">
-                          <i class="material-icons right">close</i>
+                          <i class="material-icons right">arrow_downward</i>
                         </span>
                         <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons">file_download</i></a>
                         <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>

@@ -451,7 +451,7 @@ class Gazee(object):
         return serve_template(templatename="settings.html", user=user, user_level=user_level,
                               users=users, sip=scan_in_progress, noc=num_of_comics,
                               scantime=scantime, gazee_version=gazee.versioning.current_version(),
-                              python_version=sys.version_info)
+                              latest_version=gazee.versioning.latest_version(), python_version=sys.version_info)
 
     @cherrypy.expose
     @cherrypy.tools.accept(media='text/plain')
