@@ -1,4 +1,4 @@
-![Gazee](/public/images/logo.png)
+![Gazee](/public/images/logos/yellow/logo-yellow-black.png)
 
 [![Build Status](https://travis-ci.org/hubbcaps/gazee.svg?branch=master)](https://travis-ci.org/hubbcaps/gazee)
 
