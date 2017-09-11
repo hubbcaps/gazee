@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import time
+import subprocess
 import cherrypy
 import sqlite3
 import configparser
@@ -568,7 +569,8 @@ class Gazee(object):
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
         logger.info('Restarting Gazee with ' + str(popen_list))
-        os.execv(sys.executable, popen_list)
+        subprocess.Popen(popen_list, cwd=os.getcwd())
+        os._exit(0)
         logger.info('Gazee is restarting...')
         return
 
