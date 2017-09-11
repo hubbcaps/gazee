@@ -15,19 +15,19 @@ Questions can also be asked in the #gazee channel on Freenode
 ## Features
 
 Recent Comics
-![screen01](http://i.imgur.com/4cRYbJP.jpg)
+![screen01](https://i.imgur.com/WiqlTSV.png)
 
 Exposes your sorting structure in a library view
-![screen02](http://i.imgur.com/LuJDAAG.jpg)
+![screen02](https://i.imgur.com/NNn17XR.png)
 Download your issue if you have a preferred reader outside of Gazee and read a summary of the issue in line if available with your archive
-![screen03](http://i.imgur.com/NcgCQTq.jpg)
+![screen03](https://i.imgur.com/EbnpMZS.png)
 
 Make Gazee yours and change up the color scheme
-![screen04](http://i.imgur.com/xCLoowh.jpg)
-![screen05](http://i.imgur.com/F5mb0bA.jpg)
+![screen04](https://i.imgur.com/OyFsZqE.png)
+![screen05](https://i.imgur.com/VkhRvid.png)
 
 Settings overlay to make the comic feel how you want it.
-![screen06](http://i.imgur.com/t0NsWMp.jpg)
+![screen06](https://i.imgur.com/nE3k7j8.png)
 
 HTTPS Support
 
