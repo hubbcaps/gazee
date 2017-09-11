@@ -14,19 +14,19 @@ body {
   background: #BDBDBD;
 }
 #dash_dashboard {
-  padding-right: 8px;
+  padding-left: 8px;
   display: inline-block;
 }
 #dash_library {
-  padding-right: 8px;
+  padding-left: 8px;
   display: inline-block;
 }
 #dash_search {
-  padding-right: 8px;
+  padding-left: 8px;
   display: inline-block;
 }
 #dash_settings {
-  padding-right: 8px;
+  padding-left: 8px;
   display: inline-block;
 }
 #directory-card-content {
@@ -52,6 +52,12 @@ i {
   color: #FFFFFF;
 }
 #page-settings-text {
+  color: #FFFFFF;
+}
+#page-settings-right-text i {
+  color: #FFFFFF;
+}
+#page-settings-left-text i {
   color: #FFFFFF;
 }
 #pagination-num a {
