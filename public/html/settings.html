@@ -1,5 +1,5 @@
 <%!
-	import gazee
+	import gazee, os
 %>
 %if user_level == 'admin':
 <!doctype html>
@@ -13,7 +13,7 @@
         </ul>
         <nav>
           <div class="nav-wrapper" id="logo-wrapper">
-            <img style="margin-top: -3px;" width="250" height="65" src="static/images/logos/solid/logo-white.png"/>
+            <img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/>
           </div>
         </nav>
         <nav>
@@ -197,6 +197,17 @@
           <form class="col s6" id="change-theme-form">
             <div class="row">
               <div class="input-field col s2">
+                <select name=logo id="logo-picker">
+                  <option value="" disabled selected>Choose Your Logo</option>
+% for f in logos:
+                  <option value="${f}" data-icon="${f}" class="left">${os.path.basename(f).replace('.png', '')}</option>
+% endfor
+                </select>
+                <label>Logo</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s2">
                 <input type="text" name="mainColor" value='${gazee.MAIN_COLOR}' class="jscolor" >
                 <label for="mainColor" style="padding-bottom: 5px">Main Color</label>
               </div>
@@ -251,6 +262,7 @@
             $("#dropdown-item").click(function() {
               window.location.href = $(this).attr('href');
             });
+            $('select').material_select();
             $("#update-app-submit").click(function() {
               $.ajax({
                 url: "save_settings",

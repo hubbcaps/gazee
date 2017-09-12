@@ -38,6 +38,7 @@ SSL_CERT = ''
 WEB_TEXT_COLOR = 'FFFFFF'
 MAIN_COLOR = '757575'
 ACCENT_COLOR = 'BDBDBD'
+LOGO = 'static/images/logos/red/logo-red-yellow.png'
 THUMB_SIZE = 400, 300
 LOG_LEVEL = 'logging.INFO'
 ARGS = []

@@ -419,6 +419,7 @@ class Gazee(object):
         # Here we make the inital DB connection that we will be using throughout this function.
         connection = sqlite3.connect(str(db))
         c = connection.cursor()
+        # Grab Number of Comics in DB for display
         c.execute("SELECT COUNT(*) FROM {tn}".format(tn=gazee.ALL_COMICS))
         numcinit = c.fetchone()
         num_of_comics = numcinit[0]
@@ -426,6 +427,7 @@ class Gazee(object):
         user = cherrypy.request.login
         user_level = gazee.authmech.get_user_level(user)
 
+        # Grab all the users for display
         c.execute("SELECT * FROM {tn}".format(tn=gazee.USERS))
         usersinit = c.fetchall()
         users = []
@@ -433,6 +435,7 @@ class Gazee(object):
             users.append({"User": f[0],
                           "Type": f[2]})
 
+        # Generate time comic scan has been ongoing
         if os.path.exists(os.path.join(gazee.DATA_DIR, "db.lock")):
             scan_in_progress = True
             made = os.path.getmtime(os.path.join(gazee.DATA_DIR, "db.lock"))
@@ -445,13 +448,21 @@ class Gazee(object):
             scan_in_progress = False
             scantime = ("%d:%02d:%02d" % (0, 0, 0))
 
+        logo_paths = []
+        for root, dirs, files in os.walk(os.path.join("public", "images", "logos")):
+            logo_paths.extend(os.path.join(root, f) for f in files if '.png' in f)
+
+        logos = []
+        for f in logo_paths:
+            logos.append(f.replace('public', 'static'))
+
         logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
         logger.info("Settings Served")
 
         return serve_template(templatename="settings.html", user=user, user_level=user_level,
                               users=users, sip=scan_in_progress, noc=num_of_comics,
-                              scantime=scantime, gazee_version=gazee.versioning.current_version(),
+                              scantime=scantime, logos=logos, gazee_version=gazee.versioning.current_version(),
                               latest_version=gazee.versioning.latest_version(), python_version=sys.version_info)
 
     @cherrypy.expose
@@ -477,7 +488,7 @@ class Gazee(object):
         return
 
     @cherrypy.expose
-    def change_theme(self, mainColor, accentColor, webTextColor):
+    def change_theme(self, mainColor, accentColor, webTextColor, logo):
         # Set these here as they'll be used to assign the default values of the method arguments to the current values if they aren't updated when the method is called.
         config = configparser.ConfigParser()
         config.read(os.path.join(gazee.DATA_DIR, 'app.ini'))
@@ -485,6 +496,7 @@ class Gazee(object):
         config['GLOBAL']['MAIN_COLOR'] = mainColor
         config['GLOBAL']['ACCENT_COLOR'] = accentColor
         config['GLOBAL']['WEB_TEXT_COLOR'] = webTextColor
+        config['GLOBAL']['LOGO'] = logo
         with open(os.path.join(gazee.DATA_DIR, 'app.ini'), 'w') as configfile:
             config.write(configfile)
         configfile.close()
@@ -501,6 +513,7 @@ class Gazee(object):
         gazee.MAIN_COLOR = mainColor
         gazee.ACCENT_COLOR = accentColor
         gazee.WEB_TEXT_COLOR = webTextColor
+        gazee.LOGO = logo
 
         logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
         logger = logging.getLogger(__name__)
