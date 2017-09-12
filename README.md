@@ -41,7 +41,7 @@ Multiple Users and Admins
 Much more to come!
 
 ## Requirements
-* Python 3.6
+* Python 3.4+
 * CherryPy
 * Mako
 * xmltodict
@@ -82,7 +82,7 @@ If you see an error similar to the following
     ^
     SyntaxError: invalid syntax
 
-This likely means your systems default version of python is 2.x. Verify you have python 3.6 installed and call it explicitly with python3 or python3.6
+This likely means your systems default version of python is 2.x. Verify you have python 3.4+ installed and call it explicitly with python3 or python3.x
 
     python3 Gazee.py
 
