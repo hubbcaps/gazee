@@ -39,6 +39,10 @@ body {
 #footer {
   background: #757575;
 }
+#theme-settings .dropdown-content li>a, .dropdown-content li>span, .select-dropdown li.disabled, .select-dropdown li.disabled>span, .select-dropdown li.optgroup {
+  background: #757575;
+  color: #FFFFFF;
+}
 #logo-wrapper {
   background: #757575;
 }
