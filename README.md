@@ -26,6 +26,9 @@ Make Gazee yours and change up the color scheme
 ![screen04](https://i.imgur.com/OyFsZqE.png)
 ![screen05](https://i.imgur.com/VkhRvid.png)
 
+Now with logo changer
+![screen06](http://i.imgur.com/iIoyalA.gif)
+
 Settings overlay to make the comic feel how you want it.
 ![screen06](https://i.imgur.com/nE3k7j8.png)
 
