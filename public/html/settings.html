@@ -6,11 +6,6 @@
 <html class="whole-page">
   <%include file="header.html" args="jscolor=True"/>
     <body>
-      <header>
-        <ul class="dropdown-content" id="nav-dropdown">
-          <li id="dash_dashboard"><a id="dropdown-item" href="/index"><b>Dashboard</b></a></li>
-          <li id="dash_library"><a id="dropdown-item" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><b>Library</b></a></li>
-        </ul>
         <nav>
           <div class="nav-wrapper" id="logo-wrapper">
             <img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/>
@@ -20,13 +15,15 @@
           <div class="nav-wrapper" id="breadcrumbs">
             <div class="row">
               <form id="search_form" action="/search">
-                <a class="dropdown-button hide-on-large-only" href='#!' data-activates='nav-dropdown' data-beloworigin="true"><i class="material-icons">reorder</i></a>
-                <a class="hide-on-med-and-down" id="dash_dashboard" href="/index"><i class="material-icons">home</i></a>
-                <a class="hide-on-med-and-down" id="dash_library" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><i class="material-icons">import_contacts</i></a>
-                <div class="input-field col s5 right">
-                  <input id="search_field" name="search_string" type="search" required>
-                  <label for="search_string"><i class="material-icons">search</i></label>
-                  <i class="material-icons icon-close">close</i>
+                <a id="dash_dashboard" href="/index"><i class="material-icons">home</i></a>
+                <a id="dash_library" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1"><i class="material-icons">import_contacts</i></a>
+                <a id="dash_settings" class="modal-trigger" href="#search-modal"><i class="material-icons">search</i></a>
+                <div id="search-modal" class=modal>
+                  <div class="input-field col s12 right" id="search-bar">
+                    <input id="search_field" name="search_string" type="search" required>
+                    <label for="search_string"><i class="material-icons">search</i></label>
+                    <i class="material-icons icon-close">close</i>
+                  </div>
                 </div>
               </form>
             </div>
@@ -262,6 +259,7 @@
             $("#dropdown-item").click(function() {
               window.location.href = $(this).attr('href');
             });
+            $('.modal-trigger').leanModal();
             $('select').material_select();
             $("#update-app-submit").click(function() {
               $.ajax({
