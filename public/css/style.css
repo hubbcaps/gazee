@@ -104,12 +104,15 @@ i {
   color: #FFFFFF;
 }
 .card {
+  position: relative;
   background-color: #BDBDBD;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
-.card img {
-  display:flex;
-  height:100%;
+.card-image {
+  width: 100%;
+  background-size: cover;
+}
+.card-image img {
   object-fit: cover;
 }
 .card-content {
