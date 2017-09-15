@@ -113,6 +113,7 @@ i {
 }
 .card-content {
   display:flex;
+  height: 125px;
   background: #BDBDBD;
   color: #FFFFFF;
   text-align: center;
