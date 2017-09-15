@@ -40,52 +40,51 @@
     <div class="row">
       <div class="col s12">
         <div class="row">
-          <ul id="recent-header"><b><h4><center>Recent Comics</center></h4></b></ul>
-            <div id="recent">
-               <div class="row center-cols center-align">
-                 <ul class="pagination">
+          <ul class="pagination">
 % if current_page == 1:
-                   <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
-                   <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
+            <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 % else:
 
-                   <li class="waves-effect left"><a href="/index?page_num=1"><i class="material-icons">first_page</i></a></li>
-                   <li class="waves-effect left"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect left"><a href="/index?page_num=1"><i class="material-icons">first_page</i></a></li>
+            <li class="waves-effect left"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
-
 % if current_page == num_of_pages:
-<li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-<li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
+            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
 % else:
-<li class="waves-effect right"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
-<li class="waves-effect right"><a href="/index?page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
+            <li class="waves-effect right"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+            <li class="waves-effect right"><a href="/index?page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
 % endif
-                </ul>
+          </ul>
+          <div id="recent">
+            <div class="row center-cols center-align">
+            <b><h4><center>Recent Comics</center></h4></b>
 
 % for comic in comics:
-                  <div class="col s5 m5 l2">
-                    <div class="card">
-                      <div class="card-image hoverable">
-                        <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
-                      </div>
-                      <div class="card-content hoverable" id="comic-card-content">
-                        <span class="card-title flow-text activator">${comic['ComicName']} ${comic['ComicIssue']}</span>
-                      </div>
-                      <div class="card-action">
-                        <i class="material-icons activator">info</i>
-                        <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
-                      </div>
-                      <div class="card-reveal" id="summary-pane">
-                        <span class="card-title">
-                          <i class="material-icons">close</i>
-                        </span>
-                        <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
-                      </div>
-                    </div>
+              <div class="col s5 m5 l2">
+                <div class="card">
+                  <div class="card-image hoverable">
+                    <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
                   </div>
-% endfor
+                  <div class="card-content hoverable" id="comic-card-content">
+                    <span class="card-title flow-text activator">${comic['ComicName']} ${comic['ComicIssue']}</span>
+                  </div>
+                  <div class="card-action">
+                    <i class="material-icons activator">info</i>
+                    <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                  </div>
+                  <div class="card-reveal" id="summary-pane">
+                    <span class="card-title">
+                      <i class="material-icons">close</i>
+                    </span>
+                    <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
+                  </div>
                 </div>
+              </div>
+% endfor
             </div>
+          </div>
         </div>
       </div>
     </div>
