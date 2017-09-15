@@ -55,7 +55,7 @@
             <div id="library">
               <div class="row center-cols center-align">
 % for directory in directories:
-                <div class="col s10 m5 l2">
+                <div class="col s5 m5 l2">
                   <div class="card">
                     <div class="card-image hoverable">
                       <a href="/library?parent=${parent_dir | u}&directory=${directory['DirectoryName'] | u}&page_num=1"><img id="comic-image" src="${directory['DirectoryImage']}"></a>
@@ -87,7 +87,7 @@
 % endif
                 </ul>
 % for comic in comics:
-                <div class="col s10 m5 l2">
+                <div class="col s5 m5 l2">
                   <div class="card">
                     <div class="card-image hoverable">
                       <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
