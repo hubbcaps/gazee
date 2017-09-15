@@ -50,11 +50,11 @@
             <li class="waves-effect left"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
 % if current_page == num_of_pages:
-            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
             <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
+            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
 % else:
-            <li class="waves-effect right"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
             <li class="waves-effect right"><a href="/index?page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
+            <li class="waves-effect right"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
 % endif
           </ul>
           <div id="recent">
