@@ -27,7 +27,6 @@ body {
 }
 #directory-card-content {
   display:flex;
-  height: 125px;
   color: #FFFFFF;
   background-color: #BDBDBD;
   text-position: center;
@@ -109,13 +108,11 @@ i {
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.7);
 }
 .card img {
-  height: 400px;
-  width: 300px;
+  display:flex;
   object-fit: cover;
 }
 .card-content {
   display:flex;
-  height: 125px;
   background: #BDBDBD;
   color: #FFFFFF;
   text-align: center;
@@ -161,9 +158,9 @@ i {
   background: #BDBDBD;
 }
 .nav-wrapper .input-field input[type="search"]:focus {
-  background: #757575;
+  background: #BDBDBD;
   color: #FFFFFF;
-  box-shadow: 0 1px 0 0 #757575;
+  box-shadow: 0 1px 0 0 #BDBDBD;
 }
 .nav-wrapper .input-field input[type="search"]:focus ~ .material-icons.icon-close {
   right: 2rem;
