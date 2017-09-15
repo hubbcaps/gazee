@@ -45,36 +45,23 @@
                <div class="row center-cols center-align">
                  <ul class="pagination">
 % if current_page == 1:
-                   <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                   <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
+                   <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
 % else:
 
-                   <li class="waves-effect"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+                   <li class="waves-effect left"><a href="/index?page_num=1"><i class="material-icons">first_page</i></a></li>
+                   <li class="waves-effect left"><a href="/index?page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
 % endif
-% if 10 > num_of_pages:
-  % for i in range(1, num_of_pages + 1):
-    % if i == current_page:
-                   <li id="pagination-num" class="active"><a href="#!">${i}</a></li>
-    % else:
-                   <li id="pagination-num" class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
-    % endif
-  % endfor
-% else:
-  % for i in range(1, 11):
-    % if i == current_page:
-                   <li id="pagination-num" class="active"><a href="#!">${i}</a></li>
-    % else:
-                   <li id="pagination-num" class="waves-effect"><a href="/index?page_num=${i}">${i}</a></li>
-    % endif
-  % endfor
-% endif
+
 % if current_page == num_of_pages:
-<li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-% elif current_page == 10:
-<li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+<li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+<li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
 % else:
-<li class="waves-effect"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+<li class="waves-effect right"><a href="/index?page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+<li class="waves-effect right"><a href="/index?page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
 % endif
                 </ul>
+
 % for comic in comics:
                   <div class="col s5 m5 l2">
                     <div class="card">
