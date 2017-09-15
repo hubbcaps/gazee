@@ -109,7 +109,7 @@ i {
 }
 .card img {
   display:flex;
-  height:auto;
+  height:100%;
   object-fit: cover;
 }
 .card-content {
