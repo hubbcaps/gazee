@@ -89,7 +89,7 @@ class Gazee(object):
         else:
             PAGE_OFFSET = gazee.COMICS_PER_PAGE * (int(page_num) - 1)
 
-        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 LIMIT {nc} OFFSET {pn}".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET))
+        c.execute("SELECT * FROM {tn} WHERE DATE('now') - {it} <= 7 ORDER BY date DESC LIMIT {nc} OFFSET {pn}".format(tn=gazee.ALL_COMICS, it=gazee.INSERT_DATE, cn=gazee.COMIC_NAME, ci=gazee.COMIC_NUMBER, nc=gazee.COMICS_PER_PAGE, pn=PAGE_OFFSET))
         # DB Always returns a tuple of lists. After fetching it, we then iterate over its various lists to assign their values to a dictionary.
         all_recent_comics_tup = c.fetchall()
         comics = []
