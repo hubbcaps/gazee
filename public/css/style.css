@@ -120,6 +120,7 @@ i {
 .card-image {
   position: relative;
   height: 350px;
+  overflow: hidden;
 }
 .card-image img {
   position: absolute;
@@ -131,7 +132,6 @@ i {
   right: 0;
 }
 .card-content {
-  display:flex;
   height: auto;
   background: #BDBDBD;
   color: #FFFFFF;
@@ -144,6 +144,7 @@ i {
   float:none; /* disable the float */
   display: inline-block; /* make blocks inline-block */
   text-align: initial; /* restore text-align to default */
+  vertical-align: top;
 }
 .dimmed {
   background-color: rgba(0, 0, 0, 0.7);
