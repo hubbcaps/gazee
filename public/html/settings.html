@@ -195,7 +195,7 @@
             <div class="row">
               <div class="input-field col s2">
                 <select name=logo id="logo-picker">
-                  <option value="" disabled selected>Choose Your Logo</option>
+                  <option value="${gazee.LOGO}" selected>Choose Your Logo</option>
 % for f in logos:
                   <option value="${f}" data-icon="${f}" class="left">${os.path.basename(f).replace('.png', '')}</option>
 % endfor
@@ -350,6 +350,7 @@
                 data: $("#change-theme-form").serialize(),
                 success: function() {
                   Materialize.toast("Theme updated.", 4000);
+                  window.location.reload(true);
                 }
               });
             });
