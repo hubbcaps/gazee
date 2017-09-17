@@ -9,7 +9,7 @@
   <header>
     <nav>
       <div class="nav-wrapper" id="logo-wrapper">
-        <img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/>
+        <a href="/index?page_num=1"><img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/></a>
       </div>
     </nav>
 
@@ -95,8 +95,10 @@
                       <p class="activator flow-text" style="width:100%;">${comic['ComicName']} ${comic['ComicIssue']}</span>
                     </div>
                     <div class="card-action">
-                      <i class="material-icons activator">info</i>
-                      <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                      <form id="comic-info">
+                        <a class="btn-small" href="#!"><i class="material-icons activator">info</i></a>
+                        <a class="btn-small" href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                      </form>
                     </div>
                     <div class="card-reveal" id="summary-pane">
                       <span class="card-title">
@@ -110,6 +112,23 @@
             </div>
           </div>
         </div>
+          <ul class="pagination">
+% if current_page == 1:
+            <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
+            <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+% else:
+                    
+            <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=1"><i class="material-icons">first_page</i></a></li>
+            <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
+% endif
+% if current_page == num_of_pages:
+            <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
+            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+% else:
+            <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
+            <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
+% endif
+          </ul>
       </div>
     </div>
   </main>

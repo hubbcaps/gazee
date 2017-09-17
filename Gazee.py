@@ -182,13 +182,10 @@ def main():
     logging.info("Gazee Started")
 
     cherrypy.engine.start()
+    print("Gazee has started")
     scanner = ComicScanner()
     scanner.rescan_db()
     cherrypy.engine.block()
-
-    if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
-        os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
-    return
 
 
 if __name__ == '__main__':
