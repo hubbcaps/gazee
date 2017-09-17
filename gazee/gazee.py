@@ -451,7 +451,7 @@ class Gazee(object):
             logos.append(f.replace('public', 'static'))
 
         logdir = gazee.LOG_DIR
-        logfiles = [i for i in os.listdir(logdir) if os.path.isfile(os.path.join(logdir, i)) and i.endswith('.log')]
+        logfiles = [i for i in os.listdir(logdir) if os.path.isfile(os.path.join(logdir, i)) and '.log' in i]
 
         logging.info("Settings Served")
 
