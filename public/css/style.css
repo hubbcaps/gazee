@@ -41,6 +41,12 @@ body {
   background: #757575;
   color: #FFFFFF;
 }
+#log-modal {
+  background: #BDBDBD;
+  color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+}
 #logo-wrapper {
   background: #757575;
 }

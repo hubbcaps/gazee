@@ -19,6 +19,8 @@ import git
 
 import gazee
 
+logging = logging.getLogger(__name__)
+
 
 def current_version():
     repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
@@ -35,17 +37,15 @@ def latest_version():
 
 
 def update_app():
-    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
     current_commit = current_version()
     latest_commit = latest_version()
 
     if current_commit == latest_commit:
-        logger.info("No update needed")
+        logging.info("No update needed")
         return False
 
     if current_commit != latest_commit:
-        logger.info("Updated Needed")
+        logging.info("Updated Needed")
 
         os.rename('public/css/style.css', 'public/css/style.css.bak')
 
@@ -54,7 +54,7 @@ def update_app():
         try:
             o.pull()
         except git.exc.GitCommandError:
-            logger.exception('Failed to pull version')
+            logging.exception('Failed to pull version')
             os.rename('public/css/style.css.bak', 'public/css/style.css')
             return False
 
@@ -72,5 +72,5 @@ def update_app():
         else:
             os.rename('public/css/style.css.bak', 'public/css/style.css')
 
-        logger.info("Update Pulled")
+        logging.info("Update Pulled")
         return True

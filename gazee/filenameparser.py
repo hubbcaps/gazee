@@ -29,22 +29,19 @@ import re
 import os
 from urllib.parse import unquote
 
-import gazee
 import logging
+
+logging = logging.getLogger(__name__)
 
 
 class FileNameParser:
 
     def repl(self, m):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("repl requested")
+        logging.debug("repl requested")
         return ' ' * len(m.group())
 
     def fixSpaces(self, string, remove_dashes=True):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Fix Spaces Requested")
+        logging.debug("Fix Spaces Requested")
         if remove_dashes:
             placeholders = ['[-_]', '  +']
         else:
@@ -54,9 +51,7 @@ class FileNameParser:
         return string  # .strip()
 
     def getIssueCount(self, filename, issue_end):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Issue Count Requested")
+        logging.debug("Issue Count Requested")
         count = ""
         filename = filename[issue_end:]
 
@@ -80,9 +75,7 @@ class FileNameParser:
         return count
 
     def getIssueNumber(self, filename):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Issue Number Requested")
+        logging.debug("Issue Number Requested")
         """Returns a tuple of issue number string, and start and end indexes in the filename
         (The indexes will be used to split the string up for further parsing)
         """
@@ -167,9 +160,7 @@ class FileNameParser:
         return issue, start, end
 
     def getSeriesName(self, filename, issue_start):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Series Name Requested")
+        logging.debug("Series Name Requested")
         """Use the issue number string index to split the filename string"""
 
         if issue_start != 0:
@@ -232,9 +223,7 @@ class FileNameParser:
         return series, volume.strip()
 
     def getYear(self, filename, issue_end):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Year Requested")
+        logging.debug("Year Requested")
 
         filename = filename[issue_end:]
 
@@ -248,9 +237,7 @@ class FileNameParser:
         return year
 
     def getRemainder(self, filename, year, count, volume, issue_end):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("Remainder Requested")
+        logging.debug("Remainder Requested")
         """Make a guess at where the the non-interesting stuff begins"""
 
         remainder = ""
@@ -278,9 +265,7 @@ class FileNameParser:
         return remainder.strip()
 
     def parseFilename(self, filename):
-        logging.basicConfig(level=logging.DEBUG, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-        logger = logging.getLogger(__name__)
-        logger.info("File Name Parse Requested")
+        logging.debug("File Name Parse Requested")
 
         # remove the path
         filename = os.path.basename(filename)
@@ -297,32 +282,32 @@ class FileNameParser:
         if filename.count("_28") > 1 and filename.count("_29") > 1:
             filename = filename.replace("_28", "(")
             filename = filename.replace("_29", ")")
-        logger.info("Url Encoding Fixed")
-        logger.info(filename)
+        logging.debug("Url Encoding Fixed")
+        logging.debug(filename)
 
         self.issue, issue_start, issue_end = self.getIssueNumber(filename)
         self.series, self.volume = self.getSeriesName(filename, issue_start)
-        logger.info("Series and Issue Return")
-        logger.info(self.series + " " + self.issue)
+        logging.debug("Series and Issue Return")
+        logging.debug(self.series + " " + self.issue)
 
         # provides proper value when the filename doesn't have a issue number
         if issue_end == 0:
             issue_end = len(self.series)
 
         self.year = self.getYear(filename, issue_end)
-        logger.info("Year Returned")
-        logger.info(self.year)
+        logging.debug("Year Returned")
+        logging.debug(self.year)
         self.issue_count = self.getIssueCount(filename, issue_end)
-        logger.info("Issue Count Returned")
-        logger.info(self.issue_count)
+        logging.debug("Issue Count Returned")
+        logging.debug(self.issue_count)
         self.remainder = self.getRemainder(
             filename,
             self.year,
             self.issue_count,
             self.volume,
             issue_end)
-        logger.info("Remained Returned")
-        logger.info(self.remainder)
+        logging.debug("Remained Returned")
+        logging.debug(self.remainder)
 
         if self.issue != "":
             # strip off leading zeros
