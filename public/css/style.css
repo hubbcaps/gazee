@@ -13,6 +13,9 @@ body {
   top: 0;
   background: #BDBDBD;
 }
+#comic-info {
+  display: inline;
+}
 #dash_dashboard {
   padding-left: 8px;
   display: inline-block;
@@ -123,7 +126,7 @@ i {
 }
 .card-content {
   display:flex;
-  height: 125px;
+  height: auto;
   background: #BDBDBD;
   color: #FFFFFF;
   text-align: center;

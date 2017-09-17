@@ -266,6 +266,7 @@ class ComicScanner(object):
                 f.write("locked")
             f.close()
 
+            print("Comic Scan Started")
             logger.debug("DB Build Requested")
             logger.info("Begining Full Directory and Comic Scan")
             # Here we set the db file path.
@@ -446,6 +447,7 @@ class ComicScanner(object):
 
             os.remove(os.path.join(gazee.DATA_DIR, "db.lock"))
 
+            print("Comic Scan Finished")
             logger.info("DB Build succesful")
             return
 

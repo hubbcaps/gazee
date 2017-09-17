@@ -569,6 +569,7 @@ class Gazee(object):
         if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
             os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
         threading.Timer(1, lambda: os._exit(0)).start()
+        print("Gazee is stopping")
         logger.info('Gazee is shutting down...')
         return
 
@@ -581,9 +582,13 @@ class Gazee(object):
             os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))
         popen_list = [sys.executable, gazee.FULL_PATH]
         popen_list += gazee.ARGS
+        print("Gazee is restarting")
         logger.info('Restarting Gazee with ' + str(popen_list))
-        subprocess.Popen(popen_list, cwd=os.getcwd())
-        os._exit(0)
+        if sys.platform == 'win32':
+            subprocess.Popen(popen_list, cwd=os.getcwd())
+            os._exit(0)
+        else:
+            os.execv(sys.executable, popen_list)
         logger.info('Gazee is restarting...')
         return
 
@@ -593,6 +598,7 @@ class Gazee(object):
         logger = logging.getLogger(__name__)
         updated = False
         if gazee.versioning.update_app():
+            print("Gazee is restarting to update.")
             logger.info('Gazee is restarting to apply update.')
             if (os.path.exists(os.path.join(gazee.DATA_DIR, 'db.lock'))):
                 os.remove(os.path.join(gazee.DATA_DIR, 'db.lock'))

@@ -6,11 +6,10 @@
 <%include file="header.html"/>
 
 <body>
-
   <header>
     <nav>
       <div id="logo-wrapper">
-        <img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/>
+        <a href="/index?page_num=1"><img style="margin-top: -3px;" width="250" height="65" src="${gazee.LOGO}"/></a>
       </div>
     </nav>
     <nav>
@@ -70,9 +69,11 @@
                   <div class="card-content hoverable" id="comic-card-content">
                     <span class="card-title flow-text activator">${comic['ComicName']} ${comic['ComicIssue']}</span>
                   </div>
-                  <div class="card-action">
-                    <i class="material-icons activator">info</i>
-                    <a href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                  <div class="card-action" id="comic-actions">
+                    <form id="comic-info">
+                      <a class="btn-small" href="#!"><i class="material-icons activator">info</i></a>
+                      <a class="btn-small" href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+                    </form>
                   </div>
                   <div class="card-reveal" id="summary-pane">
                     <span class="card-title">
