@@ -38,79 +38,59 @@
   </header>
 
   <main id="whiteboard">
-    <div class="row">
-      <div class="col s12">
-        <div class="row">
 % if num_of_pages != 1:
-          <ul class="pagination">
-  % if current_page == 1:
-            <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
-            <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-  % else:
-                          
-            <li class="waves-effect left"><a href="/search?page_num=1&search_string=${search_string}"><i class="material-icons">first_page</i></a></li>
-            <li class="waves-effect left"><a href="/search?page_num=${current_page - 1}&search_string=${search_string}"><i class="material-icons">chevron_left</i></a></li>
+    <ul class="pagination">
+  % if current_page != 1:
+      <li class="waves-effect left"><a href="/search?page_num=1&search_string=${search_string}"><i class="material-icons">first_page</i></a></li>
+      <li class="waves-effect left"><a href="/search?page_num=${current_page - 1}&search_string=${search_string}"><i class="material-icons">chevron_left</i></a></li>
   % endif
-  % if current_page == num_of_pages:
-            <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
-            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-  % else:
-            <li class="waves-effect right"><a href="/search?page_num=${num_of_pages}&search_string=${search_string}"><i class="material-icons">last_page</i></a></li>
-            <li class="waves-effect right"><a href="/search?page_num=${current_page + 1}&search_string=${search_string}"><i class="material-icons">chevron_right</i></a></li>
+  % if current_page != num_of_pages:
+      <li class="waves-effect right"><a href="/search?page_num=${num_of_pages}&search_string=${search_string}"><i class="material-icons">last_page</i></a></li>
+      <li class="waves-effect right"><a href="/search?page_num=${current_page + 1}&search_string=${search_string}"><i class="material-icons">chevron_right</i></a></li>
   % endif
-          </ul>
+    </ul>
 % endif
-            <div id="recent">
-               <div class="row center-cols center-align">
-                 <ul id="recent-header"><b><h4><center>Search Results</center></h4></b></ul>
+        <ul id="recent-header"><b><h4><center>Search Results</center></h4></b></ul>
+       <div class="row center-cols center-align">
+         <div class="divider"></div>
 % for comic in comics:
-                  <div class="col s5 m5 l2">
-                    <div class="card">
-                      <div class="card-image hoverable">
-                        <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
-                      </div>
-                      <div class="card-content hoverable" id="comic-card-content">
-                        <p class="activator flow-text">${comic['ComicName']} ${comic['ComicIssue']}</p>
-                      </div>
-                      <div class="card-action">
-                        <form id="comic-info">
-                          <a class="btn-small" href="#!"><i class="material-icons activator">info</i></a>
-                          <a class="btn-small" href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
-                        </form>
-                      </div>
-                      <div class="card-reveal" id="summary-pane">
-                        <span class="card-title">
-                          <i class="material-icons">close</i>
-                        </span>
-                        <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
-                      </div>
-                    </div>
-                  </div>
+         <div class="col s5 m5 l2">
+           <div class="card">
+             <div class="card-image hoverable">
+               <a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link"><img id="comic-image" src="${comic['ComicImage']}"></a>
+             </div>
+             <div class="card-content hoverable" id="comic-card-content">
+               <p class="activator flow-text">${comic['ComicName']} ${comic['ComicIssue']}</p>
+             </div>
+             <div class="card-action">
+               <form id="comic-info">
+                 <a class="btn-small" href="#!"><i class="material-icons activator">info</i></a>
+                 <a class="btn-small" href="download_comic?comic_path=${os.path.abspath(comic['ComicPath']) | u}"><i class="material-icons right">file_download</i></a>
+               </form>
+             </div>
+             <div class="card-reveal" id="summary-pane">
+               <span class="card-title">
+                 <i class="material-icons">close</i>
+               </span>
+               <p class="" style="font-size: 0.9em"><a href="/read_comic?comic_path=${comic['ComicPath'] | u}" id="read-link">${comic['ComicSummary']}</a></p>
+             </div>
+           </div>
+         </div>
 % endfor
-                </div>
-            </div>
-% if num_of_pages != 1:
-          <ul class="pagination">
-  % if current_page == 1:
-            <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
-            <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-  % else:
-                          
-            <li class="waves-effect left"><a href="/search?page_num=1&search_string=${search_string}"><i class="material-icons">first_page</i></a></li>
-            <li class="waves-effect left"><a href="/search?page_num=${current_page - 1}&search_string=${search_string}"><i class="material-icons">chevron_left</i></a></li>
-  % endif
-  % if current_page == num_of_pages:
-            <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
-            <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-  % else:
-            <li class="waves-effect right"><a href="/search?page_num=${num_of_pages}&search_string=${search_string}"><i class="material-icons">last_page</i></a></li>
-            <li class="waves-effect right"><a href="/search?page_num=${current_page + 1}&search_string=${search_string}"><i class="material-icons">chevron_right</i></a></li>
-  % endif
-          </ul>
-% endif
         </div>
       </div>
-    </div>
+% if num_of_pages != 1:
+    <ul class="pagination">
+  % if current_page != 1:
+      <li class="waves-effect left"><a href="/search?page_num=1&search_string=${search_string}"><i class="material-icons">first_page</i></a></li>
+      <li class="waves-effect left"><a href="/search?page_num=${current_page - 1}&search_string=${search_string}"><i class="material-icons">chevron_left</i></a></li>
+  % endif
+  % if current_page != num_of_pages:
+      <li class="waves-effect right"><a href="/search?page_num=${num_of_pages}&search_string=${search_string}"><i class="material-icons">last_page</i></a></li>
+      <li class="waves-effect right"><a href="/search?page_num=${current_page + 1}&search_string=${search_string}"><i class="material-icons">chevron_right</i></a></li>
+  % endif
+    </ul>
+% endif
   </main>
 
   <footer class="page-footer" id="footer">
@@ -130,7 +110,6 @@
         $('.modal-trigger').leanModal();
       });
   </script>
-	
 </body>
 </html>
 </div>
