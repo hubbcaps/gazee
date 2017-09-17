@@ -9,14 +9,14 @@ def start(path, verboseon):
         os.makedirs(path)
 
     logfile = os.path.join(path, 'gazee.log')
-    backup_days = 8
+    number_of_logs = 5
     if verboseon:
         logging_level = logging.DEBUG
     else:
         logging_level = logging.INFO
 
     formatter = logging.Formatter('%(levelname)s %(asctime)s %(name)s.%(funcName)s: %(message)s')
-    handler = logging.handlers.TimedRotatingFileHandler(logfile, when="D", interval=1, backupCount=backup_days, encoding='utf-8')
+    handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=5000000, backupCount=number_of_logs, encoding='utf-8')
     handler.setFormatter(formatter)
     logger = logging.getLogger()
     logger.addHandler(handler)
