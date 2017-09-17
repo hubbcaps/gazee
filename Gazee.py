@@ -24,6 +24,8 @@ from cherrypy.process.plugins import Daemonizer, PIDFile
 import gazee
 from gazee import Gazee, ComicScanner
 
+logging = logging.getLogger(__name__)
+
 gazee.FULL_PATH = os.path.abspath(__file__)
 # Verify our app is working out of the install directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +40,8 @@ def main():
 
     parser.add_argument('-d', '--daemon', action='store_true', help='Run as a daemon')
     parser.add_argument('-c', '--datadir', help='Set data directory')
+    parser.add_argument('-l', '--logdir', help='Set log directory')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Set log level to debug')
 
     args = parser.parse_args()
 
@@ -54,15 +58,26 @@ def main():
     if not os.path.exists(gazee.TEMP_DIR):
         os.makedirs(os.path.abspath(gazee.TEMP_DIR))
 
+    from gazee import log
+    if args.logdir:
+        gazee.LOG_DIR = args.logdir
+        gazee.ARGS += ["-l", gazee.LOG_DIR]
+    else:
+        gazee.LOG_DIR = gazee.DATA_DIR
+    if args.verbose:
+        log.start(gazee.LOG_DIR, True)
+        gazee.ARGS += ["-v"]
+    else:
+        log.start(gazee.LOG_DIR, False)
+    cherrypy.log.error_log.propagate = True
+    cherrypy.log.access_log.propagate = False
+
     gazee.db.db_creation()
     gazee.config.config_read()
 
-    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
-
     if args.daemon:
         if sys.platform == 'win32':
-            logger.info("Daemonize not supported under Windows, starting normally")
+            logging.info("Daemonize not supported under Windows, starting normally")
         else:
             # If the pidfile already exists, Gazee may still be running, so exit
             if os.path.exists(gazee.PIDFILE):

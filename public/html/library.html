@@ -51,23 +51,25 @@
     <div class="row">
       <div>
         <div class="row">
+% if num_of_pages != 1:
           <ul class="pagination">
-% if current_page == 1:
+  % if current_page == 1:
             <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
             <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-% else:
+  % else:
                     
             <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=1"><i class="material-icons">first_page</i></a></li>
             <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
-% endif
-% if current_page == num_of_pages:
+  % endif
+  % if current_page == num_of_pages:
             <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
             <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-% else:
+  % else:
             <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
             <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
-% endif
+  % endif
           </ul>
+% endif
           <div id="library">
             <div class="row center-cols center-align">
               <ul id="recent-header"><b><h4><center>Library</center></h4></b></ul>
@@ -112,23 +114,25 @@
             </div>
           </div>
         </div>
+% if num_of_pages != 1:
           <ul class="pagination">
-% if current_page == 1:
+  % if current_page == 1:
             <li class="disabled left"><a href="#!"><i class="material-icons">first_page</i></a></li>
             <li class="disabled left"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-% else:
+  % else:
                     
             <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=1"><i class="material-icons">first_page</i></a></li>
             <li class="waves-effect left"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page - 1}"><i class="material-icons">chevron_left</i></a></li>
-% endif
-% if current_page == num_of_pages:
+  % endif
+  % if current_page == num_of_pages:
             <li class="disabled right"><a href="#!"><i class="material-icons">last_page</i></a></li>
             <li class="disabled right"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-% else:
+  % else:
             <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${num_of_pages}"><i class="material-icons">last_page</i></a></li>
             <li class="waves-effect right"><a href="/library?parent=${parent_dir | u}&directory=${current_dir | u}&page_num=${current_page + 1}"><i class="material-icons">chevron_right</i></a></li>
-% endif
+  % endif
           </ul>
+% endif
       </div>
     </div>
   </main>

@@ -22,6 +22,8 @@ from pathlib import Path
 
 import gazee
 
+logging = logging.getLogger(__name__)
+
 
 # This is the function called when a user logs in, it's given a realm (Gazee) and the user inputted username and password
 # We get the hashed password from the DB for username and then check that against the hashed version of the inputted password
@@ -91,15 +93,11 @@ def change_pass(user, password):
     connection.commit()
     connection.close()
 
-    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
-    logger.info("Password Updated")
+    logging.info("Password Updated")
     return
 
 
 def add_user(user, password, ut):
-    logging.basicConfig(level=gazee.LOG_LEVEL, filename=os.path.join(gazee.DATA_DIR, 'gazee.log'))
-    logger = logging.getLogger(__name__)
     hashed_pass = hash_pass(password)
 
     # Here we set the db file path.
@@ -111,11 +109,11 @@ def add_user(user, password, ut):
     try:
         c.execute('INSERT INTO {tn} ({un}, {pw}, {ut}) VALUES (?,?,?)'.format(tn=gazee.USERS, un=gazee.USERNAME, pw=gazee.PASSWORD, ut=gazee.TYPE), (user, hashed_pass, ut,))
     except sqlite3.IntegrityError:
-        logger.info("User %s Already Exists" % user)
+        logging.info("User %s Already Exists" % user)
         return False
     finally:
         connection.commit()
         connection.close()
 
-    logger.info("User %s Added" % (user))
+    logging.info("User %s Added" % (user))
     return True
