@@ -88,6 +88,12 @@ i {
   background: #BDBDBD;
   color: #FFFFFF;
 }
+#settings-help {
+  position: absolute;
+  z-index:5000;
+  color: #FFFFFF;
+  background: #BDBDBD;
+}
 #size-height-button {
   background: #BDBDBD;
   color: #FFFFFF;
@@ -228,7 +234,7 @@ i {
 }
 .reader-overlay {
   position: absolute;
-  background-color:#ccc;
+  background-color:#757575;
   width:100%;
   height:100%;
   top:0px;
