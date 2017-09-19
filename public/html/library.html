@@ -24,7 +24,7 @@
       % endif
             <div id="search-modal" class=modal>
               <div class="input-field col s12 right" id="search-bar">
-                <input id="search_field" name="search_string" type="search" required>
+                <input id="search_field" name="search_string" type="search" required autofocus>
                 <label for="search_string"><i class="material-icons">search</i></label>
                 <i class="material-icons icon-close">close</i>
               </div>
@@ -50,7 +50,6 @@
     </ul>
 % endif
     <ul id="recent-header"><b><h4><center>Library</center></h4></b></ul>
-      <div class="divider"></div>
       <div class="row">
         <div class="col s8" id="library-breadcrumbs">
           <a style="margin-left: 20px;" class="breadcrumb" href="/library?parent=''&directory=${gazee.COMIC_PATH}&page_num=1">Comics</a>

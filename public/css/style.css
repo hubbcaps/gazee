@@ -81,6 +81,9 @@ i {
   background: #BDBDBD;
   color: #FFFFFF;
 }
+#search-modal input {
+  margin: 0 auto;
+}
 #settings-arrow {
   color: #BDBDBD;
 }
