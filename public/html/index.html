@@ -24,7 +24,7 @@
 
             <div id="search-modal" class=modal>
               <div class="input-field col s12 right" id="search-bar">
-                <input id="search_field" name="search_string" type="search" required>
+                <input id="search_field" name="search_string" type="search" required autofocus>
                 <label for="search_string"><i class="material-icons">search</i></label>
                 <i class="material-icons icon-close">close</i>
               </div>
@@ -50,7 +50,6 @@
 % endif
     <b><h4><center>Recent Comics</center></h4></b>
     <div class="row center-cols center-align">
-      <div class="divider"></div>
 % for comic in comics:
       <div class="col s5 m5 l2">
         <div class="card">

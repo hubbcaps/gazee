@@ -396,7 +396,7 @@ class ComicScanner(object):
             for f in nice_names:
                 if last_name == f:
                     logging.debug("Same Nice Name")
-                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC LIMIT 1 OFFSET ?".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME), ('%' + f + '%', last_counter,))
+                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC, {cin} ASC LIMIT 1 OFFSET ?".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME, cin=gazee.COMIC_NUMBER), ('%' + f + '%', last_counter,))
                     cinit = c.fetchall()
                     c_image = [tup[0] for tup in cinit]
                     if len(c_image) == 0:
@@ -412,7 +412,7 @@ class ComicScanner(object):
                     last_name = f
                 else:
                     logging.debug("New Nice Name")
-                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC LIMIT 1".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME), ('%' + f + '%',))
+                    c.execute("SELECT {ci} FROM {tn} WHERE {pa} LIKE ? ORDER BY {cn} ASC, {cin} ASC LIMIT 1".format(ci=gazee.COMIC_IMAGE, tn=gazee.ALL_COMICS, pa=gazee.COMIC_FULL_PATH, cn=gazee.COMIC_NAME, cin=gazee.COMIC_NUMBER), ('%' + f + '%',))
                     cinit = c.fetchall()
                     c_image = [tup[0] for tup in cinit]
                     if len(c_image) == 0:
