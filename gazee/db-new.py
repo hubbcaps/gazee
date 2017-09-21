@@ -1,0 +1,653 @@
+'''
+Copyright 2016 Nosmokingbandit
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This is a modified version of nosmokingbandit's DB module in his core module of the program Watcher.
+
+https://github.com/nosmokingbandit/Watcher3
+
+This file has been modified to handle comics rather than movies and other functions that were previously ran inline with most functions that interacted with the database in Gazee.
+'''
+
+
+import gazee
+import datetime
+import logging
+import time
+import os
+import shutil
+
+import sqlalchemy as sqla
+
+logging = logging.getLogger(__name__)
+
+current_version = 1
+
+class SQL(object):
+    '''
+    Class to handle all database interactions
+    SQL.convert_names is used to convert column names in a table.
+        This should be formatted as {TABLE: [(new_column, old_column)],
+                                     TABLE2: [(new_column, old_column), (new_column_2, old_column_2)]
+                                     }
+    '''
+
+    convert_names = {"all_comics":
+                     [("series", "name"),
+                      ("number", "issue"),
+                      ("date_added", "date")],
+                     "dir_names":
+                     [("name", "nice_name"),
+                      ("image", "dir_image")]
+                     }
+
+    def __init__(self):
+        self.metadata = sqla.MetaData()
+        DB_NAME = 'sqlite:///{}'.format(gazee.DB_FILE)
+
+        # These definitions only exist to CREATE tables.
+        self.COMICS = sqla.Table('all_comics', self.metadata,
+                                 sqla.Column('key', sqla.Integer, primary_key=True),
+                                 sqla.Column('title', sqla.TEXT),
+                                 sqla.Column('series', sqla.TEXT),
+                                 sqla.Column('number', sqla.INTEGER),
+                                 sqla.Column('volume', sqla.INTEGER),
+                                 sqla.Column('storyarc', sqla.TEXT),
+                                 sqla.Column('summary', sqla.TEXT),
+                                 sqla.Column('notes', sqla.TEXT),
+                                 sqla.Column('year', sqla.INTEGER),
+                                 sqla.Column('month', sqla.INTEGER),
+                                 sqla.Column('day', sqla.INTEGER),
+                                 sqla.Column('writer', sqla.INTEGER),
+                                 sqla.Column('penciller', sqla.INTEGER),
+                                 sqla.Column('inker', sqla.INTEGER),
+                                 sqla.Column('colorist', sqla.INTEGER),
+                                 sqla.Column('letterer', sqla.INTEGER),
+                                 sqla.Column('coverartist', sqla.INTEGER),
+                                 sqla.Column('editor', sqla.INTEGER),
+                                 sqla.Column('publisher', sqla.TEXT),
+                                 sqla.Column('imprint', sqla.INTEGER),
+                                 sqla.Column('genre', sqla.INTEGER),
+                                 sqla.Column('pagecount', sqla.INTEGER),
+                                 sqla.Column('characters', sqla.INTEGER),
+                                 sqla.Column('teams', sqla.INTEGER),
+                                 sqla.Column('scaninfo', sqla.INTEGER),
+                                 sqla.Column('image', sqla.TEXT),
+                                 sqla.Column('path', sqla.INTEGER),
+                                 sqla.Column('date_added', sqla.TEXT)
+                                 )
+        self.FULLDIRS = sqla.Table('all_directories', self.metadata,
+                                   sqla.Column('key', sqla.INTEGER, primary_key=True),
+                                   sqla.Column('full_dir_path', sqla.TEXT),
+                                   )
+        self.FOLDERS = sqla.Table('dir_names', self.metadata,
+                                  sqla.Column('name', sqla.TEXT),
+                                  sqla.Column('image', sqla.TEXT),
+                                  sqla.Column('parent_key', sqla.INTEGER)
+                                  )
+        self.USERS = sqla.Table('USERS', self.metadata,
+                                sqla.Column('username', sqla.TEXT),
+                                sqla.Column('password', sqla.TEXT),
+                                sqla.Column('type', sqla.TEXT),
+                                )
+
+        try:
+            self.engine = sqla.create_engine(DB_NAME, echo=False, connect_args={'timeout': 30})
+            if not os.path.isfile(gazee.DB_FILE):
+                print('Creating database file {}'.format(gazee.DB_FILE))
+                self.create_database(DB_NAME)
+            else:
+                logging.info('Connected to database {}'.format(DB_NAME))
+                print('Connected to database {}'.format(DB_NAME))
+
+        except (SystemExit, KeyboardInterrupt):
+            raise
+        except Exception as e:
+            logging.error('Opening SQL DB.', exc_info=True)
+            raise
+
+    def create_database(self, DB_NAME):
+        ''' Creates database and recreates self.engine
+        DB_NAME (str): absolute file path to database
+        Does not return. DO NOT supress exceptions, this MUST succeed for Gazee to start.
+        '''
+        logging.info('Creating Database tables.')
+        print('Creating tables.')
+        self.metadata.create_all(self.engine)
+        self.engine = sqla.create_engine(DB_NAME, echo=False, connect_args={'timeout': 30})
+        self.set_version(current_version)
+        logging.info('Connected to database {}'.format(DB_NAME))
+        print('Connected to database {}'.format(DB_NAME))
+        return
+
+    def execute(self, command):
+        ''' Executes SQL command
+        command (list): SQL commands ie ['INSERT INTO table (columns) VALUES (?)', 'value']
+        We are going to loop this up to 5 times in case the database is locked.
+        After each attempt we wait 1 second to try again. This allows the query
+            that has the database locked to (hopefully) finish. It might
+            (i'm not sure) allow a query to jump in line between a series of
+            queries. So if we are writing searchresults to every movie at once,
+            the get_user_movies request may be able to jump in between them to
+            get the user's movies to the browser. Maybe.
+        Return type will
+        Returns object sqlalchemy ResultProxy of command, or None if unable to execute
+        '''
+
+        logging.debug('Executing SQL command: {}'.format(command))
+
+        tries = 0
+        while tries < 5:
+            try:
+                result = self.engine.execute(*command)
+                return result
+
+            except Exception as e:
+                logging.error('SQL Database Query: {}.'.format(command), exc_info=True)
+                if 'database is locked' in e.args[0]:
+                    logging.debug('SQL Query attempt # {}.'.format(tries))
+                    tries += 1
+                    time.sleep(1)
+                else:
+                    logging.error('SQL Databse Query: {}.'.format(command), exc_info=True)
+                    return None
+        # all tries exhausted
+        return None
+
+    def write(self, TABLE, DB_STRING):
+        ''' Writes row to table
+        TABLE (str): name of db table
+        DB_STRING (dict): {columns:values} to write to TABLE
+        Returns Bool
+        '''
+
+        logging.debug('Writing data to {}.'.format(TABLE))
+
+        cols = ', '.join(DB_STRING.keys())
+        vals = list(DB_STRING.values())
+
+        qmarks = ', '.join(['?'] * len(DB_STRING))
+
+        sql = 'INSERT INTO {} ( {} ) VALUES ( {} )'.format(TABLE, cols, qmarks)
+
+        command = [sql, vals]
+
+        if self.execute(command):
+            return True
+        else:
+            logging.error('Unable to write to database.')
+            return False
+
+    def update(self, TABLE, COLUMN, VALUE, idcol, idval):
+        ''' Updates single value in existing table row.
+        TABLE (str): name of database table to write to
+        COLUMN (str): column to write into
+        VALUE (str): value to write
+        idcol (str): column to use to id row to write to
+        idval (str): value to use to id row to write to
+        Writes VALUE into COLUMN where idcol == idval
+        Returns Bool.
+        '''
+
+        logging.debug('Updating {} to {} for rows that match {}:{} in {}.'.format(COLUMN, VALUE, idcol, idval.split('&')[0], TABLE))
+
+        sql = 'UPDATE {} SET {}=? WHERE {}=?'.format(TABLE, COLUMN, idcol)
+        vals = (VALUE, idval)
+
+        command = [sql, vals]
+
+        if self.execute(command):
+            return True
+        else:
+            logging.error('Unable to update database row.')
+            return False
+
+    def update_multiple_values(self, TABLE, data, imdbid='', guid=''):
+        ''' Updates mulitple values in a single sql row
+        TABLE (str): database table to access
+        data (dict): key/value pairs to update in table
+        imdbid (str): imdbid # of movie to update
+        guid (str): guid of search result to update
+        Return bool.
+        '''
+
+        if imdbid:
+            idcol = 'imdbid'
+            idval = imdbid
+        elif guid:
+            idcol = 'guid'
+            idval = guid
+        else:
+            return False
+
+        logging.debug('Updating {}:{} to {} in {}.'.format(idcol, idval.split('&')[0], data, TABLE))
+
+        columns = '{}=?'.format('=?,'.join(data.keys()))
+
+        sql = 'UPDATE {} SET {} WHERE {}=?'.format(TABLE, columns, idcol)
+
+        vals = tuple(list(data.values()) + [idval])
+
+        command = [sql, vals]
+
+        if self.execute(command):
+            return True
+        else:
+            logging.error('Unable to update database row.')
+            return False
+
+    def update_multiple_rows(self, TABLE, values, id_col):
+        ''' Update multiple rows in a single table
+        TABLE (str): database table to access
+        values (list): of dicts of identifier and update values
+        id_col (str): name of column in values used to identify row
+        Values must be a list of dictionaries with k:v pairs reprenting columns names and
+            data to write to that column. It must also contain an indentifying k:v that
+            matches the column passed in id_col.
+            For example:
+            update_multiple_rows('MOVIES', [{'year': 2000, 'rated': 'R'}, {'year': 1990, 'rated': 'PG-13'}], 'year')
+            This call will update all MOVIES rows where 'year' == 2000 and set 'rated' to 'R', and update all MOVIES
+                rows where 'year' == 1990 and set 'rated' to 'PG-13'
+        id_col and corresponding 'values' keys will be changed to '{}_'.format(id_col) to make it compatible with sqlalchemy
+        Returns Bool
+        '''
+
+        if id_col not in values[0].keys():
+            logging.error('id_col not in values.')
+            return False
+
+        id_col_ = '{}_'.format(id_col)
+
+        for d in values:
+            d[id_col_] = d[id_col]
+
+        write = {k: sqla.bindparam(k) for k in values[0].keys() if k != id_col_}
+
+        TABLE = getattr(core.sql, TABLE)
+
+        core.sql.engine.execute(TABLE.update().where(getattr(TABLE.c, id_col) == sqla.bindparam(id_col_)).values(write), values)
+
+        return
+
+    def get_user_comics(self, sort_key='title', sort_direction='DESC', limit=-1, offset=0, hide_finished=False):
+        ''' Gets user's comic from database
+        sort_key (str): key to sort by
+        sort_direction (str): order to sort results [ASC, DESC]
+        limit (int): how many results to return
+        offset (int): list index to start returning results
+        hide_finished (bool): return
+        If limit is -1 all results are returned (still honors offset)
+        Returns list of dicts with all information in COMICS
+        '''
+        sort_direction = {'ASC': 'DESC', 'DESC': 'ASC'}[sort_direction]
+
+        logging.debug('Retrieving list of user\'s comics.')
+
+        filters = 'WHERE status NOT IN ("Finished", "Disabled")' if hide_finished else ''
+
+        if sort_key == 'status':
+            sort_key = '''CASE WHEN status = "Waiting" THEN 1
+                               WHEN status = "Wanted" THEN 2
+                               WHEN status = "Found" THEN 3
+                               WHEN status = "Snatched" THEN 4
+                               WHEN status = "Finished" THEN 5
+                               WHEN status = "Disabled" THEN 5
+                          END
+                       '''
+
+        command = 'SELECT * FROM MOVIES {} ORDER BY {} {}'.format(filters, sort_key, sort_direction)
+
+        command += ', sort_title ASC' if sort_key != 'sort_title' else ''
+
+        if int(limit) > 0:
+            command += ' LIMIT {} OFFSET {}'.format(limit, offset)
+
+        result = self.execute([command])
+
+        if result:
+            return [dict(i) for i in result]
+        else:
+            logging.error('Unable to get list of user\'s movies.')
+            return []
+
+    def get_comics_count(self, hide_finished=False):
+        ''' Gets count of rows in COMICS
+        Returns int
+        '''
+
+        logging.debug('Getting count of comics.')
+
+        command = 'SELECT COUNT(1) FROM COMICS'
+
+        result = self.execute([command])
+
+        if result:
+            x = result.fetchone()[0]
+            return x
+        else:
+            logging.error('Unable to get count of user\'s comics.')
+            return 0
+
+    def get_comic(self, idcol, idval):
+        ''' Returns dict of single comic details from COMICS.
+        idcol (str): identifying column
+        idval (str): identifying value
+        Looks through COMICS for idcol:idval
+        Returns dict of first match
+        '''
+
+        logging.debug('Retrieving details for comic {}.'.format(idval))
+
+        command = ['SELECT * FROM COMICS WHERE {}="{}"'.format(idcol, idval)]
+
+        result = self.execute(command)
+
+        if result:
+            data = result.fetchone()
+            if data:
+                return dict(data)
+            else:
+                return {}
+        else:
+            return {}
+
+    def delete(self, TABLE, idcol, idval):
+        ''' Deletes row where idcol == idval
+        TABLE (str): table name
+        idcol (str): identifying column
+        idval (str): identifying value
+        Returns Bool
+        '''
+
+        logging.debug('Removing from {} where {} is {}.'.format(TABLE, idcol, idval.split('&')[0]))
+
+        command = ['DELETE FROM {} WHERE {}="{}"'.format(TABLE, idcol, idval)]
+
+        if self.execute(command):
+            return True
+        else:
+            return False
+
+    def get_distinct(self, TABLE, column, idcol, idval):
+        ''' Gets unique values in TABLE
+        TABLE (str): table name
+        column (str): column to return
+        idcol (str): identifying column
+        idval (str): identifying value
+        Gets values in TABLE:column where idcol == idval
+        Returns list ['val1', 'val2', 'val3'] (list can be empty)
+        '''
+
+        logging.debug('Getting distinct values for {} in {}'.format(idval.split('&')[0], TABLE))
+
+        command = ['SELECT DISTINCT {} FROM {} WHERE {}="{}"'.format(column, TABLE, idcol, idval)]
+
+        data = self.execute(command)
+
+        if data:
+            data = data.fetchall()
+
+            lst = []
+            for i in data:
+                lst.append(i[column])
+            return lst
+        else:
+            logging.error('Unable to read database.')
+            return []
+
+    def row_exists(self, TABLE, imdbid='', guid='', downloadid=''):
+        ''' Checks if row exists in table
+        TABLE (str): name of sql table to look through
+        imdbid (str): imdb identification number    <optional - see notes>
+        guid (str): download guid                   <optional - see notes>
+        downloadid (str): downloader id             <optional - see notes>
+        Checks TABLE for imdbid, guid, or downloadid.
+        Exactly one optional variable must be supplied.
+        Used to check if we need to add row or update existing row.
+        Returns Bool
+        '''
+
+        if imdbid:
+            idcol = 'imdbid'
+            idval = imdbid
+        elif guid:
+            idcol = 'guid'
+            idval = guid
+        elif downloadid:
+            idcol = 'downloadid'
+            idval = downloadid
+        else:
+            return 'ID ERROR'
+
+        logging.debug('Checking if {}:{} exists in database table {}'.format(idcol, idval, TABLE))
+
+        command = ['SELECT 1 FROM {} WHERE {}="{}"'.format(TABLE, idcol, idval)]
+
+        row = self.execute(command)
+
+        if not row or row.fetchone() is None:
+            return False
+        else:
+            return True
+
+    def _get_existing_schema(self):
+        ''' Gets existing database schema
+        Expresses database schema as {TABLENAME: {COLUMN_NAME: COLUMN_TYPE}}
+        Returns dict
+        '''
+        logging.debug('Getting existing database schema.')
+        table_dict = {}
+
+        # get list of tables in db:
+        command = ['SELECT name FROM sqlite_master WHERE type="table"']
+        tables = self.execute(command)
+
+        table_dict = {}
+
+        if not tables:
+            return {}
+
+        for i in tables:
+            i = i[0]
+            command = ['PRAGMA table_info({})'.format(i)]
+            columns = self.execute(command)
+            if not columns:
+                continue
+            tmp_dict = {}
+            for col in columns:
+                tmp_dict[col['name']] = col['type']
+            table_dict[i] = tmp_dict
+
+        return table_dict
+
+    def _get_intended_schema(self):
+        ''' Gets indended database schema as described in self.__init__
+        Expresses database schema as {TABLENAME: {COLUMN_NAME: COLUMN_TYPE}}
+        Returns dict
+        '''
+        logging.debug('Getting intended database schema.')
+
+        d = {}
+        for table in self.metadata.tables.keys():
+            selftable = getattr(self, table)
+            d2 = {}
+            for i in selftable.c:
+                d2[i.name] = str(i.type)
+            d[table] = d2
+        return d
+
+    def update_tables(self):
+        ''' Updates database tables
+        Adds new rows to table based on diff between intended and existing schema
+        Returns Bool, but should crash program if an exception is thrown. DO NOT CATCH EXCEPTIONS
+        '''
+
+        logging.info('Checking if database needs to be updated.')
+
+        existing = self._get_existing_schema()
+        intended = self._get_intended_schema()
+
+        diff = Comparisons.compare_dict(intended, existing)
+
+        if not diff:
+            return True
+
+        logging.debug('Modifying database tables.')
+        print('Modifying tables.')
+
+        '''
+        For each item in diff, create new column.
+        Then, if the new columns name is in SQL.convert_names, copy data from old column
+        Create the new table, then copy data from TMP table
+        '''
+        for table, schema in diff.items():
+            if table not in existing:
+                logging.debug('Creating table {}'.format(table))
+                print('Creating table {}'.format(table))
+                getattr(self, table).create(self.engine)
+                continue
+            logging.debug('Modifying table {}.'.format(table))
+            print('Modifying table {}'.format(table))
+            for name, kind in schema.items():
+                command = ['ALTER TABLE {} ADD COLUMN {} {}'.format(table, name, kind)]
+
+                self.execute(command)
+
+                if table in SQL.convert_names.keys():
+                    for pair in SQL.convert_names[table]:
+                        if pair[0] == name:
+                            command = ['UPDATE {} SET {} = {}'.format(table, pair[0], pair[1])]
+                            self.execute(command)
+
+            # move TABLE to TABLE_TMP
+            table_tmp = '{}_TMP'.format(table)
+            logging.debug('Renaming table to {}.'.format(table_tmp))
+            print('Renaming table to {}'.format(table_tmp))
+            command = ['ALTER TABLE {} RENAME TO {}'.format(table, table_tmp)]
+            self.execute(command)
+
+            # create new table
+            logging.debug('Creating new table {}.'.format(table))
+            print('Creating new table {}'.format(table))
+            table_meta = getattr(self, table)
+            table_meta.create(self.engine)
+
+            # copy data over
+            logging.debug('Merging data from {} to {}.'.format(table_tmp, table))
+            print('Merging data from {} to {}'.format(table_tmp, table))
+            names = ', '.join(intended[table].keys())
+            command = ['INSERT INTO {} ({}) SELECT {} FROM {}'.format(table, names, names, table_tmp)]
+            self.execute(command)
+
+            logging.debug('Dropping table {}.'.format(table_tmp))
+            print('Dropping table {}'.format(table_tmp))
+            command = ['DROP TABLE {}'.format(table_tmp)]
+            self.execute(command)
+
+            logging.debug('Finished updating table {}.'.format(table))
+            print('Finished updating table {}'.format(table))
+
+            return True
+
+    def version(self):
+        ''' Get user_version of sql database
+        Returns int of db version
+        '''
+        return self.execute(['PRAGMA user_version']).fetchone()[0]
+
+    def set_version(self, v):
+        ''' Set user_version of sql database
+        v (int): version of database to set
+        Does not return
+        '''
+        self.execute(['PRAGMA user_version = {}'.format(v)])
+
+    def update_database(self):
+        ''' Handles database updates
+        '''
+        v = self.version()
+        if v >= current_version:
+            return
+
+        print('Database update required. This may take some time.')
+        logging.info('Updating database to version {}.'.format(current_version))
+
+        backup_dir = os.path.join(core.PROG_PATH, 'db')
+        logging.debug('Backing up database to {}.'.format(backup_dir))
+        print('Backing up database to {}.'.format(backup_dir))
+        try:
+            if not os.path.isdir(backup_dir):
+                os.mkdir(backup_dir)
+            backup_name = 'watcher.sqlite.{}'.format(datetime.date.today())
+
+            shutil.copyfile(core.DB_FILE, os.path.join(backup_dir, backup_name))
+        except Exception as e:
+            print('Error backing up database.')
+            logging.error('Copying SQL DB.', exc_info=True)
+            raise
+
+        for i in range(v, current_version + 1):
+            logging.info('Executing Database Update {}'.format(i))
+            print('Executing database update {}'.format(i))
+            m = getattr(DatabaseUpdate, 'update_{}'.format(i))
+            m()
+
+        self.set_version(current_version)
+
+
+class DatabaseUpdate(object):
+    ''' namespace for database update methods
+    There is one method for each database version. These methods are NOT
+        cumulative and MUST be executed in order.
+    Methods should be formatted as such:
+    @staticmethod
+    def update_<i>():
+        d = DatabaseUpdate.dump(<TABLE>)
+        l = len(d)
+        for ind, i in enumerate(d):
+            print('{}%\r'.format(int((ind + 1) / l * 100)), end='')
+            <do something>
+        print()
+    '''
+    @staticmethod
+    def dump(table):
+        ''' Helper method to get dump of table contents
+        table (str): name of table to dump
+        Gets table contents without sorting, fitlering, etc so it can't
+            fail by asking for a column that might not exist yet.
+        Returns list of dicts
+        '''
+        return [dict(i) for i in core.sql.execute(['SELECT * FROM {}'.format(table)])]
+
+    @staticmethod
+    def update_0():
+        pass
+
+    @staticmethod
+    def update_1():
+        ''' Correct posters column in MOVIES
+        Change 'poster/' to 'posters/' in file path
+        '''
+
+        d = DatabaseUpdate.dump('MOVIES')
+        l = len(d)
+
+        for ind, i in enumerate(d):
+            print('{}%\r'.format(int((ind + 1) / l * 100)), end='')
+            p = i['poster']
+            if p and 'poster/' in p:
+                core.sql.update('MOVIES', 'poster', p.replace('poster/', 'posters/'), 'imdbid', i['imdbid'])
+        print()
+
+    # Adding a new method? Remember to update the current_version #
