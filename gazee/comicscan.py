@@ -1,17 +1,19 @@
-#  This file is part of Gazee.
-#
-#  Gazee is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  Gazee is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
+'''
+This file is part of Gazee.
+
+Gazee is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Gazee is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Gazee.  If not, see <http://www.gnu.org/licenses/>.
+'''
 
 import os
 import stat
@@ -159,10 +161,30 @@ class ComicScanner(object):
     # This method will parse the XML for our values we'll insert into the DB for the comics info such as name, issue number, volume number and summary.
     def comic_info_parse(self, comicpath):
         logging.info("Comic Info Requested")
-        comic_name = "Not Available"
-        comic_issue = "Not Available"
+        comic_title = "Not Available"
+        comic_series = "Not Available"
+        comic_number = "Not Available"
         comic_volume = "Not Available"
+        comic_storyarc = "Not Available"
+        comic_notes = "Not Available"
         comic_summary = "Not Available"
+        comic_year = "Not Available"
+        comic_month = "Not Available"
+        comic_day = "Not Available"
+        comic_writer = "Not Available"
+        comic_penciller = "Not Available"
+        comic_inker = "Not Available"
+        comic_colorist = "Not Available"
+        comic_letterer = "Not Available"
+        comic_coverartist = "Not Available"
+        comic_editor = "Not Available"
+        comic_publisher = "Not Available"
+        comic_imprint = "Not Available"
+        comic_genre = "Not Available"
+        comic_pagecount = "Not Available"
+        comic_characters = "Not Available"
+        comic_teams = "Not Available"
+        comic_scaninfo = "Not Available"
 
         unpackedFiles = []
         comic_attributes = {}
@@ -182,60 +204,118 @@ class ComicScanner(object):
                         logging.warning("ComicInfo Parsing Failed")
                         break
                     try:
-                        comic_name = comic_attributes['ComicInfo']['Series']
-                        logging.debug("Comic Name Assigned")
+                        comic_title = comic_attributes['ComicInfo']['Title']
                     except:
-                        comic_name = "Not Available"
-                        logging.debug("Comic Name Not Available")
+                        logging.debug("Comic Title Not Available")
                     try:
-                        comic_issue = comic_attributes['ComicInfo']['Number']
-                        logging.debug("Comic Issue Assigned")
+                        comic_series = comic_attributes['ComicInfo']['Series']
+                        logging.debug("Comic Series Assigned")
                     except:
-                        comic_issue = "Not Available"
+                        logging.debug("Comic Series Not Available")
+                    try:
+                        comic_Number = comic_attributes['ComicInfo']['Number']
+                        logging.debug("Comic Number Assigned")
+                    except:
                         logging.debug("Comic Issue Not Available")
                     try:
                         comic_volume = comic_attributes['ComicInfo']['Volume']
                         logging.debug("Comic Volume Assigned")
                     except:
-                        comic_volume = "Not Available"
                         logging.debug("Comic Volume Not Available")
                     try:
                         comic_summary = comic_attributes['ComicInfo']['Summary']
                         logging.debug("Comic Summary Assigned")
                     except:
-                        comic_summary = "Not Available"
                         logging.debug("Comic Summary Not Available")
+                    try:
+                        comic_storyarc = comic_attributes['ComicInfo']['StoryArc']
+                        logging.debug("Comic StoryArc Assigned")
+                    except:
+                        logging.debug("Comic StoryArc Not Available")
+                    try:
+                        comic_notes = comic_attributes['ComicInfo']['Notes']
+                    except:
+                        logging.debug("Comic Notes Not Available")
+                    try:
+                        comic_year = comic_attributes['ComicInfo']['Year']
+                    except:
+                        logging.debug("Comic Year Not Available")
+                    try:
+                        comic_month = comic_attributes['ComicInfo']['Month']
+                    except:
+                        logging.debug("Comic Month Not Available")
+                    try:
+                        comic_day = comic_attributes['ComicInfo']['Day']
+                    except:
+                        logging.debug("Comic Day Not Available")
+                    try:
+                        comic_writer = comic_attributes['ComicInfo']['Writer']
+                    except:
+                        logging.debug("Comic Writer Not Available")
+                    try:
+                        comic_penciller = comic_attributes['ComicInfo']['Penciller']
+                    except:
+                        logging.debug("Comic Penciller Not Available")
+                    try:
+                        comic_inker = comic_attributes['ComicInfo']['Inker']
+                    except:
+                        logging.debug("Comic Inker Not Available")
+                    try:
+                        comic_colorist = comic_attributes['ComicInfo']['Colorist']
+                    except:
+                        logging.debug("Comic Colorist Not Available")
+                    try:
+                        comic_letterer = comic_attributes['ComicInfo']['Letterer']
+                    except:
+                        logging.debug("Comic Letterer Not Available")
+                    try:
+                        comic_coverartist = comic_attributes['ComicInfo']['CoverArtist']
+                    except:
+                        logging.debug("Comic Cover Artist Not Available")
+                    try:
+                        comic_editor = comic_attributes['ComicInfo']['Editor']
+                    except:
+                        logging.debug("Comic Editor Not Available")
+                    try:
+                        comic_publisher = comic_attributes['ComicInfo']['Publisher']
+                    except:
+                        logging.debug("Comic Publisher Not Available")
+                    try:
+                        comic_imprint = comic_attributes['ComicInfo']['Imprint']
+                    except:
+                        logging.debug("Comic Imprint Not Available")
+                    try:
+                        comic_genre = comic_attributes['ComicInfo']['Genre']
+                    except:
+                        logging.debug("Comic Genre Not Available")
+                    try:
+                        comic_pagecount = comic_attributes['ComicInfo']['PageCount']
+                    except:
+                        logging.debug("Comic Page Count Not Available")
+                    try:
+                        comic_characters = comic_attributes['ComicInfo']['Characters']
+                    except:
+                        logging.debug("Comic Characters Not Available")
+                    try:
+                        comic_teams = comic_attributes['ComicInfo']['Teams']
+                    except:
+                        logging.debug("Comic Teams Not Available")
+                    try:
+                        comic_scaninfo = comic_attributes['ComicInfo']['ScanInfo']
+                    except:
+                        logging.debug("Comic Scan Info Not Available")
                     break
 
-        if not gazee.MYLAR_DB == "":
-            try:
-                location = os.path.basename(comicpath)
-                connection = sqlite3.connect(gazee.MYLAR_DB)
-                c = connection.cursor()
-
-                c.execute('SELECT * FROM issues WHERE location=?', (location,))
-                comic_attributes = c.fetchone()
-
-                if comic_attributes is not None:
-                    if comic_name == "Not Available":
-                        logging.info("Mylar DB Found and Being Used")
-                        comic_name = comic_attributes[1]
-                        comic_issue = comic_attributes[3]
-
-                connection.close()
-            except:
-                logging.warning("Mylar DB is locked or doesn't exist")
-
-        if comic_name is "Not Available":
-            logging.info("No Mylar DB and No Comic Info, Parsing File Name.")
+        if comic_series is "Not Available":
+            logging.info("No Comic Info, Parsing File Name.")
             comicinfo = FileNameParser().parseFilename(comicpath)
-            comic_name = comicinfo['series']
-            comic_issue = comicinfo['issue']
+            comic_series = comicinfo['series']
+            comic_number = comicinfo['issue']
             comic_volume = comicinfo['volume']
-            comic_summary = comicinfo['remainder']
+            comic_scaninfo = comicinfo['remainder']
 
         logging.info("ComicInfo Being Returned")
-        return {'name': comic_name, 'issue': comic_issue, 'volume': comic_volume, 'summary': comic_summary}
+        return {'title': comic_title, 'series': comic_series, 'number': comic_number, 'volume': comic_volume, 'summary': comic_summary, 'storyarc': comic_storyarc, "notes": comic_notes, "year": comic_year, "month": comic_month, "day": comic_day, "writer": comic_writer, "penciller": comic_penciller, "inker": comic_inker, "colorist": comic_colorist, "letterer": comic_letterer, "coverartist": comic_coverartist, "editor": comic_editor, "publisher": comic_publisher, "imprint": comic_imprint, "genre": comic_genre, "pagecount": comic_pagecount, "characters": comic_characters, "teams": comic_teams, "scaninfo": comic_scaninfo}
 
     # This method is where the magic actually happens. This will use all the previous functions to build out our two DB tables, Directories and Comics respectively.
     def db_builder(self):
@@ -249,18 +329,11 @@ class ComicScanner(object):
         else:
             with open(os.path.join(gazee.DATA_DIR, "db.lock"), 'w') as f:
                 f.write("locked")
-            f.close()
 
             print("Comic Scan Started")
             logging.info("DB Build Requested")
             logging.info("Begining Full Directory and Comic Scan")
-            # Here we set the db file path.
-            db = Path(os.path.join(gazee.DATA_DIR, gazee.DB_NAME))
-
-            # Here we make the inital DB connection that we will be using throughout this function.
-            connection = sqlite3.connect(str(db))
-            c = connection.cursor()
-
+            
             # Here we define some variables we will use to check for existing directories and directories that need to be removed from the db.
             c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
             paths_in_db = c.fetchall()
@@ -271,9 +344,7 @@ class ComicScanner(object):
             logging.debug("Grabbed Directories Currently in DB")
 
             # Here we call the dir_scan directory to get a list of all the directories under the set comic directory.
-            logging.debug("Requesting Directory Scan")
             directories = self.dir_scan()
-            logging.debug("Directory Scan Returned")
 
             # Here we check if the Directory listings in the DB still exists on disk, if not, we remove them and their children from the db.
             for d in dict_of_parents:

@@ -23,7 +23,7 @@ __version__ = '0.0.1'
 __all__ = ['Gazee', 'ComicScanner']
 
 FULL_PATH = ""
-DB_NAME = 'gazee.db'
+DB_FILE = 'gazee.db'
 DATA_DIR = 'data'
 TEMP_DIR = 'tmp'
 PIDFILE = '/tmp/gazee.pid'
@@ -43,32 +43,3 @@ THUMB_SIZE = 400, 300
 LOG_LEVEL = 'logging.INFO'
 ARGS = []
 
-# Declare DB variables, such as table names and field names
-# This is mostly so the names are in a central area for later reference.
-
-# Directories table, holds all actual directories full paths. We iterate over these in comicscan for their contents and add those to the below Directory Names table with the associated key.
-ALL_DIRS = "all_directories"
-FULL_DIR_PATH = "full_dir_path"
-KEY = "key"
-
-# Directory Names. This will hold the actual names of directories and their associated parent keys.
-DIR_NAMES = "dir_names"
-NICE_NAME = "nice_name"
-DIR_IMAGE = "dir_image"
-PARENT_KEY = "parent_key"
-
-# Comics table and various attributes we associate with them.
-ALL_COMICS = "all_comics"
-COMIC_IMAGE = "image"
-COMIC_NAME = "name"
-COMIC_NUMBER = "issue"
-COMIC_VOLUME = "volume"
-COMIC_SUMMARY = "summary"
-COMIC_FULL_PATH = "path"
-INSERT_DATE = "date"
-
-# Users Table and various attributes.
-USERS = "USERS"
-USERNAME = "username"
-PASSWORD = "password"
-TYPE = "type"

@@ -5,3 +5,4 @@ Pillow==4.2.1
 xmltodict==0.11.0
 rarfile==3.0
 GitPython==2.1.5
+sqlalchemy==1.1.14
