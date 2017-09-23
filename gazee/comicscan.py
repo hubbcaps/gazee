@@ -333,7 +333,7 @@ class ComicScanner(object):
             print("Comic Scan Started")
             logging.info("DB Build Requested")
             logging.info("Begining Full Directory and Comic Scan")
-            
+
             # Here we define some variables we will use to check for existing directories and directories that need to be removed from the db.
             c.execute('SELECT * FROM {tn}'.format(tn=gazee.ALL_DIRS))
             paths_in_db = c.fetchall()
