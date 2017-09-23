@@ -190,7 +190,7 @@ def main():
         }
 
     cherrypy.config.update(options_dict)
-
+    cherrypy.engine.signals.subscribe()
     cherrypy.engine.timeout_monitor.unsubscribe()
     cherrypy.tree.mount(Gazee(), '/', config=conf)
 
