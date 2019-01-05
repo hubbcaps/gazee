@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/hubbcaps/gazee.svg?branch=master)](https://travis-ci.org/hubbcaps/gazee)
 
+# This Project is currently no longer in development. Life took over and I didn't have the motivation to continue.
+# If you'd like to take over development, feel free to fork and run with it.
+# The main thing it needs currently is an ORM to replace all the hardcoded DB interactions.
+
 Gazee is a comic viewer for the web browser.
 
 Read and reach your favorite digital comics from almost any web connected device.
