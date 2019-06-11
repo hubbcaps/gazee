@@ -31,10 +31,12 @@ def current_version():
 def latest_version():
     repo = git.Repo(os.path.dirname(gazee.FULL_PATH))
     remote = repo.remotes.origin
-    info = remote.fetch()[0]
-    remote_commit = info.commit
-    return remote_commit.hexsha
-
+    try:
+        info = remote.fetch()[0]
+        remote_commit = info.commit
+        return remote_commit.hexsha
+    except git.exc.GitCommandError:
+        return 'Unknown'
 
 def update_app():
     current_commit = current_version()
