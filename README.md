@@ -6,6 +6,8 @@
 # If you'd like to take over development, feel free to fork and run with it.
 # The main thing it needs currently is an ORM to replace all the hardcoded DB interactions.
 
+# I highly suggest taking a look at [Codex](https://github.com/ajslater/codex/tree/release/codex), this application is in current development and does everything I wanted Gazee to be and more.
+
 Gazee is a comic viewer for the web browser.
 
 Read and reach your favorite digital comics from almost any web connected device.
