@@ -1,7 +1,7 @@
 CherryPy==11.0.0
 Mako==1.0.7
 patool==1.12
-Pillow==4.2.1
+Pillow==8.1.1
 xmltodict==0.11.0
 rarfile==3.0
 GitPython==2.1.5
